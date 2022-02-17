@@ -1,0 +1,14 @@
+/*
+ * Timer1.h
+ *
+ *  Created on: Oct 15, 2021
+ *      Author: Mahmoud
+ */
+
+#ifndef MCAL_TIMER_TIMER1_H_
+#define MCAL_TIMER_TIMER1_H_
+
+ES_t Timer1_enuInit();
+ES_t Timer1_enuPWM(float Copy_u16Freq ,float Copy_u8DutyCycle);
+
+#endif /* MCAL_TIMER_TIMER1_H_ */
