@@ -13,6 +13,7 @@
 #include "../MCAL/DIO/DIO_int.h"
 //#include "../MCAL/TIMER1/Timer1_int.h"
 #include "../MCAL/SPI/SPI_int.h"
+#include "../MCAL/UART/UART_interface.h"
 
 #include "../HAL/LCD/LCD_int.h"
 #include "../HAL/Keypad/Keypad_int.h"
@@ -33,9 +34,12 @@ int main (void)
 	DIO_enuInit();
 //	Timer1_enuInit();
 	SPI_vInitMaster();
-
+	UART_enuUART_Init();
+	
+	
 	LCD_enuInit();
 	Keypad_enuInit();
+	DIO_enuSetPinDirection(DIO_u8GROUP_D,DIO_u8PIN1,DIO_u8OUTPUT);
 	
 /***************************************************************************************************/
 /* ***********************************************************************************************************/
@@ -52,6 +56,7 @@ int main (void)
 
 	u8 Keypad_Pressed_Key;
 	u8 Current_State=0;
+	u8 UART_CHOICE;
 	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
 	_delay_ms(150);
 
@@ -61,9 +66,87 @@ int main (void)
 	_delay_ms (2000);
 	LCD_enuClearDisplay();
 
+	
+	
+			if (Program_Status_Flag == FIRST_TIME_USE_STATUS)
+			{
+
+				EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
+				_delay_ms(150);
+				LCD_enuDisplayString("For First Time");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("Use");
+				_delay_ms(2000);
+				LCD_enuClearDisplay();
+				LCD_enuDisplayString("Register Admin");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("on Keypad");
+				_delay_ms(2000);
+				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_strAdmin.UserName, LoginSystem_strAdmin.Password);
+				LoginSystem_strAdmin.User_Priority = ADMIN_PRIORITY;
+				
+				
+				EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS ,LoginSystem_strAdmin.UserName , MAX_NO_OF_LETTERS);
+				_delay_ms(200);
+				EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS ,LoginSystem_strAdmin.Password , MAX_NO_OF_LETTERS);
+				_delay_ms(200);
+
+				EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,LOAD_LOGIN_SYSTEM_DATABASE);
+				_delay_ms(150);
+
+				LCD_enuClearDisplay();
+				LCD_enuDisplayString("Saved");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("Successfully");
+				_delay_ms(1000);
+				Program_Status_Flag = IDLE_STATUS;
+
+			}
+
+			/************************************************************************************************************/
+			/************************************************************************************************************/
+
+			else if (Program_Status_Flag == LOAD_LOGIN_SYSTEM_DATABASE)
+			{
+				/****************************************Load the Login System database from the EEPROM***************************************/
+				EEPROM_ui8ReadByteFromAddress(NO_OF_REGISTERED_USERS_ADDRESS,&LoginSystem_NumOfRegisteredUsers);
+				_delay_ms(200);
+				
+
+				EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS,LoginSystem_strAdmin.UserName,MAX_NO_OF_LETTERS);
+				LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+				_delay_ms(150);
+				EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password,MAX_NO_OF_LETTERS);
+				LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+				_delay_ms(150);
+				
+				LoginSystem_strAdmin.User_Priority=ADMIN_PRIORITY;
+				_delay_ms(150);
+
+				u16 Local_u16UserAddress;
+				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+				{
+					Local_u16UserAddress = SAVED_USERS_INFO_ADDRESS +Local_u8Iterator*(2* MAX_NO_OF_LETTERS+1);
+					EEPROM_vReadBlockFromAddress(Local_u16UserAddress,&LoginSystem_AstrUsers[Local_u8Iterator].UserName,MAX_NO_OF_LETTERS);
+					_delay_ms(150);
+
+					EEPROM_vReadBlockFromAddress(Local_u16UserAddress + MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].Password,MAX_NO_OF_LETTERS);
+					_delay_ms(150);
+					EEPROM_ui8ReadByteFromAddress(Local_u16UserAddress + 2*MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].User_Priority);
+					_delay_ms(150);
+					LoginSystem_AstrUsers[Local_u8Iterator].UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+					LoginSystem_AstrUsers[Local_u8Iterator].Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+				}
+				
+				
+
+
+				Program_Status_Flag = IDLE_STATUS;
+			}
+			
 	while (1)
 	{
-
+	UART_enuSendString("PRESS ENTER TO START\r\n");
 /************************************************************************************************************/
 /******************************AIR CONDITIONER AUTOMATIC CONTROL*********************************************/
 
@@ -90,158 +173,112 @@ int main (void)
 
 /***************************************************************************************************************/
 /***************************************************************************************************************/
-		if (Program_Status_Flag == FIRST_TIME_USE_STATUS)
-		{
 
-			EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
-			_delay_ms(150);
-			LCD_enuDisplayString("For First Time");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("Use");
-			_delay_ms(2000);
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("Register Admin");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("on Keypad");
-			_delay_ms(2000);
-			LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_strAdmin.UserName, LoginSystem_strAdmin.Password);
-			LoginSystem_strAdmin.User_Priority = ADMIN_PRIORITY;
-			
-		
-			EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS ,LoginSystem_strAdmin.UserName , MAX_NO_OF_LETTERS);
-			_delay_ms(200);
-			EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS ,LoginSystem_strAdmin.Password , MAX_NO_OF_LETTERS);
-			_delay_ms(200);
-/*
-			u8 Local_u8Iterator;
-			for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
-			{
 
-				EEPROM_vWriteByteToAddress(SAVED_ADMIN_INFO_ADDRESS + Local_u8Iterator,LoginSystem_strAdmin.UserName[Local_u8Iterator]);
-				_delay_ms(150);
-				EEPROM_vWriteByteToAddress(SAVED_ADMIN_INFO_ADDRESS + Local_u8Iterator + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password[Local_u8Iterator]);
-				_delay_ms(150);
-			}*/
-			
-			EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,LOAD_LOGIN_SYSTEM_DATABASE);
-			_delay_ms(150);
-
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("Saved");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("Successfully");
-			_delay_ms(1000);
-			Program_Status_Flag = IDLE_STATUS;
-
-		}
 
 /************************************************************************************************************/
 /************************************************************************************************************/
 
-		else if (Program_Status_Flag == LOAD_LOGIN_SYSTEM_DATABASE)
-		{
-			/****************************************Load the Login System database from the EEPROM***************************************/
-			EEPROM_ui8ReadByteFromAddress(NO_OF_REGISTERED_USERS_ADDRESS,&LoginSystem_NumOfRegisteredUsers);
-			_delay_ms(200);
-		
 
-			EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS,LoginSystem_strAdmin.UserName,MAX_NO_OF_LETTERS);
-			LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-			_delay_ms(150);
-			EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password,MAX_NO_OF_LETTERS);
-			LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-			_delay_ms(150);
+		while (Program_Status_Flag == IDLE_STATUS)
+		{
+
+			//LCD_enuClearDisplay();
+			
+			switch (Current_State)
+			{	
 				
-			LoginSystem_strAdmin.User_Priority=ADMIN_PRIORITY;
-			_delay_ms(150);
-
-			u16 Local_u16UserAddress;
-			for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
-			{
-						Local_u16UserAddress = SAVED_USERS_INFO_ADDRESS +Local_u8Iterator*(2* MAX_NO_OF_LETTERS+1);
-						EEPROM_vReadBlockFromAddress(Local_u16UserAddress,&LoginSystem_AstrUsers[Local_u8Iterator].UserName,MAX_NO_OF_LETTERS);
-						_delay_ms(150);
-
-						EEPROM_vReadBlockFromAddress(Local_u16UserAddress + MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].Password,MAX_NO_OF_LETTERS);
-						_delay_ms(150);
-						EEPROM_ui8ReadByteFromAddress(Local_u16UserAddress + 2*MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].User_Priority);
-						_delay_ms(150);
-						LoginSystem_AstrUsers[Local_u8Iterator].UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-						LoginSystem_AstrUsers[Local_u8Iterator].Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-					}
-				
-			
-
-
-			Program_Status_Flag = IDLE_STATUS;
-		}
-/*******************************************************************************************************************************************/
-
-/************************************************************************************************************/
-/************************************************************************************************************/
-
-
-		if (Program_Status_Flag == IDLE_STATUS)
-		{
-
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("Choose mode");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("1-Admin  2-User");
-			Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
-			switch (Keypad_Pressed_Key)
-			{
-				case '1':
-				Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
+				case State_ROOM_1:
+				LCD_enuDisplayString("Room 1 controlled");
 				break;
-				case '2':
-				Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
+				case State_ROOM_2:
+				LCD_enuDisplayString("Room 2 controlled");
+				break;
+				case State_ROOM_3:
+				LCD_enuDisplayString("Room 3 controlled");
+				break;
+				case State_ROOM_4:
+				LCD_enuDisplayString("Room 4 controlled");
+				break;
+				case State_ROOM_5:
+				LCD_enuDisplayString("Room 5 controlled");
+				break;
+				case State_Air_Cond:
+				LCD_enuDisplayString("Air Cond controlled");
+				break;
+				case State_Door:
+				LCD_enuDisplayString("Door controlled");
+				break;
+				case State_Dimmer:
+				LCD_enuDisplayString("Dimmer controlled");
 				break;
 				default:
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("Invalid Choice");
-				_delay_ms(200);
+				break;
+				
 			}
+			
+
+			u8 Local_u8Data;
+			UART_enuRecieveChar(Local_u8Data);
+			if(UART_enuCheck_Connection())
+				{
+					Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
+				}
 
 		}
 
 		if (Program_Status_Flag == ADMIN_LOGIN_PAGE_STATUS)
 		{
-			u8 LoginSystem_u8TrueFlag;
-			u8 LoginSystem_u8TrialsLeft =3;
-			LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
+						u8 LoginSystem_u8_AdminTrueFlag;
+						u8 LoginSystem_u8_Remoted_USERTrueFlag;
+						u8 LoginSystem_u8TrialsLeft =3;
+						LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_Au8Username, LoginSystem_Au8Password);
 
 
-			LoginSystem_u8TrueFlag = (LoginSystem_u8Strcmp(LoginSystem_Au8Username,LoginSystem_strAdmin.UserName)) && ( LoginSystem_u8Strcmp(LoginSystem_Au8Password,LoginSystem_strAdmin.Password) ) ;
-			if (LoginSystem_u8TrueFlag == FALSE)
-			{
-				LoginSystem_u8TrialsLeft--;
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("Wrong Username");
-				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayString("or Password");
-				_delay_ms(1000);
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("Remaining Trials: ");
-				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayUnsignedInteger(LoginSystem_u8TrialsLeft);
-				_delay_ms(1000);
-				if (LoginSystem_u8TrialsLeft == 0)
-				{
-					Program_Status_Flag = BLOCKING_STATUS;
+						LoginSystem_u8_AdminTrueFlag = (LoginSystem_u8Strcmp(LoginSystem_Au8Username,LoginSystem_strAdmin.UserName)) && ( LoginSystem_u8Strcmp(LoginSystem_Au8Password,LoginSystem_strAdmin.Password) ) ;
+
+						if(LoginSystem_u8_AdminTrueFlag == TRUE)
+						{
+							Program_Status_Flag = ADMIN_MENU_STATUS;
+						}
+						else
+						{
+							for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+							{
+								LoginSystem_u8_Remoted_USERTrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
+								if (LoginSystem_u8_Remoted_USERTrueFlag == TRUE)
+								{
+									if(LoginSystem_AstrUsers[Local_u8Iterator].User_Priority == REMOTED_USER ) // pro>>>>   // rem: key or not
+									Program_Status_Flag = REMOTED_USER_MENU_STATUS;
+									break;
+								}
+							}
+
+						}
+
+
+						if ( (LoginSystem_u8_AdminTrueFlag == FALSE)&& (LoginSystem_u8_Remoted_USERTrueFlag ==FALSE) )
+						{
+							LoginSystem_u8TrialsLeft--;
+							UART_enuSendString("\r\nWrong Username or Password");
+							_delay_ms(300);
+							UART_enuSendString("\r\nRemaining Trials: ");
+							UART_enuSendChar('0'+LoginSystem_u8TrialsLeft);
+							_delay_ms(1000);
+							if (LoginSystem_u8TrialsLeft == 0)
+							{
+								Program_Status_Flag = BLOCKING_STATUS;
+							}
+						}
+						else
+						{
+							UART_enuSendString("\r\nLogged in Successfully");
+							_delay_ms(500);
+						}
 				}
-			}
-			else
-			{
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("Logged in");
-				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayString("Successfully");
-				_delay_ms(700);
-				Program_Status_Flag = ADMIN_MENU_STATUS;
-
-			}
-		}
+				
+				
+				/*
 		if (Program_Status_Flag == ADMIN_MENU_STATUS)
 		{
 			LCD_enuClearDisplay();
@@ -278,13 +315,12 @@ int main (void)
 
 					}
 
-					/**************Saving the new user into the EEPROM****************/
+					/**************Saving the new user into the EEPROM****************
 					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1), LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName,MAX_NO_OF_LETTERS);
 					_delay_ms(10);
 					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + MAX_NO_OF_LETTERS, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password,MAX_NO_OF_LETTERS);
 					_delay_ms(10);
-					LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-					LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+					
 
 					EEPROM_vWriteByteToAddress((SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + 2*MAX_NO_OF_LETTERS),LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].User_Priority);
 					_delay_ms(10);
@@ -339,6 +375,104 @@ int main (void)
 			}
 
 		}
+		*/
+		while (Program_Status_Flag == ADMIN_MENU_STATUS)
+		{
+			u8 ShowToUser = MAIN_MENU;
+			UART_enuSendString("\r\nWelcome Admin:\n");
+			UART_enuSendString(LoginSystem_strAdmin.UserName);
+			_delay_ms(500);
+	
+
+			while(ShowToUser == MAIN_MENU)
+			{
+				UART_enuSendString("\r\n1-Add User");
+				UART_enuSendString("\r\n2-Remove User");
+				UART_enuSendString("\r\n3-Room1");
+				UART_enuSendString("\r\n4-Room2");
+				UART_enuSendString("\r\n5-Room3");
+				UART_enuSendString("\r\n6-Room4");
+				UART_enuSendString("\r\n7-Room5");
+				UART_enuSendString("\r\n8-Dimmer");
+				UART_enuSendString("\r\n9-Door\r\n");
+			//	UART_enuSendString("\r\n10-Air Conditioner\r\n");
+				
+				UART_enuRecieveChar(&UART_CHOICE);
+				switch(UART_CHOICE)
+				{
+					case '1':
+					ShowToUser = ADD_USER_COMMAND;
+					break;
+					case '2':
+					ShowToUser = REMOVE_USER_COMMAND;
+					break;
+					case '3':
+					SPI_ui8TransmitRecive(ROOM1_LED_TOGGLE);
+					ShowToUser = LOG_OUT_CHOICE;//Set the next menu to be shown to room1 menu
+					break;
+					case '4':
+					SPI_ui8TransmitRecive(ROOM2_LED_TOGGLE);
+					ShowToUser = LOG_OUT_CHOICE;//Set the next menu to be shown to room1 menu
+					break;
+					case '5':
+					SPI_ui8TransmitRecive(ROOM3_LED_TOGGLE);
+					ShowToUser = LOG_OUT_CHOICE;
+					break;
+					case '6':
+					SPI_ui8TransmitRecive(ROOM4_LED_TOGGLE);
+					ShowToUser = LOG_OUT_CHOICE;
+					break;
+					case '7':
+					SPI_ui8TransmitRecive(ROOM5_LED_TOGGLE);
+					ShowToUser = LOG_OUT_CHOICE;
+					break;
+					case '8':
+					ShowToUser = DIMMER_MENU;
+					break;
+					case '9':
+					ShowToUser = DOOR_MENU;
+					break;
+					/*case '10':
+					ShowToUser = AIR_COND_MENU;
+					break;
+					*/
+					default:
+					UART_enuSendString("\r\nInvalid Choice");
+					_delay_ms(1000);
+					ShowToUser = MAIN_MENU;
+					break;
+				}
+			}
+			switch (ShowToUser)
+			{
+				case ADD_USER_COMMAND:
+				LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
+				UART_enuSendString("\r\n1-Remoted");
+				UART_enuSendString("\r\n2-Promoted");
+				UART_enuSendString("\r\n3-Nonremoted");
+				UART_enuSendString("\r\nPriority Arrangment: Promoted > Nonremoted (LCD+Keypad) > Remoted");
+				UART_enuRecieveChar(&UART_CHOICE);
+				/////////////////////////////////////////////////////////////fel
+				if (UART_CHOICE == '1')
+				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
+				else if (UART_CHOICE == '2')
+				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = PROMOTED_USER;
+				else if (UART_CHOICE == '3')
+				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
+				else{
+				UART_enuSendString("\r\nInvalid Choice");/////////////////////////////////////////////////////////////fel a5er
+				_delay_ms(1000);}
+				LoginSystem_SaveNewUser(LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers],&LoginSystem_NumOfRegisteredUsers);	
+			//	case REMOVE_USER_COMMAND:
+				
+				
+				
+			}
+				
+			
+		}
+		
+					
 		if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///offline user should have interrupt
 			{
 

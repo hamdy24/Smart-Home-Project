@@ -17,7 +17,20 @@
 #include "main_config.h"
 
 #include <util/delay.h>
+	ES_t LoginSystem_SaveNewUser(User_t Copy_strNewUser,u8 *Copy_u8NumofRegisteredUsers)
+	{
+		EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + (*Copy_u8NumofRegisteredUsers)*(2*MAX_NO_OF_LETTERS+1), Copy_strNewUser.UserName,MAX_NO_OF_LETTERS);
+		_delay_ms(50);
+		EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + (*Copy_u8NumofRegisteredUsers)*(2*MAX_NO_OF_LETTERS+1) + MAX_NO_OF_LETTERS, Copy_strNewUser.Password,MAX_NO_OF_LETTERS);
+		_delay_ms(50);
+		
 
+		EEPROM_vWriteByteToAddress((SAVED_USERS_INFO_ADDRESS + (*Copy_u8NumofRegisteredUsers)*(2*MAX_NO_OF_LETTERS+1) + 2*MAX_NO_OF_LETTERS),Copy_strNewUser.User_Priority);
+		_delay_ms(50);
+		(*Copy_u8NumofRegisteredUsers)++;
+
+		EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,(*Copy_u8NumofRegisteredUsers));
+	}
 	ES_t LoginSystem_enuGetDataFromUserByKeypad(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
 	{
 		ES_t Local_enuErrorState = ES_NOK;
@@ -32,7 +45,7 @@
 			LCD_enuSendData(Local_u8PressedKey);
 			Copy_Au8Username[Local_u8Iterator] = Local_u8PressedKey;
 		}
-		Copy_Au8Username[Local_u8Iterator] =NULL_CHARACTER;
+		Copy_Au8Username[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
 
 		LCD_enuClearDisplay();
 		LCD_enuDisplayString("Password:");
@@ -48,10 +61,25 @@
 			Copy_Au8Password[Local_u8Iterator] = Local_u8PressedKey;
 
 		}
-		Copy_Au8Password[Local_u8Iterator] =NULL_CHARACTER;
+		Copy_Au8Password[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
 		Local_enuErrorState = ES_OK;
 		return Local_enuErrorState;
 	}
+	
+		ES_t LoginSystem_enuGetDataFromUserBY_UART(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
+		{
+			ES_t Local_enuErrorState = ES_NOK;
+			UART_enuSendString("Username: ");
+			UART_enuRecieveString(Copy_Au8Username);
+			Copy_Au8Username[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
+			UART_enuSendString("Password: ");
+			UART_enuRecieveString(Copy_Au8Password);
+			Copy_Au8Password[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
+
+			Local_enuErrorState = ES_OK;
+			return Local_enuErrorState;
+		}
+
 
 
 	u8 LoginSystem_u8Strcmp (char *Copy_Au8Sring1, char *Copy_Au8Sring2)

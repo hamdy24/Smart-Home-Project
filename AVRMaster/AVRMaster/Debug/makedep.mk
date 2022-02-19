@@ -16,3 +16,5 @@ MCAL\DIO\DIO_prog.c
 
 MCAL\SPI\SPI.c
 
+MCAL\UART\UART_program.c
+

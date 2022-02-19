@@ -47,6 +47,22 @@
 #define State_Air_Cond							 7
 #define State_Door								 8
 
+
+#define MAIN_MENU  0
+
+#define ROOM1_LED_TOGGLE 1
+#define ROOM2_LED_TOGGLE 2
+#define ROOM3_LED_TOGGLE 3
+#define ROOM4_LED_TOGGLE 4
+#define ROOM5_LED_TOGGLE 5
+
+#define ADD_USER_COMMAND	6
+#define REMOVE_USER_COMMAND	7
+#define DIMMER_MENU  8
+#define AIR_COND_MENU  9
+#define DOOR_MENU  10
+
+#define LOG_OUT_CHOICE 11
 typedef struct {
 	u8 UserName[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
 	u8 Password[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
