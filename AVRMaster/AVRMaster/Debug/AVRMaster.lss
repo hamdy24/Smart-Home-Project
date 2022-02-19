@@ -1,0 +1,3182 @@
+
+AVRMaster.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00001362  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000018c  00800060  00001362  000013d6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00001562  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00001594  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000198  00000000  00000000  000015d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000037cd  00000000  00000000  00001768  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000dec  00000000  00000000  00004f35  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00001969  00000000  00000000  00005d21  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  0000040c  00000000  00000000  0000768c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000be5  00000000  00000000  00007a98  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00001f90  00000000  00000000  0000867d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000140  00000000  00000000  0000a60d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+       4:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+       8:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+       c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      10:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      14:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      18:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      1c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      20:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      24:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      28:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      2c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      30:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      34:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      38:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      3c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      40:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      44:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      48:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      4c:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+      50:	0c 94 3f 00 	jmp	0x7e	; 0x7e <__bad_interrupt>
+
+00000054 <__ctors_end>:
+      54:	11 24       	eor	r1, r1
+      56:	1f be       	out	0x3f, r1	; 63
+      58:	cf e5       	ldi	r28, 0x5F	; 95
+      5a:	d8 e0       	ldi	r29, 0x08	; 8
+      5c:	de bf       	out	0x3e, r29	; 62
+      5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_copy_data>:
+      60:	11 e0       	ldi	r17, 0x01	; 1
+      62:	a0 e6       	ldi	r26, 0x60	; 96
+      64:	b0 e0       	ldi	r27, 0x00	; 0
+      66:	e2 e6       	ldi	r30, 0x62	; 98
+      68:	f3 e1       	ldi	r31, 0x13	; 19
+      6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
+      6c:	05 90       	lpm	r0, Z+
+      6e:	0d 92       	st	X+, r0
+      70:	ac 3e       	cpi	r26, 0xEC	; 236
+      72:	b1 07       	cpc	r27, r17
+      74:	d9 f7       	brne	.-10     	; 0x6c <__do_copy_data+0xc>
+      76:	0e 94 c0 00 	call	0x180	; 0x180 <main>
+      7a:	0c 94 af 09 	jmp	0x135e	; 0x135e <_exit>
+
+0000007e <__bad_interrupt>:
+      7e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000082 <LoginSystem_enuGetDataFromUserByKeypad>:
+#include "main_config.h"
+
+#include <util/delay.h>
+
+	ES_t LoginSystem_enuGetDataFromUserByKeypad(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
+	{
+      82:	cf 92       	push	r12
+      84:	df 92       	push	r13
+      86:	ef 92       	push	r14
+      88:	ff 92       	push	r15
+      8a:	1f 93       	push	r17
+      8c:	cf 93       	push	r28
+      8e:	df 93       	push	r29
+      90:	1f 92       	push	r1
+      92:	cd b7       	in	r28, 0x3d	; 61
+      94:	de b7       	in	r29, 0x3e	; 62
+      96:	6c 01       	movw	r12, r24
+      98:	7b 01       	movw	r14, r22
+		ES_t Local_enuErrorState = ES_NOK;
+		u8 Local_u8PressedKey;
+		u8 Local_u8Iterator;
+		LCD_enuClearDisplay();
+      9a:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+		LCD_enuDisplayString("Username:");
+      9e:	80 e7       	ldi	r24, 0x70	; 112
+      a0:	90 e0       	ldi	r25, 0x00	; 0
+      a2:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+		LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+      a6:	60 e0       	ldi	r22, 0x00	; 0
+      a8:	81 e0       	ldi	r24, 0x01	; 1
+      aa:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+		for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
+      ae:	10 e0       	ldi	r17, 0x00	; 0
+      b0:	0d c0       	rjmp	.+26     	; 0xcc <LoginSystem_enuGetDataFromUserByKeypad+0x4a>
+		{
+			Keypad_enuGetPressedKey(&Local_u8PressedKey);
+      b2:	ce 01       	movw	r24, r28
+      b4:	01 96       	adiw	r24, 0x01	; 1
+      b6:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+			LCD_enuSendData(Local_u8PressedKey);
+      ba:	89 81       	ldd	r24, Y+1	; 0x01
+      bc:	0e 94 81 07 	call	0xf02	; 0xf02 <LCD_enuSendData>
+			Copy_Au8Username[Local_u8Iterator] = Local_u8PressedKey;
+      c0:	f6 01       	movw	r30, r12
+      c2:	e1 0f       	add	r30, r17
+      c4:	f1 1d       	adc	r31, r1
+      c6:	89 81       	ldd	r24, Y+1	; 0x01
+      c8:	80 83       	st	Z, r24
+		u8 Local_u8PressedKey;
+		u8 Local_u8Iterator;
+		LCD_enuClearDisplay();
+		LCD_enuDisplayString("Username:");
+		LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+		for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
+      ca:	1f 5f       	subi	r17, 0xFF	; 255
+      cc:	14 30       	cpi	r17, 0x04	; 4
+      ce:	88 f3       	brcs	.-30     	; 0xb2 <LoginSystem_enuGetDataFromUserByKeypad+0x30>
+		{
+			Keypad_enuGetPressedKey(&Local_u8PressedKey);
+			LCD_enuSendData(Local_u8PressedKey);
+			Copy_Au8Username[Local_u8Iterator] = Local_u8PressedKey;
+		}
+		Copy_Au8Username[Local_u8Iterator] =NULL_CHARACTER;
+      d0:	f6 01       	movw	r30, r12
+      d2:	e1 0f       	add	r30, r17
+      d4:	f1 1d       	adc	r31, r1
+      d6:	10 82       	st	Z, r1
+
+		LCD_enuClearDisplay();
+      d8:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+		LCD_enuDisplayString("Password:");
+      dc:	8a e7       	ldi	r24, 0x7A	; 122
+      de:	90 e0       	ldi	r25, 0x00	; 0
+      e0:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+		LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+      e4:	60 e0       	ldi	r22, 0x00	; 0
+      e6:	81 e0       	ldi	r24, 0x01	; 1
+      e8:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+
+		for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
+      ec:	10 e0       	ldi	r17, 0x00	; 0
+      ee:	1a c0       	rjmp	.+52     	; 0x124 <LoginSystem_enuGetDataFromUserByKeypad+0xa2>
+		{
+			Keypad_enuGetPressedKey(&Local_u8PressedKey);
+      f0:	ce 01       	movw	r24, r28
+      f2:	01 96       	adiw	r24, 0x01	; 1
+      f4:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+			LCD_enuSendData(Local_u8PressedKey);
+      f8:	89 81       	ldd	r24, Y+1	; 0x01
+      fa:	0e 94 81 07 	call	0xf02	; 0xf02 <LCD_enuSendData>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+      fe:	87 ea       	ldi	r24, 0xA7	; 167
+     100:	91 e6       	ldi	r25, 0x61	; 97
+     102:	01 97       	sbiw	r24, 0x01	; 1
+     104:	f1 f7       	brne	.-4      	; 0x102 <LoginSystem_enuGetDataFromUserByKeypad+0x80>
+     106:	00 c0       	rjmp	.+0      	; 0x108 <LoginSystem_enuGetDataFromUserByKeypad+0x86>
+     108:	00 00       	nop
+			_delay_ms(100);
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0+Local_u8Iterator);
+     10a:	61 2f       	mov	r22, r17
+     10c:	81 e0       	ldi	r24, 0x01	; 1
+     10e:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuSendData('*');
+     112:	8a e2       	ldi	r24, 0x2A	; 42
+     114:	0e 94 81 07 	call	0xf02	; 0xf02 <LCD_enuSendData>
+			Copy_Au8Password[Local_u8Iterator] = Local_u8PressedKey;
+     118:	f7 01       	movw	r30, r14
+     11a:	e1 0f       	add	r30, r17
+     11c:	f1 1d       	adc	r31, r1
+     11e:	89 81       	ldd	r24, Y+1	; 0x01
+     120:	80 83       	st	Z, r24
+
+		LCD_enuClearDisplay();
+		LCD_enuDisplayString("Password:");
+		LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+
+		for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
+     122:	1f 5f       	subi	r17, 0xFF	; 255
+     124:	14 30       	cpi	r17, 0x04	; 4
+     126:	20 f3       	brcs	.-56     	; 0xf0 <LoginSystem_enuGetDataFromUserByKeypad+0x6e>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0+Local_u8Iterator);
+			LCD_enuSendData('*');
+			Copy_Au8Password[Local_u8Iterator] = Local_u8PressedKey;
+
+		}
+		Copy_Au8Password[Local_u8Iterator] =NULL_CHARACTER;
+     128:	f7 01       	movw	r30, r14
+     12a:	e1 0f       	add	r30, r17
+     12c:	f1 1d       	adc	r31, r1
+     12e:	10 82       	st	Z, r1
+		Local_enuErrorState = ES_OK;
+		return Local_enuErrorState;
+	}
+     130:	81 e0       	ldi	r24, 0x01	; 1
+     132:	0f 90       	pop	r0
+     134:	df 91       	pop	r29
+     136:	cf 91       	pop	r28
+     138:	1f 91       	pop	r17
+     13a:	ff 90       	pop	r15
+     13c:	ef 90       	pop	r14
+     13e:	df 90       	pop	r13
+     140:	cf 90       	pop	r12
+     142:	08 95       	ret
+
+00000144 <LoginSystem_u8Strcmp>:
+
+
+	u8 LoginSystem_u8Strcmp (char *Copy_Au8Sring1, char *Copy_Au8Sring2)
+	{
+     144:	dc 01       	movw	r26, r24
+		u8 Local_u8Iterator=0;
+     146:	40 e0       	ldi	r20, 0x00	; 0
+		while(Copy_Au8Sring1[Local_u8Iterator]==Copy_Au8Sring2[Local_u8Iterator])
+     148:	05 c0       	rjmp	.+10     	; 0x154 <LoginSystem_u8Strcmp+0x10>
+		{
+			if (Copy_Au8Sring1[Local_u8Iterator]==NULL_CHARACTER || Copy_Au8Sring2[Local_u8Iterator]==NULL_CHARACTER)
+     14a:	99 23       	and	r25, r25
+     14c:	79 f0       	breq	.+30     	; 0x16c <LoginSystem_u8Strcmp+0x28>
+     14e:	22 23       	and	r18, r18
+     150:	69 f0       	breq	.+26     	; 0x16c <LoginSystem_u8Strcmp+0x28>
+				break;
+			Local_u8Iterator++;
+     152:	4f 5f       	subi	r20, 0xFF	; 255
+
+
+	u8 LoginSystem_u8Strcmp (char *Copy_Au8Sring1, char *Copy_Au8Sring2)
+	{
+		u8 Local_u8Iterator=0;
+		while(Copy_Au8Sring1[Local_u8Iterator]==Copy_Au8Sring2[Local_u8Iterator])
+     154:	24 2f       	mov	r18, r20
+     156:	30 e0       	ldi	r19, 0x00	; 0
+     158:	fd 01       	movw	r30, r26
+     15a:	e2 0f       	add	r30, r18
+     15c:	f3 1f       	adc	r31, r19
+     15e:	90 81       	ld	r25, Z
+     160:	fb 01       	movw	r30, r22
+     162:	e2 0f       	add	r30, r18
+     164:	f3 1f       	adc	r31, r19
+     166:	20 81       	ld	r18, Z
+     168:	92 17       	cp	r25, r18
+     16a:	79 f3       	breq	.-34     	; 0x14a <LoginSystem_u8Strcmp+0x6>
+			if (Copy_Au8Sring1[Local_u8Iterator]==NULL_CHARACTER || Copy_Au8Sring2[Local_u8Iterator]==NULL_CHARACTER)
+				break;
+			Local_u8Iterator++;
+		}
+
+		if (Copy_Au8Sring1[Local_u8Iterator]==NULL_CHARACTER && Copy_Au8Sring2[Local_u8Iterator]==NULL_CHARACTER)
+     16c:	91 11       	cpse	r25, r1
+     16e:	04 c0       	rjmp	.+8      	; 0x178 <LoginSystem_u8Strcmp+0x34>
+     170:	22 23       	and	r18, r18
+     172:	21 f0       	breq	.+8      	; 0x17c <LoginSystem_u8Strcmp+0x38>
+			return TRUE;
+		else
+			return FALSE;
+     174:	80 e0       	ldi	r24, 0x00	; 0
+     176:	08 95       	ret
+     178:	80 e0       	ldi	r24, 0x00	; 0
+     17a:	08 95       	ret
+				break;
+			Local_u8Iterator++;
+		}
+
+		if (Copy_Au8Sring1[Local_u8Iterator]==NULL_CHARACTER && Copy_Au8Sring2[Local_u8Iterator]==NULL_CHARACTER)
+			return TRUE;
+     17c:	81 e0       	ldi	r24, 0x01	; 1
+		else
+			return FALSE;
+	}
+     17e:	08 95       	ret
+
+00000180 <main>:
+#include "LoginSystem.h"
+
+#include <util/delay.h>
+
+int main (void)
+{
+     180:	cf 93       	push	r28
+     182:	df 93       	push	r29
+     184:	cd b7       	in	r28, 0x3d	; 61
+     186:	de b7       	in	r29, 0x3e	; 62
+     188:	c4 54       	subi	r28, 0x44	; 68
+     18a:	d1 09       	sbc	r29, r1
+     18c:	0f b6       	in	r0, 0x3f	; 63
+     18e:	f8 94       	cli
+     190:	de bf       	out	0x3e, r29	; 62
+     192:	0f be       	out	0x3f, r0	; 63
+     194:	cd bf       	out	0x3d, r28	; 61
+/************************************************************************************************************/
+/*******************************************INITIALIZATION***************************************************/
+	//TWI_Init();
+	//EEPROM_enuInit();
+	DIO_enuInit();
+     196:	0e 94 55 08 	call	0x10aa	; 0x10aa <DIO_enuInit>
+//	Timer1_enuInit();
+	SPI_vInitMaster();
+     19a:	0e 94 86 09 	call	0x130c	; 0x130c <SPI_vInitMaster>
+
+	LCD_enuInit();
+     19e:	0e 94 24 07 	call	0xe48	; 0xe48 <LCD_enuInit>
+	Keypad_enuInit();
+     1a2:	0e 94 58 05 	call	0xab0	; 0xab0 <Keypad_enuInit>
+	
+/***************************************************************************************************/
+/* ***********************************************************************************************************/
+/************************************************************************************************************/
+
+	__asm("sei");// GIE
+     1a6:	78 94       	sei
+
+	u8 Program_Status_Flag;
+	User_t LoginSystem_strAdmin;
+	User_t LoginSystem_AstrUsers[MAX_NO_OF_USERS];
+	u8 LoginSystem_NumOfRegisteredUsers=0;
+     1a8:	19 ae       	std	Y+57, r1	; 0x39
+	u8 LoginSystem_Au8Username[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
+	u8 LoginSystem_Au8Password[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
+
+	u8 Keypad_Pressed_Key;
+	u8 Current_State=0;
+	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
+     1aa:	be 01       	movw	r22, r28
+     1ac:	6f 5f       	subi	r22, 0xFF	; 255
+     1ae:	7f 4f       	sbci	r23, 0xFF	; 255
+     1b0:	80 e0       	ldi	r24, 0x00	; 0
+     1b2:	0e 94 fb 04 	call	0x9f6	; 0x9f6 <EEPROM_ui8ReadByteFromAddress>
+     1b6:	2f ef       	ldi	r18, 0xFF	; 255
+     1b8:	32 e5       	ldi	r19, 0x52	; 82
+     1ba:	87 e0       	ldi	r24, 0x07	; 7
+     1bc:	21 50       	subi	r18, 0x01	; 1
+     1be:	30 40       	sbci	r19, 0x00	; 0
+     1c0:	80 40       	sbci	r24, 0x00	; 0
+     1c2:	e1 f7       	brne	.-8      	; 0x1bc <main+0x3c>
+     1c4:	00 c0       	rjmp	.+0      	; 0x1c6 <main+0x46>
+     1c6:	00 00       	nop
+	_delay_ms(150);
+
+	LCD_enuDisplayString("Welcome To Smart");
+     1c8:	84 e8       	ldi	r24, 0x84	; 132
+     1ca:	90 e0       	ldi	r25, 0x00	; 0
+     1cc:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+	LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     1d0:	60 e0       	ldi	r22, 0x00	; 0
+     1d2:	81 e0       	ldi	r24, 0x01	; 1
+     1d4:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+	LCD_enuDisplayString("Home !");
+     1d8:	85 e9       	ldi	r24, 0x95	; 149
+     1da:	90 e0       	ldi	r25, 0x00	; 0
+     1dc:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     1e0:	9f ef       	ldi	r25, 0xFF	; 255
+     1e2:	27 ea       	ldi	r18, 0xA7	; 167
+     1e4:	31 e6       	ldi	r19, 0x61	; 97
+     1e6:	91 50       	subi	r25, 0x01	; 1
+     1e8:	20 40       	sbci	r18, 0x00	; 0
+     1ea:	30 40       	sbci	r19, 0x00	; 0
+     1ec:	e1 f7       	brne	.-8      	; 0x1e6 <main+0x66>
+     1ee:	00 c0       	rjmp	.+0      	; 0x1f0 <main+0x70>
+     1f0:	00 00       	nop
+	_delay_ms (2000);
+	LCD_enuClearDisplay();
+     1f2:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+*/
+
+
+/***************************************************************************************************************/
+/***************************************************************************************************************/
+		if (Program_Status_Flag == FIRST_TIME_USE_STATUS)
+     1f6:	89 81       	ldd	r24, Y+1	; 0x01
+     1f8:	8f 3f       	cpi	r24, 0xFF	; 255
+     1fa:	09 f0       	breq	.+2      	; 0x1fe <main+0x7e>
+     1fc:	8f c0       	rjmp	.+286    	; 0x31c <main+0x19c>
+		{
+
+			EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
+     1fe:	69 ad       	ldd	r22, Y+57	; 0x39
+     200:	81 e1       	ldi	r24, 0x11	; 17
+     202:	90 e0       	ldi	r25, 0x00	; 0
+     204:	0e 94 1f 05 	call	0xa3e	; 0xa3e <EEPROM_vWriteByteToAddress>
+     208:	8f ef       	ldi	r24, 0xFF	; 255
+     20a:	92 e5       	ldi	r25, 0x52	; 82
+     20c:	27 e0       	ldi	r18, 0x07	; 7
+     20e:	81 50       	subi	r24, 0x01	; 1
+     210:	90 40       	sbci	r25, 0x00	; 0
+     212:	20 40       	sbci	r18, 0x00	; 0
+     214:	e1 f7       	brne	.-8      	; 0x20e <main+0x8e>
+     216:	00 c0       	rjmp	.+0      	; 0x218 <main+0x98>
+     218:	00 00       	nop
+			_delay_ms(150);
+			LCD_enuDisplayString("For First Time");
+     21a:	8c e9       	ldi	r24, 0x9C	; 156
+     21c:	90 e0       	ldi	r25, 0x00	; 0
+     21e:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     222:	60 e0       	ldi	r22, 0x00	; 0
+     224:	81 e0       	ldi	r24, 0x01	; 1
+     226:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString("Use");
+     22a:	8b ea       	ldi	r24, 0xAB	; 171
+     22c:	90 e0       	ldi	r25, 0x00	; 0
+     22e:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     232:	3f ef       	ldi	r19, 0xFF	; 255
+     234:	87 ea       	ldi	r24, 0xA7	; 167
+     236:	91 e6       	ldi	r25, 0x61	; 97
+     238:	31 50       	subi	r19, 0x01	; 1
+     23a:	80 40       	sbci	r24, 0x00	; 0
+     23c:	90 40       	sbci	r25, 0x00	; 0
+     23e:	e1 f7       	brne	.-8      	; 0x238 <main+0xb8>
+     240:	00 c0       	rjmp	.+0      	; 0x242 <main+0xc2>
+     242:	00 00       	nop
+			_delay_ms(2000);
+			LCD_enuClearDisplay();
+     244:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+			LCD_enuDisplayString("Register Admin");
+     248:	8f ea       	ldi	r24, 0xAF	; 175
+     24a:	90 e0       	ldi	r25, 0x00	; 0
+     24c:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     250:	60 e0       	ldi	r22, 0x00	; 0
+     252:	81 e0       	ldi	r24, 0x01	; 1
+     254:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString("on Keypad");
+     258:	8e eb       	ldi	r24, 0xBE	; 190
+     25a:	90 e0       	ldi	r25, 0x00	; 0
+     25c:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     260:	2f ef       	ldi	r18, 0xFF	; 255
+     262:	37 ea       	ldi	r19, 0xA7	; 167
+     264:	81 e6       	ldi	r24, 0x61	; 97
+     266:	21 50       	subi	r18, 0x01	; 1
+     268:	30 40       	sbci	r19, 0x00	; 0
+     26a:	80 40       	sbci	r24, 0x00	; 0
+     26c:	e1 f7       	brne	.-8      	; 0x266 <main+0xe6>
+     26e:	00 c0       	rjmp	.+0      	; 0x270 <main+0xf0>
+     270:	00 00       	nop
+			_delay_ms(2000);
+			LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_strAdmin.UserName, LoginSystem_strAdmin.Password);
+     272:	be 01       	movw	r22, r28
+     274:	69 5f       	subi	r22, 0xF9	; 249
+     276:	7f 4f       	sbci	r23, 0xFF	; 255
+     278:	ce 01       	movw	r24, r28
+     27a:	02 96       	adiw	r24, 0x02	; 2
+     27c:	0e 94 41 00 	call	0x82	; 0x82 <LoginSystem_enuGetDataFromUserByKeypad>
+			LoginSystem_strAdmin.User_Priority = ADMIN_PRIORITY;
+     280:	81 e0       	ldi	r24, 0x01	; 1
+     282:	8c 87       	std	Y+12, r24	; 0x0c
+			
+		
+			EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS ,LoginSystem_strAdmin.UserName , MAX_NO_OF_LETTERS);
+     284:	44 e0       	ldi	r20, 0x04	; 4
+     286:	50 e0       	ldi	r21, 0x00	; 0
+     288:	be 01       	movw	r22, r28
+     28a:	6e 5f       	subi	r22, 0xFE	; 254
+     28c:	7f 4f       	sbci	r23, 0xFF	; 255
+     28e:	81 e0       	ldi	r24, 0x01	; 1
+     290:	90 e0       	ldi	r25, 0x00	; 0
+     292:	0e 94 31 05 	call	0xa62	; 0xa62 <EEPROM_vWriteBlockToAddress>
+     296:	9f ef       	ldi	r25, 0xFF	; 255
+     298:	23 ec       	ldi	r18, 0xC3	; 195
+     29a:	39 e0       	ldi	r19, 0x09	; 9
+     29c:	91 50       	subi	r25, 0x01	; 1
+     29e:	20 40       	sbci	r18, 0x00	; 0
+     2a0:	30 40       	sbci	r19, 0x00	; 0
+     2a2:	e1 f7       	brne	.-8      	; 0x29c <main+0x11c>
+     2a4:	00 c0       	rjmp	.+0      	; 0x2a6 <main+0x126>
+     2a6:	00 00       	nop
+			_delay_ms(200);
+			EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS ,LoginSystem_strAdmin.Password , MAX_NO_OF_LETTERS);
+     2a8:	44 e0       	ldi	r20, 0x04	; 4
+     2aa:	50 e0       	ldi	r21, 0x00	; 0
+     2ac:	be 01       	movw	r22, r28
+     2ae:	69 5f       	subi	r22, 0xF9	; 249
+     2b0:	7f 4f       	sbci	r23, 0xFF	; 255
+     2b2:	85 e0       	ldi	r24, 0x05	; 5
+     2b4:	90 e0       	ldi	r25, 0x00	; 0
+     2b6:	0e 94 31 05 	call	0xa62	; 0xa62 <EEPROM_vWriteBlockToAddress>
+     2ba:	8f ef       	ldi	r24, 0xFF	; 255
+     2bc:	93 ec       	ldi	r25, 0xC3	; 195
+     2be:	29 e0       	ldi	r18, 0x09	; 9
+     2c0:	81 50       	subi	r24, 0x01	; 1
+     2c2:	90 40       	sbci	r25, 0x00	; 0
+     2c4:	20 40       	sbci	r18, 0x00	; 0
+     2c6:	e1 f7       	brne	.-8      	; 0x2c0 <main+0x140>
+     2c8:	00 c0       	rjmp	.+0      	; 0x2ca <main+0x14a>
+     2ca:	00 00       	nop
+				_delay_ms(150);
+				EEPROM_vWriteByteToAddress(SAVED_ADMIN_INFO_ADDRESS + Local_u8Iterator + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password[Local_u8Iterator]);
+				_delay_ms(150);
+			}*/
+			
+			EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,LOAD_LOGIN_SYSTEM_DATABASE);
+     2cc:	60 e0       	ldi	r22, 0x00	; 0
+     2ce:	80 e0       	ldi	r24, 0x00	; 0
+     2d0:	90 e0       	ldi	r25, 0x00	; 0
+     2d2:	0e 94 1f 05 	call	0xa3e	; 0xa3e <EEPROM_vWriteByteToAddress>
+     2d6:	3f ef       	ldi	r19, 0xFF	; 255
+     2d8:	82 e5       	ldi	r24, 0x52	; 82
+     2da:	97 e0       	ldi	r25, 0x07	; 7
+     2dc:	31 50       	subi	r19, 0x01	; 1
+     2de:	80 40       	sbci	r24, 0x00	; 0
+     2e0:	90 40       	sbci	r25, 0x00	; 0
+     2e2:	e1 f7       	brne	.-8      	; 0x2dc <main+0x15c>
+     2e4:	00 c0       	rjmp	.+0      	; 0x2e6 <main+0x166>
+     2e6:	00 00       	nop
+			_delay_ms(150);
+
+			LCD_enuClearDisplay();
+     2e8:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+			LCD_enuDisplayString("Saved");
+     2ec:	88 ec       	ldi	r24, 0xC8	; 200
+     2ee:	90 e0       	ldi	r25, 0x00	; 0
+     2f0:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     2f4:	60 e0       	ldi	r22, 0x00	; 0
+     2f6:	81 e0       	ldi	r24, 0x01	; 1
+     2f8:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString("Successfully");
+     2fc:	8e ec       	ldi	r24, 0xCE	; 206
+     2fe:	90 e0       	ldi	r25, 0x00	; 0
+     300:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     304:	2f ef       	ldi	r18, 0xFF	; 255
+     306:	33 ed       	ldi	r19, 0xD3	; 211
+     308:	80 e3       	ldi	r24, 0x30	; 48
+     30a:	21 50       	subi	r18, 0x01	; 1
+     30c:	30 40       	sbci	r19, 0x00	; 0
+     30e:	80 40       	sbci	r24, 0x00	; 0
+     310:	e1 f7       	brne	.-8      	; 0x30a <main+0x18a>
+     312:	00 c0       	rjmp	.+0      	; 0x314 <main+0x194>
+     314:	00 00       	nop
+			_delay_ms(1000);
+			Program_Status_Flag = IDLE_STATUS;
+     316:	87 e0       	ldi	r24, 0x07	; 7
+     318:	89 83       	std	Y+1, r24	; 0x01
+     31a:	aa c0       	rjmp	.+340    	; 0x470 <__EEPROM_REGION_LENGTH__+0x70>
+		}
+
+/************************************************************************************************************/
+/************************************************************************************************************/
+
+		else if (Program_Status_Flag == LOAD_LOGIN_SYSTEM_DATABASE)
+     31c:	81 11       	cpse	r24, r1
+     31e:	a8 c0       	rjmp	.+336    	; 0x470 <__EEPROM_REGION_LENGTH__+0x70>
+		{
+			/****************************************Load the Login System database from the EEPROM***************************************/
+			EEPROM_ui8ReadByteFromAddress(NO_OF_REGISTERED_USERS_ADDRESS,&LoginSystem_NumOfRegisteredUsers);
+     320:	be 01       	movw	r22, r28
+     322:	67 5c       	subi	r22, 0xC7	; 199
+     324:	7f 4f       	sbci	r23, 0xFF	; 255
+     326:	81 e1       	ldi	r24, 0x11	; 17
+     328:	0e 94 fb 04 	call	0x9f6	; 0x9f6 <EEPROM_ui8ReadByteFromAddress>
+     32c:	9f ef       	ldi	r25, 0xFF	; 255
+     32e:	23 ec       	ldi	r18, 0xC3	; 195
+     330:	39 e0       	ldi	r19, 0x09	; 9
+     332:	91 50       	subi	r25, 0x01	; 1
+     334:	20 40       	sbci	r18, 0x00	; 0
+     336:	30 40       	sbci	r19, 0x00	; 0
+     338:	e1 f7       	brne	.-8      	; 0x332 <main+0x1b2>
+     33a:	00 c0       	rjmp	.+0      	; 0x33c <main+0x1bc>
+     33c:	00 00       	nop
+			_delay_ms(200);
+		
+
+			EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS,LoginSystem_strAdmin.UserName,MAX_NO_OF_LETTERS);
+     33e:	44 e0       	ldi	r20, 0x04	; 4
+     340:	50 e0       	ldi	r21, 0x00	; 0
+     342:	be 01       	movw	r22, r28
+     344:	6e 5f       	subi	r22, 0xFE	; 254
+     346:	7f 4f       	sbci	r23, 0xFF	; 255
+     348:	81 e0       	ldi	r24, 0x01	; 1
+     34a:	90 e0       	ldi	r25, 0x00	; 0
+     34c:	0e 94 06 05 	call	0xa0c	; 0xa0c <EEPROM_vReadBlockFromAddress>
+			LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     350:	1e 82       	std	Y+6, r1	; 0x06
+     352:	8f ef       	ldi	r24, 0xFF	; 255
+     354:	92 e5       	ldi	r25, 0x52	; 82
+     356:	27 e0       	ldi	r18, 0x07	; 7
+     358:	81 50       	subi	r24, 0x01	; 1
+     35a:	90 40       	sbci	r25, 0x00	; 0
+     35c:	20 40       	sbci	r18, 0x00	; 0
+     35e:	e1 f7       	brne	.-8      	; 0x358 <main+0x1d8>
+     360:	00 c0       	rjmp	.+0      	; 0x362 <main+0x1e2>
+     362:	00 00       	nop
+			_delay_ms(150);
+			EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password,MAX_NO_OF_LETTERS);
+     364:	44 e0       	ldi	r20, 0x04	; 4
+     366:	50 e0       	ldi	r21, 0x00	; 0
+     368:	be 01       	movw	r22, r28
+     36a:	69 5f       	subi	r22, 0xF9	; 249
+     36c:	7f 4f       	sbci	r23, 0xFF	; 255
+     36e:	85 e0       	ldi	r24, 0x05	; 5
+     370:	90 e0       	ldi	r25, 0x00	; 0
+     372:	0e 94 06 05 	call	0xa0c	; 0xa0c <EEPROM_vReadBlockFromAddress>
+			LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     376:	1b 86       	std	Y+11, r1	; 0x0b
+     378:	3f ef       	ldi	r19, 0xFF	; 255
+     37a:	82 e5       	ldi	r24, 0x52	; 82
+     37c:	97 e0       	ldi	r25, 0x07	; 7
+     37e:	31 50       	subi	r19, 0x01	; 1
+     380:	80 40       	sbci	r24, 0x00	; 0
+     382:	90 40       	sbci	r25, 0x00	; 0
+     384:	e1 f7       	brne	.-8      	; 0x37e <main+0x1fe>
+     386:	00 c0       	rjmp	.+0      	; 0x388 <main+0x208>
+     388:	00 00       	nop
+			_delay_ms(150);
+				
+			LoginSystem_strAdmin.User_Priority=ADMIN_PRIORITY;
+     38a:	81 e0       	ldi	r24, 0x01	; 1
+     38c:	8c 87       	std	Y+12, r24	; 0x0c
+     38e:	2f ef       	ldi	r18, 0xFF	; 255
+     390:	32 e5       	ldi	r19, 0x52	; 82
+     392:	87 e0       	ldi	r24, 0x07	; 7
+     394:	21 50       	subi	r18, 0x01	; 1
+     396:	30 40       	sbci	r19, 0x00	; 0
+     398:	80 40       	sbci	r24, 0x00	; 0
+     39a:	e1 f7       	brne	.-8      	; 0x394 <main+0x214>
+     39c:	00 c0       	rjmp	.+0      	; 0x39e <main+0x21e>
+     39e:	00 00       	nop
+			_delay_ms(150);
+
+			u16 Local_u16UserAddress;
+			for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+     3a0:	d1 2c       	mov	r13, r1
+     3a2:	60 c0       	rjmp	.+192    	; 0x464 <__EEPROM_REGION_LENGTH__+0x64>
+			{
+						Local_u16UserAddress = SAVED_USERS_INFO_ADDRESS +Local_u8Iterator*(2* MAX_NO_OF_LETTERS+1);
+     3a4:	8d 2d       	mov	r24, r13
+     3a6:	90 e0       	ldi	r25, 0x00	; 0
+     3a8:	7c 01       	movw	r14, r24
+     3aa:	ee 0c       	add	r14, r14
+     3ac:	ff 1c       	adc	r15, r15
+     3ae:	ee 0c       	add	r14, r14
+     3b0:	ff 1c       	adc	r15, r15
+     3b2:	ee 0c       	add	r14, r14
+     3b4:	ff 1c       	adc	r15, r15
+     3b6:	e8 0e       	add	r14, r24
+     3b8:	f9 1e       	adc	r15, r25
+     3ba:	57 01       	movw	r10, r14
+     3bc:	22 e1       	ldi	r18, 0x12	; 18
+     3be:	a2 0e       	add	r10, r18
+     3c0:	b1 1c       	adc	r11, r1
+						EEPROM_vReadBlockFromAddress(Local_u16UserAddress,&LoginSystem_AstrUsers[Local_u8Iterator].UserName,MAX_NO_OF_LETTERS);
+     3c2:	2b e0       	ldi	r18, 0x0B	; 11
+     3c4:	28 9f       	mul	r18, r24
+     3c6:	80 01       	movw	r16, r0
+     3c8:	29 9f       	mul	r18, r25
+     3ca:	10 0d       	add	r17, r0
+     3cc:	11 24       	eor	r1, r1
+     3ce:	6d e0       	ldi	r22, 0x0D	; 13
+     3d0:	70 e0       	ldi	r23, 0x00	; 0
+     3d2:	6c 0f       	add	r22, r28
+     3d4:	7d 1f       	adc	r23, r29
+     3d6:	60 0f       	add	r22, r16
+     3d8:	71 1f       	adc	r23, r17
+     3da:	44 e0       	ldi	r20, 0x04	; 4
+     3dc:	50 e0       	ldi	r21, 0x00	; 0
+     3de:	c5 01       	movw	r24, r10
+     3e0:	0e 94 06 05 	call	0xa0c	; 0xa0c <EEPROM_vReadBlockFromAddress>
+     3e4:	3f ef       	ldi	r19, 0xFF	; 255
+     3e6:	82 e5       	ldi	r24, 0x52	; 82
+     3e8:	97 e0       	ldi	r25, 0x07	; 7
+     3ea:	31 50       	subi	r19, 0x01	; 1
+     3ec:	80 40       	sbci	r24, 0x00	; 0
+     3ee:	90 40       	sbci	r25, 0x00	; 0
+     3f0:	e1 f7       	brne	.-8      	; 0x3ea <main+0x26a>
+     3f2:	00 c0       	rjmp	.+0      	; 0x3f4 <main+0x274>
+     3f4:	00 00       	nop
+						_delay_ms(150);
+
+						EEPROM_vReadBlockFromAddress(Local_u16UserAddress + MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].Password,MAX_NO_OF_LETTERS);
+     3f6:	b8 01       	movw	r22, r16
+     3f8:	6b 5f       	subi	r22, 0xFB	; 251
+     3fa:	7f 4f       	sbci	r23, 0xFF	; 255
+     3fc:	2d e0       	ldi	r18, 0x0D	; 13
+     3fe:	30 e0       	ldi	r19, 0x00	; 0
+     400:	2c 0f       	add	r18, r28
+     402:	3d 1f       	adc	r19, r29
+     404:	62 0f       	add	r22, r18
+     406:	73 1f       	adc	r23, r19
+     408:	44 e0       	ldi	r20, 0x04	; 4
+     40a:	50 e0       	ldi	r21, 0x00	; 0
+     40c:	c7 01       	movw	r24, r14
+     40e:	46 96       	adiw	r24, 0x16	; 22
+     410:	0e 94 06 05 	call	0xa0c	; 0xa0c <EEPROM_vReadBlockFromAddress>
+     414:	3f ef       	ldi	r19, 0xFF	; 255
+     416:	82 e5       	ldi	r24, 0x52	; 82
+     418:	97 e0       	ldi	r25, 0x07	; 7
+     41a:	31 50       	subi	r19, 0x01	; 1
+     41c:	80 40       	sbci	r24, 0x00	; 0
+     41e:	90 40       	sbci	r25, 0x00	; 0
+     420:	e1 f7       	brne	.-8      	; 0x41a <__EEPROM_REGION_LENGTH__+0x1a>
+     422:	00 c0       	rjmp	.+0      	; 0x424 <__EEPROM_REGION_LENGTH__+0x24>
+     424:	00 00       	nop
+						_delay_ms(150);
+						EEPROM_ui8ReadByteFromAddress(Local_u16UserAddress + 2*MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].User_Priority);
+     426:	b8 01       	movw	r22, r16
+     428:	66 5f       	subi	r22, 0xF6	; 246
+     42a:	7f 4f       	sbci	r23, 0xFF	; 255
+     42c:	2d e0       	ldi	r18, 0x0D	; 13
+     42e:	30 e0       	ldi	r19, 0x00	; 0
+     430:	2c 0f       	add	r18, r28
+     432:	3d 1f       	adc	r19, r29
+     434:	62 0f       	add	r22, r18
+     436:	73 1f       	adc	r23, r19
+     438:	88 e0       	ldi	r24, 0x08	; 8
+     43a:	8a 0d       	add	r24, r10
+     43c:	0e 94 fb 04 	call	0x9f6	; 0x9f6 <EEPROM_ui8ReadByteFromAddress>
+     440:	3f ef       	ldi	r19, 0xFF	; 255
+     442:	82 e5       	ldi	r24, 0x52	; 82
+     444:	97 e0       	ldi	r25, 0x07	; 7
+     446:	31 50       	subi	r19, 0x01	; 1
+     448:	80 40       	sbci	r24, 0x00	; 0
+     44a:	90 40       	sbci	r25, 0x00	; 0
+     44c:	e1 f7       	brne	.-8      	; 0x446 <__EEPROM_REGION_LENGTH__+0x46>
+     44e:	00 c0       	rjmp	.+0      	; 0x450 <__EEPROM_REGION_LENGTH__+0x50>
+     450:	00 00       	nop
+						_delay_ms(150);
+						LoginSystem_AstrUsers[Local_u8Iterator].UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     452:	e1 e0       	ldi	r30, 0x01	; 1
+     454:	f0 e0       	ldi	r31, 0x00	; 0
+     456:	ec 0f       	add	r30, r28
+     458:	fd 1f       	adc	r31, r29
+     45a:	e0 0f       	add	r30, r16
+     45c:	f1 1f       	adc	r31, r17
+     45e:	10 8a       	std	Z+16, r1	; 0x10
+						LoginSystem_AstrUsers[Local_u8Iterator].Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     460:	15 8a       	std	Z+21, r1	; 0x15
+				
+			LoginSystem_strAdmin.User_Priority=ADMIN_PRIORITY;
+			_delay_ms(150);
+
+			u16 Local_u16UserAddress;
+			for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+     462:	d3 94       	inc	r13
+     464:	89 ad       	ldd	r24, Y+57	; 0x39
+     466:	d8 16       	cp	r13, r24
+     468:	08 f4       	brcc	.+2      	; 0x46c <__EEPROM_REGION_LENGTH__+0x6c>
+     46a:	9c cf       	rjmp	.-200    	; 0x3a4 <main+0x224>
+					}
+				
+			
+
+
+			Program_Status_Flag = IDLE_STATUS;
+     46c:	87 e0       	ldi	r24, 0x07	; 7
+     46e:	89 83       	std	Y+1, r24	; 0x01
+
+/************************************************************************************************************/
+/************************************************************************************************************/
+
+
+		if (Program_Status_Flag == IDLE_STATUS)
+     470:	89 81       	ldd	r24, Y+1	; 0x01
+     472:	87 30       	cpi	r24, 0x07	; 7
+     474:	81 f5       	brne	.+96     	; 0x4d6 <__EEPROM_REGION_LENGTH__+0xd6>
+		{
+
+			LCD_enuClearDisplay();
+     476:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+			LCD_enuDisplayString("Choose mode");
+     47a:	8b ed       	ldi	r24, 0xDB	; 219
+     47c:	90 e0       	ldi	r25, 0x00	; 0
+     47e:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     482:	60 e0       	ldi	r22, 0x00	; 0
+     484:	81 e0       	ldi	r24, 0x01	; 1
+     486:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString("1-Admin  2-User");
+     48a:	87 ee       	ldi	r24, 0xE7	; 231
+     48c:	90 e0       	ldi	r25, 0x00	; 0
+     48e:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+     492:	ce 01       	movw	r24, r28
+     494:	8c 5b       	subi	r24, 0xBC	; 188
+     496:	9f 4f       	sbci	r25, 0xFF	; 255
+     498:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+			switch (Keypad_Pressed_Key)
+     49c:	25 96       	adiw	r28, 0x05	; 5
+     49e:	8f ad       	ldd	r24, Y+63	; 0x3f
+     4a0:	25 97       	sbiw	r28, 0x05	; 5
+     4a2:	81 33       	cpi	r24, 0x31	; 49
+     4a4:	19 f0       	breq	.+6      	; 0x4ac <__EEPROM_REGION_LENGTH__+0xac>
+     4a6:	82 33       	cpi	r24, 0x32	; 50
+     4a8:	21 f0       	breq	.+8      	; 0x4b2 <__EEPROM_REGION_LENGTH__+0xb2>
+     4aa:	06 c0       	rjmp	.+12     	; 0x4b8 <__EEPROM_REGION_LENGTH__+0xb8>
+			{
+				case '1':
+				Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
+     4ac:	82 e0       	ldi	r24, 0x02	; 2
+     4ae:	89 83       	std	Y+1, r24	; 0x01
+				break;
+     4b0:	12 c0       	rjmp	.+36     	; 0x4d6 <__EEPROM_REGION_LENGTH__+0xd6>
+				case '2':
+				Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
+     4b2:	83 e0       	ldi	r24, 0x03	; 3
+     4b4:	89 83       	std	Y+1, r24	; 0x01
+				break;
+     4b6:	0f c0       	rjmp	.+30     	; 0x4d6 <__EEPROM_REGION_LENGTH__+0xd6>
+				default:
+				LCD_enuClearDisplay();
+     4b8:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("Invalid Choice");
+     4bc:	87 ef       	ldi	r24, 0xF7	; 247
+     4be:	90 e0       	ldi	r25, 0x00	; 0
+     4c0:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     4c4:	2f ef       	ldi	r18, 0xFF	; 255
+     4c6:	33 ec       	ldi	r19, 0xC3	; 195
+     4c8:	89 e0       	ldi	r24, 0x09	; 9
+     4ca:	21 50       	subi	r18, 0x01	; 1
+     4cc:	30 40       	sbci	r19, 0x00	; 0
+     4ce:	80 40       	sbci	r24, 0x00	; 0
+     4d0:	e1 f7       	brne	.-8      	; 0x4ca <__EEPROM_REGION_LENGTH__+0xca>
+     4d2:	00 c0       	rjmp	.+0      	; 0x4d4 <__EEPROM_REGION_LENGTH__+0xd4>
+     4d4:	00 00       	nop
+				_delay_ms(200);
+			}
+
+		}
+
+		if (Program_Status_Flag == ADMIN_LOGIN_PAGE_STATUS)
+     4d6:	89 81       	ldd	r24, Y+1	; 0x01
+     4d8:	82 30       	cpi	r24, 0x02	; 2
+     4da:	09 f0       	breq	.+2      	; 0x4de <__EEPROM_REGION_LENGTH__+0xde>
+     4dc:	6a c0       	rjmp	.+212    	; 0x5b2 <__EEPROM_REGION_LENGTH__+0x1b2>
+		{
+			u8 LoginSystem_u8TrueFlag;
+			u8 LoginSystem_u8TrialsLeft =3;
+			LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
+     4de:	be 01       	movw	r22, r28
+     4e0:	61 5c       	subi	r22, 0xC1	; 193
+     4e2:	7f 4f       	sbci	r23, 0xFF	; 255
+     4e4:	ce 01       	movw	r24, r28
+     4e6:	ca 96       	adiw	r24, 0x3a	; 58
+     4e8:	0e 94 41 00 	call	0x82	; 0x82 <LoginSystem_enuGetDataFromUserByKeypad>
+
+
+			LoginSystem_u8TrueFlag = (LoginSystem_u8Strcmp(LoginSystem_Au8Username,LoginSystem_strAdmin.UserName)) && ( LoginSystem_u8Strcmp(LoginSystem_Au8Password,LoginSystem_strAdmin.Password) ) ;
+     4ec:	be 01       	movw	r22, r28
+     4ee:	6e 5f       	subi	r22, 0xFE	; 254
+     4f0:	7f 4f       	sbci	r23, 0xFF	; 255
+     4f2:	ce 01       	movw	r24, r28
+     4f4:	ca 96       	adiw	r24, 0x3a	; 58
+     4f6:	0e 94 a2 00 	call	0x144	; 0x144 <LoginSystem_u8Strcmp>
+     4fa:	88 23       	and	r24, r24
+     4fc:	59 f0       	breq	.+22     	; 0x514 <__EEPROM_REGION_LENGTH__+0x114>
+     4fe:	be 01       	movw	r22, r28
+     500:	69 5f       	subi	r22, 0xF9	; 249
+     502:	7f 4f       	sbci	r23, 0xFF	; 255
+     504:	ce 01       	movw	r24, r28
+     506:	cf 96       	adiw	r24, 0x3f	; 63
+     508:	0e 94 a2 00 	call	0x144	; 0x144 <LoginSystem_u8Strcmp>
+     50c:	88 23       	and	r24, r24
+     50e:	21 f0       	breq	.+8      	; 0x518 <__EEPROM_REGION_LENGTH__+0x118>
+     510:	81 e0       	ldi	r24, 0x01	; 1
+     512:	03 c0       	rjmp	.+6      	; 0x51a <__EEPROM_REGION_LENGTH__+0x11a>
+     514:	80 e0       	ldi	r24, 0x00	; 0
+     516:	01 c0       	rjmp	.+2      	; 0x51a <__EEPROM_REGION_LENGTH__+0x11a>
+     518:	80 e0       	ldi	r24, 0x00	; 0
+			if (LoginSystem_u8TrueFlag == FALSE)
+     51a:	81 11       	cpse	r24, r1
+     51c:	31 c0       	rjmp	.+98     	; 0x580 <__EEPROM_REGION_LENGTH__+0x180>
+			{
+				LoginSystem_u8TrialsLeft--;
+				LCD_enuClearDisplay();
+     51e:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("Wrong Username");
+     522:	86 e0       	ldi	r24, 0x06	; 6
+     524:	91 e0       	ldi	r25, 0x01	; 1
+     526:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     52a:	60 e0       	ldi	r22, 0x00	; 0
+     52c:	81 e0       	ldi	r24, 0x01	; 1
+     52e:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+				LCD_enuDisplayString("or Password");
+     532:	85 e1       	ldi	r24, 0x15	; 21
+     534:	91 e0       	ldi	r25, 0x01	; 1
+     536:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     53a:	9f ef       	ldi	r25, 0xFF	; 255
+     53c:	23 ed       	ldi	r18, 0xD3	; 211
+     53e:	30 e3       	ldi	r19, 0x30	; 48
+     540:	91 50       	subi	r25, 0x01	; 1
+     542:	20 40       	sbci	r18, 0x00	; 0
+     544:	30 40       	sbci	r19, 0x00	; 0
+     546:	e1 f7       	brne	.-8      	; 0x540 <__EEPROM_REGION_LENGTH__+0x140>
+     548:	00 c0       	rjmp	.+0      	; 0x54a <__EEPROM_REGION_LENGTH__+0x14a>
+     54a:	00 00       	nop
+				_delay_ms(1000);
+				LCD_enuClearDisplay();
+     54c:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("Remaining Trials: ");
+     550:	81 e2       	ldi	r24, 0x21	; 33
+     552:	91 e0       	ldi	r25, 0x01	; 1
+     554:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     558:	60 e0       	ldi	r22, 0x00	; 0
+     55a:	81 e0       	ldi	r24, 0x01	; 1
+     55c:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+				LCD_enuDisplayUnsignedInteger(LoginSystem_u8TrialsLeft);
+     560:	62 e0       	ldi	r22, 0x02	; 2
+     562:	70 e0       	ldi	r23, 0x00	; 0
+     564:	80 e0       	ldi	r24, 0x00	; 0
+     566:	90 e0       	ldi	r25, 0x00	; 0
+     568:	0e 94 8e 07 	call	0xf1c	; 0xf1c <LCD_enuDisplayUnsignedInteger>
+     56c:	8f ef       	ldi	r24, 0xFF	; 255
+     56e:	93 ed       	ldi	r25, 0xD3	; 211
+     570:	20 e3       	ldi	r18, 0x30	; 48
+     572:	81 50       	subi	r24, 0x01	; 1
+     574:	90 40       	sbci	r25, 0x00	; 0
+     576:	20 40       	sbci	r18, 0x00	; 0
+     578:	e1 f7       	brne	.-8      	; 0x572 <__EEPROM_REGION_LENGTH__+0x172>
+     57a:	00 c0       	rjmp	.+0      	; 0x57c <__EEPROM_REGION_LENGTH__+0x17c>
+     57c:	00 00       	nop
+     57e:	19 c0       	rjmp	.+50     	; 0x5b2 <__EEPROM_REGION_LENGTH__+0x1b2>
+					Program_Status_Flag = BLOCKING_STATUS;
+				}
+			}
+			else
+			{
+				LCD_enuClearDisplay();
+     580:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("Logged in");
+     584:	84 e3       	ldi	r24, 0x34	; 52
+     586:	91 e0       	ldi	r25, 0x01	; 1
+     588:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     58c:	60 e0       	ldi	r22, 0x00	; 0
+     58e:	81 e0       	ldi	r24, 0x01	; 1
+     590:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+				LCD_enuDisplayString("Successfully");
+     594:	8e ec       	ldi	r24, 0xCE	; 206
+     596:	90 e0       	ldi	r25, 0x00	; 0
+     598:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     59c:	3f ef       	ldi	r19, 0xFF	; 255
+     59e:	8d e2       	ldi	r24, 0x2D	; 45
+     5a0:	92 e2       	ldi	r25, 0x22	; 34
+     5a2:	31 50       	subi	r19, 0x01	; 1
+     5a4:	80 40       	sbci	r24, 0x00	; 0
+     5a6:	90 40       	sbci	r25, 0x00	; 0
+     5a8:	e1 f7       	brne	.-8      	; 0x5a2 <__EEPROM_REGION_LENGTH__+0x1a2>
+     5aa:	00 c0       	rjmp	.+0      	; 0x5ac <__EEPROM_REGION_LENGTH__+0x1ac>
+     5ac:	00 00       	nop
+				_delay_ms(700);
+				Program_Status_Flag = ADMIN_MENU_STATUS;
+     5ae:	84 e0       	ldi	r24, 0x04	; 4
+     5b0:	89 83       	std	Y+1, r24	; 0x01
+
+			}
+		}
+		if (Program_Status_Flag == ADMIN_MENU_STATUS)
+     5b2:	89 81       	ldd	r24, Y+1	; 0x01
+     5b4:	84 30       	cpi	r24, 0x04	; 4
+     5b6:	09 f0       	breq	.+2      	; 0x5ba <__EEPROM_REGION_LENGTH__+0x1ba>
+     5b8:	49 c1       	rjmp	.+658    	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+		{
+			LCD_enuClearDisplay();
+     5ba:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+			LCD_enuDisplayString("Welcome Admin:");
+     5be:	8e e3       	ldi	r24, 0x3E	; 62
+     5c0:	91 e0       	ldi	r25, 0x01	; 1
+     5c2:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     5c6:	60 e0       	ldi	r22, 0x00	; 0
+     5c8:	81 e0       	ldi	r24, 0x01	; 1
+     5ca:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString(LoginSystem_strAdmin.UserName);
+     5ce:	ce 01       	movw	r24, r28
+     5d0:	02 96       	adiw	r24, 0x02	; 2
+     5d2:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     5d6:	2f ef       	ldi	r18, 0xFF	; 255
+     5d8:	39 e6       	ldi	r19, 0x69	; 105
+     5da:	88 e1       	ldi	r24, 0x18	; 24
+     5dc:	21 50       	subi	r18, 0x01	; 1
+     5de:	30 40       	sbci	r19, 0x00	; 0
+     5e0:	80 40       	sbci	r24, 0x00	; 0
+     5e2:	e1 f7       	brne	.-8      	; 0x5dc <__EEPROM_REGION_LENGTH__+0x1dc>
+     5e4:	00 c0       	rjmp	.+0      	; 0x5e6 <__EEPROM_REGION_LENGTH__+0x1e6>
+     5e6:	00 00       	nop
+			_delay_ms(500);
+			LCD_enuClearDisplay();
+     5e8:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+			LCD_enuDisplayString("1-Registration");
+     5ec:	8d e4       	ldi	r24, 0x4D	; 77
+     5ee:	91 e0       	ldi	r25, 0x01	; 1
+     5f0:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     5f4:	60 e0       	ldi	r22, 0x00	; 0
+     5f6:	81 e0       	ldi	r24, 0x01	; 1
+     5f8:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+			LCD_enuDisplayString("2-Lights 3-More");
+     5fc:	8c e5       	ldi	r24, 0x5C	; 92
+     5fe:	91 e0       	ldi	r25, 0x01	; 1
+     600:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+			Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+     604:	ce 01       	movw	r24, r28
+     606:	8c 5b       	subi	r24, 0xBC	; 188
+     608:	9f 4f       	sbci	r25, 0xFF	; 255
+     60a:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+			switch (Keypad_Pressed_Key)
+     60e:	25 96       	adiw	r28, 0x05	; 5
+     610:	8f ad       	ldd	r24, Y+63	; 0x3f
+     612:	25 97       	sbiw	r28, 0x05	; 5
+     614:	82 33       	cpi	r24, 0x32	; 50
+     616:	09 f4       	brne	.+2      	; 0x61a <__EEPROM_REGION_LENGTH__+0x21a>
+     618:	19 c1       	rjmp	.+562    	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+     61a:	83 33       	cpi	r24, 0x33	; 51
+     61c:	09 f4       	brne	.+2      	; 0x620 <__EEPROM_REGION_LENGTH__+0x220>
+     61e:	de c0       	rjmp	.+444    	; 0x7dc <__EEPROM_REGION_LENGTH__+0x3dc>
+     620:	81 33       	cpi	r24, 0x31	; 49
+     622:	09 f0       	breq	.+2      	; 0x626 <__EEPROM_REGION_LENGTH__+0x226>
+     624:	04 c1       	rjmp	.+520    	; 0x82e <__DATA_REGION_LENGTH__+0x2e>
+			{
+				case '1':
+				if (LoginSystem_NumOfRegisteredUsers < MAX_NO_OF_USERS)
+     626:	89 ad       	ldd	r24, Y+57	; 0x39
+     628:	84 30       	cpi	r24, 0x04	; 4
+     62a:	08 f0       	brcs	.+2      	; 0x62e <__EEPROM_REGION_LENGTH__+0x22e>
+     62c:	ca c0       	rjmp	.+404    	; 0x7c2 <__EEPROM_REGION_LENGTH__+0x3c2>
+				{
+
+					LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
+     62e:	2b e0       	ldi	r18, 0x0B	; 11
+     630:	82 9f       	mul	r24, r18
+     632:	c0 01       	movw	r24, r0
+     634:	11 24       	eor	r1, r1
+     636:	bc 01       	movw	r22, r24
+     638:	6b 5f       	subi	r22, 0xFB	; 251
+     63a:	7f 4f       	sbci	r23, 0xFF	; 255
+     63c:	2d e0       	ldi	r18, 0x0D	; 13
+     63e:	30 e0       	ldi	r19, 0x00	; 0
+     640:	2c 0f       	add	r18, r28
+     642:	3d 1f       	adc	r19, r29
+     644:	62 0f       	add	r22, r18
+     646:	73 1f       	adc	r23, r19
+     648:	82 0f       	add	r24, r18
+     64a:	93 1f       	adc	r25, r19
+     64c:	0e 94 41 00 	call	0x82	; 0x82 <LoginSystem_enuGetDataFromUserByKeypad>
+					LCD_enuClearDisplay();
+     650:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("1-Remoted");
+     654:	8c e6       	ldi	r24, 0x6C	; 108
+     656:	91 e0       	ldi	r25, 0x01	; 1
+     658:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     65c:	60 e0       	ldi	r22, 0x00	; 0
+     65e:	81 e0       	ldi	r24, 0x01	; 1
+     660:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayString("2-Nonremoted");
+     664:	86 e7       	ldi	r24, 0x76	; 118
+     666:	91 e0       	ldi	r25, 0x01	; 1
+     668:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+     66c:	ce 01       	movw	r24, r28
+     66e:	8c 5b       	subi	r24, 0xBC	; 188
+     670:	9f 4f       	sbci	r25, 0xFF	; 255
+     672:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+
+					switch (Keypad_Pressed_Key)
+     676:	25 96       	adiw	r28, 0x05	; 5
+     678:	8f ad       	ldd	r24, Y+63	; 0x3f
+     67a:	25 97       	sbiw	r28, 0x05	; 5
+     67c:	81 33       	cpi	r24, 0x31	; 49
+     67e:	19 f0       	breq	.+6      	; 0x686 <__EEPROM_REGION_LENGTH__+0x286>
+     680:	82 33       	cpi	r24, 0x32	; 50
+     682:	71 f0       	breq	.+28     	; 0x6a0 <__EEPROM_REGION_LENGTH__+0x2a0>
+     684:	18 c0       	rjmp	.+48     	; 0x6b6 <__EEPROM_REGION_LENGTH__+0x2b6>
+					{
+						case '1':
+						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
+     686:	89 ad       	ldd	r24, Y+57	; 0x39
+     688:	e1 e0       	ldi	r30, 0x01	; 1
+     68a:	f0 e0       	ldi	r31, 0x00	; 0
+     68c:	ec 0f       	add	r30, r28
+     68e:	fd 1f       	adc	r31, r29
+     690:	3b e0       	ldi	r19, 0x0B	; 11
+     692:	83 9f       	mul	r24, r19
+     694:	e0 0d       	add	r30, r0
+     696:	f1 1d       	adc	r31, r1
+     698:	11 24       	eor	r1, r1
+     69a:	82 e0       	ldi	r24, 0x02	; 2
+     69c:	86 8b       	std	Z+22, r24	; 0x16
+						break;
+     69e:	0b c0       	rjmp	.+22     	; 0x6b6 <__EEPROM_REGION_LENGTH__+0x2b6>
+						case '2':
+						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
+     6a0:	89 ad       	ldd	r24, Y+57	; 0x39
+     6a2:	e1 e0       	ldi	r30, 0x01	; 1
+     6a4:	f0 e0       	ldi	r31, 0x00	; 0
+     6a6:	ec 0f       	add	r30, r28
+     6a8:	fd 1f       	adc	r31, r29
+     6aa:	9b e0       	ldi	r25, 0x0B	; 11
+     6ac:	89 9f       	mul	r24, r25
+     6ae:	e0 0d       	add	r30, r0
+     6b0:	f1 1d       	adc	r31, r1
+     6b2:	11 24       	eor	r1, r1
+     6b4:	16 8a       	std	Z+22, r1	; 0x16
+						break;
+
+					}
+
+					/**************Saving the new user into the EEPROM****************/
+					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1), LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName,MAX_NO_OF_LETTERS);
+     6b6:	89 ad       	ldd	r24, Y+57	; 0x39
+     6b8:	90 e0       	ldi	r25, 0x00	; 0
+     6ba:	1b e0       	ldi	r17, 0x0B	; 11
+     6bc:	18 9f       	mul	r17, r24
+     6be:	b0 01       	movw	r22, r0
+     6c0:	19 9f       	mul	r17, r25
+     6c2:	70 0d       	add	r23, r0
+     6c4:	11 24       	eor	r1, r1
+     6c6:	2d e0       	ldi	r18, 0x0D	; 13
+     6c8:	30 e0       	ldi	r19, 0x00	; 0
+     6ca:	2c 0f       	add	r18, r28
+     6cc:	3d 1f       	adc	r19, r29
+     6ce:	62 0f       	add	r22, r18
+     6d0:	73 1f       	adc	r23, r19
+     6d2:	9c 01       	movw	r18, r24
+     6d4:	22 0f       	add	r18, r18
+     6d6:	33 1f       	adc	r19, r19
+     6d8:	22 0f       	add	r18, r18
+     6da:	33 1f       	adc	r19, r19
+     6dc:	22 0f       	add	r18, r18
+     6de:	33 1f       	adc	r19, r19
+     6e0:	82 0f       	add	r24, r18
+     6e2:	93 1f       	adc	r25, r19
+     6e4:	44 e0       	ldi	r20, 0x04	; 4
+     6e6:	50 e0       	ldi	r21, 0x00	; 0
+     6e8:	42 96       	adiw	r24, 0x12	; 18
+     6ea:	0e 94 31 05 	call	0xa62	; 0xa62 <EEPROM_vWriteBlockToAddress>
+     6ee:	8f e3       	ldi	r24, 0x3F	; 63
+     6f0:	9c e9       	ldi	r25, 0x9C	; 156
+     6f2:	01 97       	sbiw	r24, 0x01	; 1
+     6f4:	f1 f7       	brne	.-4      	; 0x6f2 <__EEPROM_REGION_LENGTH__+0x2f2>
+     6f6:	00 c0       	rjmp	.+0      	; 0x6f8 <__EEPROM_REGION_LENGTH__+0x2f8>
+     6f8:	00 00       	nop
+					_delay_ms(10);
+					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + MAX_NO_OF_LETTERS, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password,MAX_NO_OF_LETTERS);
+     6fa:	89 ad       	ldd	r24, Y+57	; 0x39
+     6fc:	90 e0       	ldi	r25, 0x00	; 0
+     6fe:	18 9f       	mul	r17, r24
+     700:	b0 01       	movw	r22, r0
+     702:	19 9f       	mul	r17, r25
+     704:	70 0d       	add	r23, r0
+     706:	11 24       	eor	r1, r1
+     708:	6b 5f       	subi	r22, 0xFB	; 251
+     70a:	7f 4f       	sbci	r23, 0xFF	; 255
+     70c:	2d e0       	ldi	r18, 0x0D	; 13
+     70e:	30 e0       	ldi	r19, 0x00	; 0
+     710:	2c 0f       	add	r18, r28
+     712:	3d 1f       	adc	r19, r29
+     714:	62 0f       	add	r22, r18
+     716:	73 1f       	adc	r23, r19
+     718:	9c 01       	movw	r18, r24
+     71a:	22 0f       	add	r18, r18
+     71c:	33 1f       	adc	r19, r19
+     71e:	22 0f       	add	r18, r18
+     720:	33 1f       	adc	r19, r19
+     722:	22 0f       	add	r18, r18
+     724:	33 1f       	adc	r19, r19
+     726:	82 0f       	add	r24, r18
+     728:	93 1f       	adc	r25, r19
+     72a:	44 e0       	ldi	r20, 0x04	; 4
+     72c:	50 e0       	ldi	r21, 0x00	; 0
+     72e:	46 96       	adiw	r24, 0x16	; 22
+     730:	0e 94 31 05 	call	0xa62	; 0xa62 <EEPROM_vWriteBlockToAddress>
+     734:	8f e3       	ldi	r24, 0x3F	; 63
+     736:	9c e9       	ldi	r25, 0x9C	; 156
+     738:	01 97       	sbiw	r24, 0x01	; 1
+     73a:	f1 f7       	brne	.-4      	; 0x738 <__EEPROM_REGION_LENGTH__+0x338>
+     73c:	00 c0       	rjmp	.+0      	; 0x73e <__EEPROM_REGION_LENGTH__+0x33e>
+     73e:	00 00       	nop
+					_delay_ms(10);
+					LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     740:	1e 82       	std	Y+6, r1	; 0x06
+					LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
+     742:	1b 86       	std	Y+11, r1	; 0x0b
+
+					EEPROM_vWriteByteToAddress((SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + 2*MAX_NO_OF_LETTERS),LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].User_Priority);
+     744:	29 ad       	ldd	r18, Y+57	; 0x39
+     746:	30 e0       	ldi	r19, 0x00	; 0
+     748:	c9 01       	movw	r24, r18
+     74a:	88 0f       	add	r24, r24
+     74c:	99 1f       	adc	r25, r25
+     74e:	88 0f       	add	r24, r24
+     750:	99 1f       	adc	r25, r25
+     752:	88 0f       	add	r24, r24
+     754:	99 1f       	adc	r25, r25
+     756:	82 0f       	add	r24, r18
+     758:	93 1f       	adc	r25, r19
+     75a:	12 9f       	mul	r17, r18
+     75c:	f0 01       	movw	r30, r0
+     75e:	13 9f       	mul	r17, r19
+     760:	f0 0d       	add	r31, r0
+     762:	11 24       	eor	r1, r1
+     764:	21 e0       	ldi	r18, 0x01	; 1
+     766:	30 e0       	ldi	r19, 0x00	; 0
+     768:	2c 0f       	add	r18, r28
+     76a:	3d 1f       	adc	r19, r29
+     76c:	e2 0f       	add	r30, r18
+     76e:	f3 1f       	adc	r31, r19
+     770:	66 89       	ldd	r22, Z+22	; 0x16
+     772:	4a 96       	adiw	r24, 0x1a	; 26
+     774:	0e 94 1f 05 	call	0xa3e	; 0xa3e <EEPROM_vWriteByteToAddress>
+     778:	8f e3       	ldi	r24, 0x3F	; 63
+     77a:	9c e9       	ldi	r25, 0x9C	; 156
+     77c:	01 97       	sbiw	r24, 0x01	; 1
+     77e:	f1 f7       	brne	.-4      	; 0x77c <__EEPROM_REGION_LENGTH__+0x37c>
+     780:	00 c0       	rjmp	.+0      	; 0x782 <__EEPROM_REGION_LENGTH__+0x382>
+     782:	00 00       	nop
+					_delay_ms(10);
+					LoginSystem_NumOfRegisteredUsers++;
+     784:	69 ad       	ldd	r22, Y+57	; 0x39
+     786:	6f 5f       	subi	r22, 0xFF	; 255
+     788:	69 af       	std	Y+57, r22	; 0x39
+
+					EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
+     78a:	81 e1       	ldi	r24, 0x11	; 17
+     78c:	90 e0       	ldi	r25, 0x00	; 0
+     78e:	0e 94 1f 05 	call	0xa3e	; 0xa3e <EEPROM_vWriteByteToAddress>
+					LCD_enuClearDisplay();
+     792:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("Registered");
+     796:	83 e8       	ldi	r24, 0x83	; 131
+     798:	91 e0       	ldi	r25, 0x01	; 1
+     79a:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     79e:	60 e0       	ldi	r22, 0x00	; 0
+     7a0:	81 e0       	ldi	r24, 0x01	; 1
+     7a2:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayString("Successfully");
+     7a6:	8e ec       	ldi	r24, 0xCE	; 206
+     7a8:	90 e0       	ldi	r25, 0x00	; 0
+     7aa:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     7ae:	9f ef       	ldi	r25, 0xFF	; 255
+     7b0:	2d e2       	ldi	r18, 0x2D	; 45
+     7b2:	32 e2       	ldi	r19, 0x22	; 34
+     7b4:	91 50       	subi	r25, 0x01	; 1
+     7b6:	20 40       	sbci	r18, 0x00	; 0
+     7b8:	30 40       	sbci	r19, 0x00	; 0
+     7ba:	e1 f7       	brne	.-8      	; 0x7b4 <__EEPROM_REGION_LENGTH__+0x3b4>
+     7bc:	00 c0       	rjmp	.+0      	; 0x7be <__EEPROM_REGION_LENGTH__+0x3be>
+     7be:	00 00       	nop
+     7c0:	45 c0       	rjmp	.+138    	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+					_delay_ms(700);
+				}
+
+				else
+				{
+					LCD_enuDisplayString("Max Limit");
+     7c2:	8e e8       	ldi	r24, 0x8E	; 142
+     7c4:	91 e0       	ldi	r25, 0x01	; 1
+     7c6:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     7ca:	60 e0       	ldi	r22, 0x00	; 0
+     7cc:	81 e0       	ldi	r24, 0x01	; 1
+     7ce:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayString("is Reached");
+     7d2:	88 e9       	ldi	r24, 0x98	; 152
+     7d4:	91 e0       	ldi	r25, 0x01	; 1
+     7d6:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     7da:	38 c0       	rjmp	.+112    	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+				case '2':
+				///////////////////////////////////
+				break;
+				case '3':
+
+				LCD_enuClearDisplay();
+     7dc:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("4-Promote User");
+     7e0:	83 ea       	ldi	r24, 0xA3	; 163
+     7e2:	91 e0       	ldi	r25, 0x01	; 1
+     7e4:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     7e8:	60 e0       	ldi	r22, 0x00	; 0
+     7ea:	81 e0       	ldi	r24, 0x01	; 1
+     7ec:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+				LCD_enuDisplayString("5-Dimmer 6-Door");
+     7f0:	82 eb       	ldi	r24, 0xB2	; 178
+     7f2:	91 e0       	ldi	r25, 0x01	; 1
+     7f4:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+				Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+     7f8:	ce 01       	movw	r24, r28
+     7fa:	8c 5b       	subi	r24, 0xBC	; 188
+     7fc:	9f 4f       	sbci	r25, 0xFF	; 255
+     7fe:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+				switch (Keypad_Pressed_Key)
+     802:	25 96       	adiw	r28, 0x05	; 5
+     804:	8f ad       	ldd	r24, Y+63	; 0x3f
+     806:	25 97       	sbiw	r28, 0x05	; 5
+     808:	84 53       	subi	r24, 0x34	; 52
+     80a:	82 30       	cpi	r24, 0x02	; 2
+     80c:	f8 f0       	brcs	.+62     	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+					/////////////
+					break;
+					case '6':
+					////////////
+					default:
+					LCD_enuClearDisplay();
+     80e:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("Invalid Choice");
+     812:	87 ef       	ldi	r24, 0xF7	; 247
+     814:	90 e0       	ldi	r25, 0x00	; 0
+     816:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     81a:	8f ef       	ldi	r24, 0xFF	; 255
+     81c:	93 ec       	ldi	r25, 0xC3	; 195
+     81e:	29 e0       	ldi	r18, 0x09	; 9
+     820:	81 50       	subi	r24, 0x01	; 1
+     822:	90 40       	sbci	r25, 0x00	; 0
+     824:	20 40       	sbci	r18, 0x00	; 0
+     826:	e1 f7       	brne	.-8      	; 0x820 <__DATA_REGION_LENGTH__+0x20>
+     828:	00 c0       	rjmp	.+0      	; 0x82a <__DATA_REGION_LENGTH__+0x2a>
+     82a:	00 00       	nop
+     82c:	0f c0       	rjmp	.+30     	; 0x84c <__DATA_REGION_LENGTH__+0x4c>
+					_delay_ms(200);
+				}
+				break;
+
+				default:
+				LCD_enuClearDisplay();
+     82e:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+				LCD_enuDisplayString("Invalid Choice");
+     832:	87 ef       	ldi	r24, 0xF7	; 247
+     834:	90 e0       	ldi	r25, 0x00	; 0
+     836:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     83a:	3f ef       	ldi	r19, 0xFF	; 255
+     83c:	83 ec       	ldi	r24, 0xC3	; 195
+     83e:	99 e0       	ldi	r25, 0x09	; 9
+     840:	31 50       	subi	r19, 0x01	; 1
+     842:	80 40       	sbci	r24, 0x00	; 0
+     844:	90 40       	sbci	r25, 0x00	; 0
+     846:	e1 f7       	brne	.-8      	; 0x840 <__DATA_REGION_LENGTH__+0x40>
+     848:	00 c0       	rjmp	.+0      	; 0x84a <__DATA_REGION_LENGTH__+0x4a>
+     84a:	00 00       	nop
+				_delay_ms(200);
+			}
+
+		}
+		if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///offline user should have interrupt
+     84c:	89 81       	ldd	r24, Y+1	; 0x01
+     84e:	83 30       	cpi	r24, 0x03	; 3
+     850:	09 f0       	breq	.+2      	; 0x854 <__DATA_REGION_LENGTH__+0x54>
+     852:	8b c0       	rjmp	.+278    	; 0x96a <__stack+0x10b>
+			{
+
+				u8 LoginSystem_u8TrueFlag;
+				u8 LoginSystem_u8TrialsLeft =3;
+
+				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
+     854:	be 01       	movw	r22, r28
+     856:	61 5c       	subi	r22, 0xC1	; 193
+     858:	7f 4f       	sbci	r23, 0xFF	; 255
+     85a:	ce 01       	movw	r24, r28
+     85c:	ca 96       	adiw	r24, 0x3a	; 58
+     85e:	0e 94 41 00 	call	0x82	; 0x82 <LoginSystem_enuGetDataFromUserByKeypad>
+				/*********************Search The Users Array***********************/
+				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+     862:	10 e0       	ldi	r17, 0x00	; 0
+     864:	33 c0       	rjmp	.+102    	; 0x8cc <__stack+0x6d>
+				{
+					LoginSystem_u8TrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
+     866:	e1 2e       	mov	r14, r17
+     868:	f1 2c       	mov	r15, r1
+     86a:	2b e0       	ldi	r18, 0x0B	; 11
+     86c:	2e 9d       	mul	r18, r14
+     86e:	c0 01       	movw	r24, r0
+     870:	2f 9d       	mul	r18, r15
+     872:	90 0d       	add	r25, r0
+     874:	11 24       	eor	r1, r1
+     876:	be 01       	movw	r22, r28
+     878:	66 5c       	subi	r22, 0xC6	; 198
+     87a:	7f 4f       	sbci	r23, 0xFF	; 255
+     87c:	2d e0       	ldi	r18, 0x0D	; 13
+     87e:	30 e0       	ldi	r19, 0x00	; 0
+     880:	2c 0f       	add	r18, r28
+     882:	3d 1f       	adc	r19, r29
+     884:	82 0f       	add	r24, r18
+     886:	93 1f       	adc	r25, r19
+     888:	0e 94 a2 00 	call	0x144	; 0x144 <LoginSystem_u8Strcmp>
+     88c:	88 23       	and	r24, r24
+     88e:	b1 f0       	breq	.+44     	; 0x8bc <__stack+0x5d>
+     890:	2b e0       	ldi	r18, 0x0B	; 11
+     892:	2e 9d       	mul	r18, r14
+     894:	c0 01       	movw	r24, r0
+     896:	2f 9d       	mul	r18, r15
+     898:	90 0d       	add	r25, r0
+     89a:	11 24       	eor	r1, r1
+     89c:	05 96       	adiw	r24, 0x05	; 5
+     89e:	be 01       	movw	r22, r28
+     8a0:	61 5c       	subi	r22, 0xC1	; 193
+     8a2:	7f 4f       	sbci	r23, 0xFF	; 255
+     8a4:	2d e0       	ldi	r18, 0x0D	; 13
+     8a6:	30 e0       	ldi	r19, 0x00	; 0
+     8a8:	2c 0f       	add	r18, r28
+     8aa:	3d 1f       	adc	r19, r29
+     8ac:	82 0f       	add	r24, r18
+     8ae:	93 1f       	adc	r25, r19
+     8b0:	0e 94 a2 00 	call	0x144	; 0x144 <LoginSystem_u8Strcmp>
+     8b4:	88 23       	and	r24, r24
+     8b6:	21 f0       	breq	.+8      	; 0x8c0 <__stack+0x61>
+     8b8:	81 e0       	ldi	r24, 0x01	; 1
+     8ba:	03 c0       	rjmp	.+6      	; 0x8c2 <__stack+0x63>
+     8bc:	80 e0       	ldi	r24, 0x00	; 0
+     8be:	01 c0       	rjmp	.+2      	; 0x8c2 <__stack+0x63>
+     8c0:	80 e0       	ldi	r24, 0x00	; 0
+     8c2:	c8 2e       	mov	r12, r24
+					if (LoginSystem_u8TrueFlag == TRUE)
+     8c4:	31 e0       	ldi	r19, 0x01	; 1
+     8c6:	83 17       	cp	r24, r19
+     8c8:	21 f0       	breq	.+8      	; 0x8d2 <__stack+0x73>
+				u8 LoginSystem_u8TrueFlag;
+				u8 LoginSystem_u8TrialsLeft =3;
+
+				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
+				/*********************Search The Users Array***********************/
+				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+     8ca:	1f 5f       	subi	r17, 0xFF	; 255
+     8cc:	89 ad       	ldd	r24, Y+57	; 0x39
+     8ce:	18 17       	cp	r17, r24
+     8d0:	50 f2       	brcs	.-108    	; 0x866 <__stack+0x7>
+					{
+						break;
+					}
+				}
+
+				if (LoginSystem_u8TrueFlag == FALSE)
+     8d2:	c1 10       	cpse	r12, r1
+     8d4:	31 c0       	rjmp	.+98     	; 0x938 <__stack+0xd9>
+				{
+					LoginSystem_u8TrialsLeft--;
+					LCD_enuClearDisplay();
+     8d6:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("Wrong Username");
+     8da:	86 e0       	ldi	r24, 0x06	; 6
+     8dc:	91 e0       	ldi	r25, 0x01	; 1
+     8de:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     8e2:	60 e0       	ldi	r22, 0x00	; 0
+     8e4:	81 e0       	ldi	r24, 0x01	; 1
+     8e6:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayString("or Password");
+     8ea:	85 e1       	ldi	r24, 0x15	; 21
+     8ec:	91 e0       	ldi	r25, 0x01	; 1
+     8ee:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     8f2:	8f ef       	ldi	r24, 0xFF	; 255
+     8f4:	92 e5       	ldi	r25, 0x52	; 82
+     8f6:	27 e0       	ldi	r18, 0x07	; 7
+     8f8:	81 50       	subi	r24, 0x01	; 1
+     8fa:	90 40       	sbci	r25, 0x00	; 0
+     8fc:	20 40       	sbci	r18, 0x00	; 0
+     8fe:	e1 f7       	brne	.-8      	; 0x8f8 <__stack+0x99>
+     900:	00 c0       	rjmp	.+0      	; 0x902 <__stack+0xa3>
+     902:	00 00       	nop
+					_delay_ms(150);
+					LCD_enuClearDisplay();
+     904:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("Remaining Trials: ");
+     908:	81 e2       	ldi	r24, 0x21	; 33
+     90a:	91 e0       	ldi	r25, 0x01	; 1
+     90c:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     910:	60 e0       	ldi	r22, 0x00	; 0
+     912:	81 e0       	ldi	r24, 0x01	; 1
+     914:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayUnsignedInteger(LoginSystem_u8TrialsLeft);
+     918:	62 e0       	ldi	r22, 0x02	; 2
+     91a:	70 e0       	ldi	r23, 0x00	; 0
+     91c:	80 e0       	ldi	r24, 0x00	; 0
+     91e:	90 e0       	ldi	r25, 0x00	; 0
+     920:	0e 94 8e 07 	call	0xf1c	; 0xf1c <LCD_enuDisplayUnsignedInteger>
+     924:	3f ef       	ldi	r19, 0xFF	; 255
+     926:	82 e5       	ldi	r24, 0x52	; 82
+     928:	97 e0       	ldi	r25, 0x07	; 7
+     92a:	31 50       	subi	r19, 0x01	; 1
+     92c:	80 40       	sbci	r24, 0x00	; 0
+     92e:	90 40       	sbci	r25, 0x00	; 0
+     930:	e1 f7       	brne	.-8      	; 0x92a <__stack+0xcb>
+     932:	00 c0       	rjmp	.+0      	; 0x934 <__stack+0xd5>
+     934:	00 00       	nop
+     936:	19 c0       	rjmp	.+50     	; 0x96a <__stack+0x10b>
+						Program_Status_Flag = BLOCKING_STATUS;
+					}
+				}
+				else
+				{
+					LCD_enuClearDisplay();
+     938:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+					LCD_enuDisplayString("Logged in");
+     93c:	84 e3       	ldi	r24, 0x34	; 52
+     93e:	91 e0       	ldi	r25, 0x01	; 1
+     940:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     944:	60 e0       	ldi	r22, 0x00	; 0
+     946:	81 e0       	ldi	r24, 0x01	; 1
+     948:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+					LCD_enuDisplayString("Successfully");
+     94c:	8e ec       	ldi	r24, 0xCE	; 206
+     94e:	90 e0       	ldi	r25, 0x00	; 0
+     950:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     954:	2f ef       	ldi	r18, 0xFF	; 255
+     956:	3d e2       	ldi	r19, 0x2D	; 45
+     958:	82 e2       	ldi	r24, 0x22	; 34
+     95a:	21 50       	subi	r18, 0x01	; 1
+     95c:	30 40       	sbci	r19, 0x00	; 0
+     95e:	80 40       	sbci	r24, 0x00	; 0
+     960:	e1 f7       	brne	.-8      	; 0x95a <__stack+0xfb>
+     962:	00 c0       	rjmp	.+0      	; 0x964 <__stack+0x105>
+     964:	00 00       	nop
+					_delay_ms(700);
+					Program_Status_Flag = USER_MENU_STATUS;
+     966:	85 e0       	ldi	r24, 0x05	; 5
+     968:	89 83       	std	Y+1, r24	; 0x01
+
+
+/************************************************************************************************************/
+/************************************************************************************************************/
+
+		if (Program_Status_Flag == USER_MENU_STATUS)//**offline user menu
+     96a:	89 81       	ldd	r24, Y+1	; 0x01
+     96c:	85 30       	cpi	r24, 0x05	; 5
+     96e:	09 f0       	breq	.+2      	; 0x972 <__stack+0x113>
+     970:	42 cc       	rjmp	.-1916   	; 0x1f6 <main+0x76>
+		{
+							LCD_enuClearDisplay();
+     972:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+							LCD_enuDisplayString("Welcome User");
+     976:	82 ec       	ldi	r24, 0xC2	; 194
+     978:	91 e0       	ldi	r25, 0x01	; 1
+     97a:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+							LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     97e:	60 e0       	ldi	r22, 0x00	; 0
+     980:	81 e0       	ldi	r24, 0x01	; 1
+     982:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+							LCD_enuDisplayString(LoginSystem_strAdmin.UserName);
+     986:	ce 01       	movw	r24, r28
+     988:	02 96       	adiw	r24, 0x02	; 2
+     98a:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     98e:	9f ef       	ldi	r25, 0xFF	; 255
+     990:	29 e6       	ldi	r18, 0x69	; 105
+     992:	38 e1       	ldi	r19, 0x18	; 24
+     994:	91 50       	subi	r25, 0x01	; 1
+     996:	20 40       	sbci	r18, 0x00	; 0
+     998:	30 40       	sbci	r19, 0x00	; 0
+     99a:	e1 f7       	brne	.-8      	; 0x994 <__stack+0x135>
+     99c:	00 c0       	rjmp	.+0      	; 0x99e <__stack+0x13f>
+     99e:	00 00       	nop
+							_delay_ms(500);
+							LCD_enuClearDisplay();
+     9a0:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+							LCD_enuDisplayString("1-Lights 2-Dimmer");
+     9a4:	8f ec       	ldi	r24, 0xCF	; 207
+     9a6:	91 e0       	ldi	r25, 0x01	; 1
+     9a8:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+							LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+     9ac:	60 e0       	ldi	r22, 0x00	; 0
+     9ae:	81 e0       	ldi	r24, 0x01	; 1
+     9b0:	0e 94 26 08 	call	0x104c	; 0x104c <LCD_enuSetCursorPosition>
+							LCD_enuDisplayString("3-Air Cond");
+     9b4:	81 ee       	ldi	r24, 0xE1	; 225
+     9b6:	91 e0       	ldi	r25, 0x01	; 1
+     9b8:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+							Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+     9bc:	ce 01       	movw	r24, r28
+     9be:	8c 5b       	subi	r24, 0xBC	; 188
+     9c0:	9f 4f       	sbci	r25, 0xFF	; 255
+     9c2:	0e 94 aa 05 	call	0xb54	; 0xb54 <Keypad_enuGetPressedKey>
+							switch (Keypad_Pressed_Key)
+     9c6:	25 96       	adiw	r28, 0x05	; 5
+     9c8:	8f ad       	ldd	r24, Y+63	; 0x3f
+     9ca:	25 97       	sbiw	r28, 0x05	; 5
+     9cc:	81 53       	subi	r24, 0x31	; 49
+     9ce:	83 30       	cpi	r24, 0x03	; 3
+     9d0:	78 f0       	brcs	.+30     	; 0x9f0 <__stack+0x191>
+								//////////////
+								break;
+
+
+								default:
+								LCD_enuClearDisplay();
+     9d2:	0e 94 48 08 	call	0x1090	; 0x1090 <LCD_enuClearDisplay>
+								LCD_enuDisplayString("Invalid Choice");
+     9d6:	87 ef       	ldi	r24, 0xF7	; 247
+     9d8:	90 e0       	ldi	r25, 0x00	; 0
+     9da:	0e 94 07 08 	call	0x100e	; 0x100e <LCD_enuDisplayString>
+     9de:	8f ef       	ldi	r24, 0xFF	; 255
+     9e0:	93 ec       	ldi	r25, 0xC3	; 195
+     9e2:	29 e0       	ldi	r18, 0x09	; 9
+     9e4:	81 50       	subi	r24, 0x01	; 1
+     9e6:	90 40       	sbci	r25, 0x00	; 0
+     9e8:	20 40       	sbci	r18, 0x00	; 0
+     9ea:	e1 f7       	brne	.-8      	; 0x9e4 <__stack+0x185>
+     9ec:	00 c0       	rjmp	.+0      	; 0x9ee <__stack+0x18f>
+     9ee:	00 00       	nop
+								_delay_ms(200);
+								break;
+								}
+							Program_Status_Flag = IDLE_STATUS;
+     9f0:	87 e0       	ldi	r24, 0x07	; 7
+     9f2:	89 83       	std	Y+1, r24	; 0x01
+     9f4:	00 cc       	rjmp	.-2048   	; 0x1f6 <main+0x76>
+
+000009f6 <EEPROM_ui8ReadByteFromAddress>:
+
+
+void EEPROM_ui8ReadByteFromAddress( const u16 u16Address ,  u8 * data)
+{
+	/* Wait for completion of previous write */
+	while (((EECR & (1 << EEWE))>>EEWE)==1);
+     9f6:	e1 99       	sbic	0x1c, 1	; 28
+     9f8:	fe cf       	rjmp	.-4      	; 0x9f6 <EEPROM_ui8ReadByteFromAddress>
+	/* Set up address register */
+	EEAR = u16Address;
+     9fa:	9f bb       	out	0x1f, r25	; 31
+     9fc:	8e bb       	out	0x1e, r24	; 30
+	/* Start EEPROM read by writing EERE */
+	EECR |= (1 << EERE);
+     9fe:	8c b3       	in	r24, 0x1c	; 28
+     a00:	81 60       	ori	r24, 0x01	; 1
+     a02:	8c bb       	out	0x1c, r24	; 28
+	/* Return data from data register */
+	* data = EEDR;
+     a04:	8d b3       	in	r24, 0x1d	; 29
+     a06:	fb 01       	movw	r30, r22
+     a08:	80 83       	st	Z, r24
+     a0a:	08 95       	ret
+
+00000a0c <EEPROM_vReadBlockFromAddress>:
+	//return 1;
+}
+
+void EEPROM_vReadBlockFromAddress(const u16 uAddress, u8* dist,const u16 size)
+{
+     a0c:	dc 01       	movw	r26, r24
+	/* Wait for completion of previous write */
+	while (((EECR & (1 << EEWE))>>EEWE)==1)
+     a0e:	e1 99       	sbic	0x1c, 1	; 28
+     a10:	fe cf       	rjmp	.-4      	; 0xa0e <EEPROM_vReadBlockFromAddress+0x2>
+     a12:	20 e0       	ldi	r18, 0x00	; 0
+     a14:	30 e0       	ldi	r19, 0x00	; 0
+     a16:	0f c0       	rjmp	.+30     	; 0xa36 <EEPROM_vReadBlockFromAddress+0x2a>
+	u16 counter = 0;//the counter of bytes that are read
+
+	while (counter < size) //loop until move all bytes to the given array
+	{
+		/* Set up address register */
+		EEAR = uAddress + counter;
+     a18:	f9 01       	movw	r30, r18
+     a1a:	ea 0f       	add	r30, r26
+     a1c:	fb 1f       	adc	r31, r27
+     a1e:	ff bb       	out	0x1f, r31	; 31
+     a20:	ee bb       	out	0x1e, r30	; 30
+		/* Start EEPROM read by writing EERE */
+		EECR |= (1 << EERE);
+     a22:	9c b3       	in	r25, 0x1c	; 28
+     a24:	91 60       	ori	r25, 0x01	; 1
+     a26:	9c bb       	out	0x1c, r25	; 28
+		/* move data from data register to the array */
+		*(dist + counter) = EEDR;
+     a28:	fb 01       	movw	r30, r22
+     a2a:	e2 0f       	add	r30, r18
+     a2c:	f3 1f       	adc	r31, r19
+     a2e:	9d b3       	in	r25, 0x1d	; 29
+     a30:	90 83       	st	Z, r25
+
+		counter++;//increase the bytes counter
+     a32:	2f 5f       	subi	r18, 0xFF	; 255
+     a34:	3f 4f       	sbci	r19, 0xFF	; 255
+	while (((EECR & (1 << EEWE))>>EEWE)==1)
+	;
+
+	u16 counter = 0;//the counter of bytes that are read
+
+	while (counter < size) //loop until move all bytes to the given array
+     a36:	24 17       	cp	r18, r20
+     a38:	35 07       	cpc	r19, r21
+     a3a:	70 f3       	brcs	.-36     	; 0xa18 <EEPROM_vReadBlockFromAddress+0xc>
+		/* move data from data register to the array */
+		*(dist + counter) = EEDR;
+
+		counter++;//increase the bytes counter
+	}
+}
+     a3c:	08 95       	ret
+
+00000a3e <EEPROM_vWriteByteToAddress>:
+
+void EEPROM_vWriteByteToAddress(const u16 uiAddress, const u8 uiData)
+{
+
+	/* Wait for completion of previous write process*/
+	while ( ( (EECR & (1 << EEWE) ) >>EEWE ) == 1)
+     a3e:	e1 99       	sbic	0x1c, 1	; 28
+     a40:	fe cf       	rjmp	.-4      	; 0xa3e <EEPROM_vWriteByteToAddress>
+	;
+	/* Set up address register */
+	EEAR = uiAddress;
+     a42:	9f bb       	out	0x1f, r25	; 31
+     a44:	8e bb       	out	0x1e, r24	; 30
+
+	/* Read the byte in the address of EEAR */
+	EECR |= (1 << EERE);
+     a46:	8c b3       	in	r24, 0x1c	; 28
+     a48:	81 60       	ori	r24, 0x01	; 1
+     a4a:	8c bb       	out	0x1c, r24	; 28
+	if (EEDR != uiData)//compare the value read to the value to be written
+     a4c:	8d b3       	in	r24, 0x1d	; 29
+     a4e:	86 17       	cp	r24, r22
+     a50:	39 f0       	breq	.+14     	; 0xa60 <EEPROM_vWriteByteToAddress+0x22>
+	{//if they are not equal then write the data 
+		EEDR = uiData;//move the data to EEDR
+     a52:	6d bb       	out	0x1d, r22	; 29
+
+		/* Write logical one to EEMWE */
+		EECR |= (1 << EEMWE);
+     a54:	8c b3       	in	r24, 0x1c	; 28
+     a56:	84 60       	ori	r24, 0x04	; 4
+     a58:	8c bb       	out	0x1c, r24	; 28
+		/* Start EEPROM write by setting EEWE */
+		EECR |= (1 << EEWE);
+     a5a:	8c b3       	in	r24, 0x1c	; 28
+     a5c:	82 60       	ori	r24, 0x02	; 2
+     a5e:	8c bb       	out	0x1c, r24	; 28
+     a60:	08 95       	ret
+
+00000a62 <EEPROM_vWriteBlockToAddress>:
+	}
+
+}
+
+void EEPROM_vWriteBlockToAddress(const u16 uiAddress, const u8* uiData,const u16 size)
+{
+     a62:	cf 93       	push	r28
+     a64:	df 93       	push	r29
+     a66:	dc 01       	movw	r26, r24
+     a68:	ea 01       	movw	r28, r20
+	u16 counter = 0;//Bytes write counter
+     a6a:	20 e0       	ldi	r18, 0x00	; 0
+     a6c:	30 e0       	ldi	r19, 0x00	; 0
+	while (counter < size)
+     a6e:	1a c0       	rjmp	.+52     	; 0xaa4 <EEPROM_vWriteBlockToAddress+0x42>
+	{
+		/* Wait for completion of previous write process*/
+		while (( (EECR & (1 << EEWE) ) >>EEWE ) == 1)
+     a70:	e1 99       	sbic	0x1c, 1	; 28
+     a72:	fe cf       	rjmp	.-4      	; 0xa70 <EEPROM_vWriteBlockToAddress+0xe>
+		;
+		/* Set up address register */
+		EEAR = uiAddress + counter;
+     a74:	c9 01       	movw	r24, r18
+     a76:	8a 0f       	add	r24, r26
+     a78:	9b 1f       	adc	r25, r27
+     a7a:	9f bb       	out	0x1f, r25	; 31
+     a7c:	8e bb       	out	0x1e, r24	; 30
+
+		/* Read the byte in the address of EEAR */
+		EECR |= (1 << EERE);
+     a7e:	9c b3       	in	r25, 0x1c	; 28
+     a80:	91 60       	ori	r25, 0x01	; 1
+     a82:	9c bb       	out	0x1c, r25	; 28
+		if (EEDR != (*(uiData + counter)))//compare the value read to the value to be written
+     a84:	5d b3       	in	r21, 0x1d	; 29
+     a86:	fb 01       	movw	r30, r22
+     a88:	e2 0f       	add	r30, r18
+     a8a:	f3 1f       	adc	r31, r19
+     a8c:	90 81       	ld	r25, Z
+     a8e:	59 17       	cp	r21, r25
+     a90:	39 f0       	breq	.+14     	; 0xaa0 <EEPROM_vWriteBlockToAddress+0x3e>
+		{//if they are not equal then write the data 
+			EEDR = *(uiData + counter);//move the data to EEDR
+     a92:	9d bb       	out	0x1d, r25	; 29
+
+			/* Write logical one to EEMWE */
+			EECR |= (1 << EEMWE);
+     a94:	9c b3       	in	r25, 0x1c	; 28
+     a96:	94 60       	ori	r25, 0x04	; 4
+     a98:	9c bb       	out	0x1c, r25	; 28
+			/* Start EEPROM write by setting EEWE */
+			EECR |= (1 << EEWE);
+     a9a:	9c b3       	in	r25, 0x1c	; 28
+     a9c:	92 60       	ori	r25, 0x02	; 2
+     a9e:	9c bb       	out	0x1c, r25	; 28
+		}
+		else
+		{
+
+		}
+		counter++;//increase bytes counter
+     aa0:	2f 5f       	subi	r18, 0xFF	; 255
+     aa2:	3f 4f       	sbci	r19, 0xFF	; 255
+}
+
+void EEPROM_vWriteBlockToAddress(const u16 uiAddress, const u8* uiData,const u16 size)
+{
+	u16 counter = 0;//Bytes write counter
+	while (counter < size)
+     aa4:	2c 17       	cp	r18, r28
+     aa6:	3d 07       	cpc	r19, r29
+     aa8:	18 f3       	brcs	.-58     	; 0xa70 <EEPROM_vWriteBlockToAddress+0xe>
+		{
+
+		}
+		counter++;//increase bytes counter
+	}
+}
+     aaa:	df 91       	pop	r29
+     aac:	cf 91       	pop	r28
+     aae:	08 95       	ret
+
+00000ab0 <Keypad_enuInit>:
+
+ES_t Keypad_enuInit(void)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+
+	DIO_enuSetPinDirection(C1_PORT , C1_PIN , DIO_u8OUTPUT);
+     ab0:	41 e0       	ldi	r20, 0x01	; 1
+     ab2:	63 e0       	ldi	r22, 0x03	; 3
+     ab4:	83 e0       	ldi	r24, 0x03	; 3
+     ab6:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(C2_PORT , C2_PIN , DIO_u8OUTPUT);
+     aba:	41 e0       	ldi	r20, 0x01	; 1
+     abc:	64 e0       	ldi	r22, 0x04	; 4
+     abe:	83 e0       	ldi	r24, 0x03	; 3
+     ac0:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(C3_PORT , C3_PIN , DIO_u8OUTPUT);
+     ac4:	41 e0       	ldi	r20, 0x01	; 1
+     ac6:	65 e0       	ldi	r22, 0x05	; 5
+     ac8:	83 e0       	ldi	r24, 0x03	; 3
+     aca:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(C4_PORT , C4_PIN , DIO_u8OUTPUT);
+     ace:	41 e0       	ldi	r20, 0x01	; 1
+     ad0:	66 e0       	ldi	r22, 0x06	; 6
+     ad2:	83 e0       	ldi	r24, 0x03	; 3
+     ad4:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+
+	DIO_enuSetPinDirection(R1_PORT , R1_PIN , DIO_u8INPUT);
+     ad8:	40 e0       	ldi	r20, 0x00	; 0
+     ada:	62 e0       	ldi	r22, 0x02	; 2
+     adc:	82 e0       	ldi	r24, 0x02	; 2
+     ade:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(R2_PORT , R2_PIN , DIO_u8INPUT);
+     ae2:	40 e0       	ldi	r20, 0x00	; 0
+     ae4:	63 e0       	ldi	r22, 0x03	; 3
+     ae6:	82 e0       	ldi	r24, 0x02	; 2
+     ae8:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(R3_PORT , R3_PIN , DIO_u8INPUT);
+     aec:	40 e0       	ldi	r20, 0x00	; 0
+     aee:	64 e0       	ldi	r22, 0x04	; 4
+     af0:	82 e0       	ldi	r24, 0x02	; 2
+     af2:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+	DIO_enuSetPinDirection(R4_PORT , R4_PIN , DIO_u8INPUT);
+     af6:	40 e0       	ldi	r20, 0x00	; 0
+     af8:	65 e0       	ldi	r22, 0x05	; 5
+     afa:	82 e0       	ldi	r24, 0x02	; 2
+     afc:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+
+	DIO_enuSetPinValue(C1_PORT , C1_PIN , DIO_u8HIGH);
+     b00:	41 e0       	ldi	r20, 0x01	; 1
+     b02:	63 e0       	ldi	r22, 0x03	; 3
+     b04:	83 e0       	ldi	r24, 0x03	; 3
+     b06:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(C2_PORT , C2_PIN , DIO_u8HIGH);
+     b0a:	41 e0       	ldi	r20, 0x01	; 1
+     b0c:	64 e0       	ldi	r22, 0x04	; 4
+     b0e:	83 e0       	ldi	r24, 0x03	; 3
+     b10:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(C3_PORT , C3_PIN , DIO_u8HIGH);
+     b14:	41 e0       	ldi	r20, 0x01	; 1
+     b16:	65 e0       	ldi	r22, 0x05	; 5
+     b18:	83 e0       	ldi	r24, 0x03	; 3
+     b1a:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(C4_PORT , C4_PIN , DIO_u8HIGH);
+     b1e:	41 e0       	ldi	r20, 0x01	; 1
+     b20:	66 e0       	ldi	r22, 0x06	; 6
+     b22:	83 e0       	ldi	r24, 0x03	; 3
+     b24:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+
+	DIO_enuSetPinValue(R1_PORT , R1_PIN , DIO_u8PULL_UP);
+     b28:	41 e0       	ldi	r20, 0x01	; 1
+     b2a:	62 e0       	ldi	r22, 0x02	; 2
+     b2c:	82 e0       	ldi	r24, 0x02	; 2
+     b2e:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(R2_PORT , R2_PIN , DIO_u8PULL_UP);
+     b32:	41 e0       	ldi	r20, 0x01	; 1
+     b34:	63 e0       	ldi	r22, 0x03	; 3
+     b36:	82 e0       	ldi	r24, 0x02	; 2
+     b38:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(R3_PORT , R3_PIN , DIO_u8PULL_UP);
+     b3c:	41 e0       	ldi	r20, 0x01	; 1
+     b3e:	64 e0       	ldi	r22, 0x04	; 4
+     b40:	82 e0       	ldi	r24, 0x02	; 2
+     b42:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+	DIO_enuSetPinValue(R4_PORT , R4_PIN , DIO_u8PULL_UP);
+     b46:	41 e0       	ldi	r20, 0x01	; 1
+     b48:	65 e0       	ldi	r22, 0x05	; 5
+     b4a:	82 e0       	ldi	r24, 0x02	; 2
+     b4c:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+
+	return Local_enuErrorState;
+}
+     b50:	80 e0       	ldi	r24, 0x00	; 0
+     b52:	08 95       	ret
+
+00000b54 <Keypad_enuGetPressedKey>:
+
+ES_t Keypad_enuGetPressedKey(u8 * Copy_pu8KeyValue)
+{
+     b54:	6f 92       	push	r6
+     b56:	7f 92       	push	r7
+     b58:	8f 92       	push	r8
+     b5a:	9f 92       	push	r9
+     b5c:	af 92       	push	r10
+     b5e:	bf 92       	push	r11
+     b60:	cf 92       	push	r12
+     b62:	df 92       	push	r13
+     b64:	ef 92       	push	r14
+     b66:	ff 92       	push	r15
+     b68:	0f 93       	push	r16
+     b6a:	1f 93       	push	r17
+     b6c:	cf 93       	push	r28
+     b6e:	df 93       	push	r29
+     b70:	cd b7       	in	r28, 0x3d	; 61
+     b72:	de b7       	in	r29, 0x3e	; 62
+     b74:	a1 97       	sbiw	r28, 0x21	; 33
+     b76:	0f b6       	in	r0, 0x3f	; 63
+     b78:	f8 94       	cli
+     b7a:	de bf       	out	0x3e, r29	; 62
+     b7c:	0f be       	out	0x3f, r0	; 63
+     b7e:	cd bf       	out	0x3d, r28	; 61
+     b80:	5c 01       	movw	r10, r24
+	ES_t Local_enuErrorState = ES_NOK;
+
+	u8 Local_Au8ColPorts [COL_NUM] = {C1_PORT,C2_PORT,C3_PORT,C4_PORT};
+     b82:	83 e0       	ldi	r24, 0x03	; 3
+     b84:	89 83       	std	Y+1, r24	; 0x01
+     b86:	8a 83       	std	Y+2, r24	; 0x02
+     b88:	8b 83       	std	Y+3, r24	; 0x03
+     b8a:	8c 83       	std	Y+4, r24	; 0x04
+	u8 Local_Au8ColPins  [COL_NUM] = {C1_PIN, C2_PIN, C3_PIN, C4_PIN};
+     b8c:	8d 83       	std	Y+5, r24	; 0x05
+     b8e:	34 e0       	ldi	r19, 0x04	; 4
+     b90:	3e 83       	std	Y+6, r19	; 0x06
+     b92:	25 e0       	ldi	r18, 0x05	; 5
+     b94:	2f 83       	std	Y+7, r18	; 0x07
+     b96:	96 e0       	ldi	r25, 0x06	; 6
+     b98:	98 87       	std	Y+8, r25	; 0x08
+
+	u8 Local_Au8RowPorts [ROW_NUM] = {R1_PORT,R2_PORT,R3_PORT,R4_PORT};
+     b9a:	92 e0       	ldi	r25, 0x02	; 2
+     b9c:	99 87       	std	Y+9, r25	; 0x09
+     b9e:	9a 87       	std	Y+10, r25	; 0x0a
+     ba0:	9b 87       	std	Y+11, r25	; 0x0b
+     ba2:	9c 87       	std	Y+12, r25	; 0x0c
+	u8 Local_Au8RowPins  [ROW_NUM] = {R1_PIN, R2_PIN, R3_PIN, R4_PIN};
+     ba4:	9d 87       	std	Y+13, r25	; 0x0d
+     ba6:	8e 87       	std	Y+14, r24	; 0x0e
+     ba8:	3f 87       	std	Y+15, r19	; 0x0f
+     baa:	28 8b       	std	Y+16, r18	; 0x10
+
+	u8 Local_u8ColIter , Local_u8RowIter , Local_u8PinValue;
+	*Copy_pu8KeyValue = KEYPAD_NOT_PRESSED;
+     bac:	8f ef       	ldi	r24, 0xFF	; 255
+     bae:	f5 01       	movw	r30, r10
+     bb0:	80 83       	st	Z, r24
+	while (*Copy_pu8KeyValue == KEYPAD_NOT_PRESSED)
+     bb2:	77 c0       	rjmp	.+238    	; 0xca2 <Keypad_enuGetPressedKey+0x14e>
+	{
+	for (Local_u8ColIter=0; Local_u8ColIter < COL_NUM ; Local_u8ColIter++ )
+	{
+		DIO_enuSetPinValue(Local_Au8ColPorts[Local_u8ColIter], Local_Au8ColPins[Local_u8ColIter], DIO_u8LOW);
+     bb4:	c8 2c       	mov	r12, r8
+     bb6:	d1 2c       	mov	r13, r1
+     bb8:	e5 e0       	ldi	r30, 0x05	; 5
+     bba:	f0 e0       	ldi	r31, 0x00	; 0
+     bbc:	ec 0f       	add	r30, r28
+     bbe:	fd 1f       	adc	r31, r29
+     bc0:	ec 0d       	add	r30, r12
+     bc2:	fd 1d       	adc	r31, r13
+     bc4:	60 80       	ld	r6, Z
+     bc6:	e1 e0       	ldi	r30, 0x01	; 1
+     bc8:	f0 e0       	ldi	r31, 0x00	; 0
+     bca:	ec 0f       	add	r30, r28
+     bcc:	fd 1f       	adc	r31, r29
+     bce:	ec 0d       	add	r30, r12
+     bd0:	fd 1d       	adc	r31, r13
+     bd2:	70 80       	ld	r7, Z
+     bd4:	40 e0       	ldi	r20, 0x00	; 0
+     bd6:	66 2d       	mov	r22, r6
+     bd8:	87 2d       	mov	r24, r7
+     bda:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+		for (Local_u8RowIter=0; Local_u8RowIter < ROW_NUM ; Local_u8RowIter++)
+     bde:	10 e0       	ldi	r17, 0x00	; 0
+     be0:	51 c0       	rjmp	.+162    	; 0xc84 <Keypad_enuGetPressedKey+0x130>
+		{
+			DIO_enuGetPinValue(Local_Au8RowPorts[Local_u8RowIter], Local_Au8RowPins[Local_u8RowIter], &Local_u8PinValue);
+     be2:	e1 2e       	mov	r14, r17
+     be4:	f1 2c       	mov	r15, r1
+     be6:	ed e0       	ldi	r30, 0x0D	; 13
+     be8:	f0 e0       	ldi	r31, 0x00	; 0
+     bea:	ec 0f       	add	r30, r28
+     bec:	fd 1f       	adc	r31, r29
+     bee:	ee 0d       	add	r30, r14
+     bf0:	ff 1d       	adc	r31, r15
+     bf2:	00 81       	ld	r16, Z
+     bf4:	e9 e0       	ldi	r30, 0x09	; 9
+     bf6:	f0 e0       	ldi	r31, 0x00	; 0
+     bf8:	ec 0f       	add	r30, r28
+     bfa:	fd 1f       	adc	r31, r29
+     bfc:	ee 0d       	add	r30, r14
+     bfe:	ff 1d       	adc	r31, r15
+     c00:	90 80       	ld	r9, Z
+     c02:	ae 01       	movw	r20, r28
+     c04:	4f 5e       	subi	r20, 0xEF	; 239
+     c06:	5f 4f       	sbci	r21, 0xFF	; 255
+     c08:	60 2f       	mov	r22, r16
+     c0a:	89 2d       	mov	r24, r9
+     c0c:	0e 94 3f 09 	call	0x127e	; 0x127e <DIO_enuGetPinValue>
+			if (! Local_u8PinValue)
+     c10:	89 89       	ldd	r24, Y+17	; 0x11
+     c12:	81 11       	cpse	r24, r1
+     c14:	36 c0       	rjmp	.+108    	; 0xc82 <Keypad_enuGetPressedKey+0x12e>
+     c16:	83 ec       	ldi	r24, 0xC3	; 195
+     c18:	99 e0       	ldi	r25, 0x09	; 9
+     c1a:	01 97       	sbiw	r24, 0x01	; 1
+     c1c:	f1 f7       	brne	.-4      	; 0xc1a <Keypad_enuGetPressedKey+0xc6>
+     c1e:	00 c0       	rjmp	.+0      	; 0xc20 <Keypad_enuGetPressedKey+0xcc>
+     c20:	00 00       	nop
+			{
+				_delay_ms(10);
+				DIO_enuGetPinValue(Local_Au8RowPorts[Local_u8RowIter], Local_Au8RowPins[Local_u8RowIter], &Local_u8PinValue);
+     c22:	ae 01       	movw	r20, r28
+     c24:	4f 5e       	subi	r20, 0xEF	; 239
+     c26:	5f 4f       	sbci	r21, 0xFF	; 255
+     c28:	60 2f       	mov	r22, r16
+     c2a:	89 2d       	mov	r24, r9
+     c2c:	0e 94 3f 09 	call	0x127e	; 0x127e <DIO_enuGetPinValue>
+				if (! Local_u8PinValue)
+     c30:	89 89       	ldd	r24, Y+17	; 0x11
+     c32:	81 11       	cpse	r24, r1
+     c34:	26 c0       	rjmp	.+76     	; 0xc82 <Keypad_enuGetPressedKey+0x12e>
+     c36:	07 c0       	rjmp	.+14     	; 0xc46 <Keypad_enuGetPressedKey+0xf2>
+				{
+					while (! Local_u8PinValue)
+						DIO_enuGetPinValue(Local_Au8RowPorts[Local_u8RowIter], Local_Au8RowPins[Local_u8RowIter], &Local_u8PinValue);
+     c38:	ae 01       	movw	r20, r28
+     c3a:	4f 5e       	subi	r20, 0xEF	; 239
+     c3c:	5f 4f       	sbci	r21, 0xFF	; 255
+     c3e:	60 2f       	mov	r22, r16
+     c40:	89 2d       	mov	r24, r9
+     c42:	0e 94 3f 09 	call	0x127e	; 0x127e <DIO_enuGetPinValue>
+			{
+				_delay_ms(10);
+				DIO_enuGetPinValue(Local_Au8RowPorts[Local_u8RowIter], Local_Au8RowPins[Local_u8RowIter], &Local_u8PinValue);
+				if (! Local_u8PinValue)
+				{
+					while (! Local_u8PinValue)
+     c46:	89 89       	ldd	r24, Y+17	; 0x11
+     c48:	88 23       	and	r24, r24
+     c4a:	b1 f3       	breq	.-20     	; 0xc38 <Keypad_enuGetPressedKey+0xe4>
+						DIO_enuGetPinValue(Local_Au8RowPorts[Local_u8RowIter], Local_Au8RowPins[Local_u8RowIter], &Local_u8PinValue);
+
+					u8 Local_Au8Values[ROW_NUM][COL_NUM] = KEYPAD_VALUES;
+     c4c:	80 e1       	ldi	r24, 0x10	; 16
+     c4e:	e0 e6       	ldi	r30, 0x60	; 96
+     c50:	f0 e0       	ldi	r31, 0x00	; 0
+     c52:	de 01       	movw	r26, r28
+     c54:	52 96       	adiw	r26, 0x12	; 18
+     c56:	01 90       	ld	r0, Z+
+     c58:	0d 92       	st	X+, r0
+     c5a:	8a 95       	dec	r24
+     c5c:	e1 f7       	brne	.-8      	; 0xc56 <Keypad_enuGetPressedKey+0x102>
+					*Copy_pu8KeyValue = Local_Au8Values[Local_u8RowIter][Local_u8ColIter];
+     c5e:	ee 0c       	add	r14, r14
+     c60:	ff 1c       	adc	r15, r15
+     c62:	ee 0c       	add	r14, r14
+     c64:	ff 1c       	adc	r15, r15
+     c66:	e1 e0       	ldi	r30, 0x01	; 1
+     c68:	f0 e0       	ldi	r31, 0x00	; 0
+     c6a:	ec 0f       	add	r30, r28
+     c6c:	fd 1f       	adc	r31, r29
+     c6e:	ee 0e       	add	r14, r30
+     c70:	ff 1e       	adc	r15, r31
+     c72:	f7 01       	movw	r30, r14
+     c74:	ec 0d       	add	r30, r12
+     c76:	fd 1d       	adc	r31, r13
+     c78:	81 89       	ldd	r24, Z+17	; 0x11
+     c7a:	f5 01       	movw	r30, r10
+     c7c:	80 83       	st	Z, r24
+					return ES_OK;
+     c7e:	81 e0       	ldi	r24, 0x01	; 1
+     c80:	15 c0       	rjmp	.+42     	; 0xcac <Keypad_enuGetPressedKey+0x158>
+	while (*Copy_pu8KeyValue == KEYPAD_NOT_PRESSED)
+	{
+	for (Local_u8ColIter=0; Local_u8ColIter < COL_NUM ; Local_u8ColIter++ )
+	{
+		DIO_enuSetPinValue(Local_Au8ColPorts[Local_u8ColIter], Local_Au8ColPins[Local_u8ColIter], DIO_u8LOW);
+		for (Local_u8RowIter=0; Local_u8RowIter < ROW_NUM ; Local_u8RowIter++)
+     c82:	1f 5f       	subi	r17, 0xFF	; 255
+     c84:	14 30       	cpi	r17, 0x04	; 4
+     c86:	08 f4       	brcc	.+2      	; 0xc8a <Keypad_enuGetPressedKey+0x136>
+     c88:	ac cf       	rjmp	.-168    	; 0xbe2 <Keypad_enuGetPressedKey+0x8e>
+					*Copy_pu8KeyValue = Local_Au8Values[Local_u8RowIter][Local_u8ColIter];
+					return ES_OK;
+				}
+			}
+		}
+		DIO_enuSetPinValue(Local_Au8ColPorts[Local_u8ColIter], Local_Au8ColPins[Local_u8ColIter], DIO_u8HIGH);
+     c8a:	41 e0       	ldi	r20, 0x01	; 1
+     c8c:	66 2d       	mov	r22, r6
+     c8e:	87 2d       	mov	r24, r7
+     c90:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+
+	u8 Local_u8ColIter , Local_u8RowIter , Local_u8PinValue;
+	*Copy_pu8KeyValue = KEYPAD_NOT_PRESSED;
+	while (*Copy_pu8KeyValue == KEYPAD_NOT_PRESSED)
+	{
+	for (Local_u8ColIter=0; Local_u8ColIter < COL_NUM ; Local_u8ColIter++ )
+     c94:	83 94       	inc	r8
+     c96:	01 c0       	rjmp	.+2      	; 0xc9a <Keypad_enuGetPressedKey+0x146>
+     c98:	81 2c       	mov	r8, r1
+     c9a:	f3 e0       	ldi	r31, 0x03	; 3
+     c9c:	f8 15       	cp	r31, r8
+     c9e:	08 f0       	brcs	.+2      	; 0xca2 <Keypad_enuGetPressedKey+0x14e>
+     ca0:	89 cf       	rjmp	.-238    	; 0xbb4 <Keypad_enuGetPressedKey+0x60>
+	u8 Local_Au8RowPorts [ROW_NUM] = {R1_PORT,R2_PORT,R3_PORT,R4_PORT};
+	u8 Local_Au8RowPins  [ROW_NUM] = {R1_PIN, R2_PIN, R3_PIN, R4_PIN};
+
+	u8 Local_u8ColIter , Local_u8RowIter , Local_u8PinValue;
+	*Copy_pu8KeyValue = KEYPAD_NOT_PRESSED;
+	while (*Copy_pu8KeyValue == KEYPAD_NOT_PRESSED)
+     ca2:	f5 01       	movw	r30, r10
+     ca4:	80 81       	ld	r24, Z
+     ca6:	8f 3f       	cpi	r24, 0xFF	; 255
+     ca8:	b9 f3       	breq	.-18     	; 0xc98 <Keypad_enuGetPressedKey+0x144>
+			}
+		}
+		DIO_enuSetPinValue(Local_Au8ColPorts[Local_u8ColIter], Local_Au8ColPins[Local_u8ColIter], DIO_u8HIGH);
+	}
+	}
+	return Local_enuErrorState;
+     caa:	80 e0       	ldi	r24, 0x00	; 0
+}
+     cac:	a1 96       	adiw	r28, 0x21	; 33
+     cae:	0f b6       	in	r0, 0x3f	; 63
+     cb0:	f8 94       	cli
+     cb2:	de bf       	out	0x3e, r29	; 62
+     cb4:	0f be       	out	0x3f, r0	; 63
+     cb6:	cd bf       	out	0x3d, r28	; 61
+     cb8:	df 91       	pop	r29
+     cba:	cf 91       	pop	r28
+     cbc:	1f 91       	pop	r17
+     cbe:	0f 91       	pop	r16
+     cc0:	ff 90       	pop	r15
+     cc2:	ef 90       	pop	r14
+     cc4:	df 90       	pop	r13
+     cc6:	cf 90       	pop	r12
+     cc8:	bf 90       	pop	r11
+     cca:	af 90       	pop	r10
+     ccc:	9f 90       	pop	r9
+     cce:	8f 90       	pop	r8
+     cd0:	7f 90       	pop	r7
+     cd2:	6f 90       	pop	r6
+     cd4:	08 95       	ret
+
+00000cd6 <LCD_enuWriteNLatch>:
+				/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********/
+			}
+	}
+
+	return Local_enuErrorState;
+}
+     cd6:	1f 93       	push	r17
+     cd8:	cf 93       	push	r28
+     cda:	df 93       	push	r29
+     cdc:	1f 92       	push	r1
+     cde:	cd b7       	in	r28, 0x3d	; 61
+     ce0:	de b7       	in	r29, 0x3e	; 62
+     ce2:	18 2f       	mov	r17, r24
+     ce4:	40 e0       	ldi	r20, 0x00	; 0
+     ce6:	63 e0       	ldi	r22, 0x03	; 3
+     ce8:	81 e0       	ldi	r24, 0x01	; 1
+     cea:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     cee:	40 e0       	ldi	r20, 0x00	; 0
+     cf0:	62 e0       	ldi	r22, 0x02	; 2
+     cf2:	81 e0       	ldi	r24, 0x01	; 1
+     cf4:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     cf8:	18 32       	cpi	r17, 0x28	; 40
+     cfa:	e1 f5       	brne	.+120    	; 0xd74 <LCD_enuWriteNLatch+0x9e>
+     cfc:	ae 01       	movw	r20, r28
+     cfe:	4f 5f       	subi	r20, 0xFF	; 255
+     d00:	5f 4f       	sbci	r21, 0xFF	; 255
+     d02:	61 e0       	ldi	r22, 0x01	; 1
+     d04:	81 e0       	ldi	r24, 0x01	; 1
+     d06:	0e 94 3f 09 	call	0x127e	; 0x127e <DIO_enuGetPinValue>
+     d0a:	89 81       	ldd	r24, Y+1	; 0x01
+     d0c:	81 11       	cpse	r24, r1
+     d0e:	32 c0       	rjmp	.+100    	; 0xd74 <LCD_enuWriteNLatch+0x9e>
+     d10:	41 2f       	mov	r20, r17
+     d12:	44 1f       	adc	r20, r20
+     d14:	44 27       	eor	r20, r20
+     d16:	44 1f       	adc	r20, r20
+     d18:	67 e0       	ldi	r22, 0x07	; 7
+     d1a:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d1e:	16 fb       	bst	r17, 6
+     d20:	44 27       	eor	r20, r20
+     d22:	40 f9       	bld	r20, 0
+     d24:	66 e0       	ldi	r22, 0x06	; 6
+     d26:	80 e0       	ldi	r24, 0x00	; 0
+     d28:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d2c:	15 fb       	bst	r17, 5
+     d2e:	44 27       	eor	r20, r20
+     d30:	40 f9       	bld	r20, 0
+     d32:	65 e0       	ldi	r22, 0x05	; 5
+     d34:	80 e0       	ldi	r24, 0x00	; 0
+     d36:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d3a:	14 fb       	bst	r17, 4
+     d3c:	44 27       	eor	r20, r20
+     d3e:	40 f9       	bld	r20, 0
+     d40:	64 e0       	ldi	r22, 0x04	; 4
+     d42:	80 e0       	ldi	r24, 0x00	; 0
+     d44:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d48:	41 e0       	ldi	r20, 0x01	; 1
+     d4a:	63 e0       	ldi	r22, 0x03	; 3
+     d4c:	81 e0       	ldi	r24, 0x01	; 1
+     d4e:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d52:	81 ee       	ldi	r24, 0xE1	; 225
+     d54:	94 e0       	ldi	r25, 0x04	; 4
+     d56:	01 97       	sbiw	r24, 0x01	; 1
+     d58:	f1 f7       	brne	.-4      	; 0xd56 <LCD_enuWriteNLatch+0x80>
+     d5a:	00 c0       	rjmp	.+0      	; 0xd5c <LCD_enuWriteNLatch+0x86>
+     d5c:	00 00       	nop
+     d5e:	40 e0       	ldi	r20, 0x00	; 0
+     d60:	63 e0       	ldi	r22, 0x03	; 3
+     d62:	81 e0       	ldi	r24, 0x01	; 1
+     d64:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d68:	83 ed       	ldi	r24, 0xD3	; 211
+     d6a:	90 e3       	ldi	r25, 0x30	; 48
+     d6c:	01 97       	sbiw	r24, 0x01	; 1
+     d6e:	f1 f7       	brne	.-4      	; 0xd6c <LCD_enuWriteNLatch+0x96>
+     d70:	00 c0       	rjmp	.+0      	; 0xd72 <LCD_enuWriteNLatch+0x9c>
+     d72:	00 00       	nop
+     d74:	41 2f       	mov	r20, r17
+     d76:	44 1f       	adc	r20, r20
+     d78:	44 27       	eor	r20, r20
+     d7a:	44 1f       	adc	r20, r20
+     d7c:	67 e0       	ldi	r22, 0x07	; 7
+     d7e:	80 e0       	ldi	r24, 0x00	; 0
+     d80:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d84:	16 fb       	bst	r17, 6
+     d86:	44 27       	eor	r20, r20
+     d88:	40 f9       	bld	r20, 0
+     d8a:	66 e0       	ldi	r22, 0x06	; 6
+     d8c:	80 e0       	ldi	r24, 0x00	; 0
+     d8e:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     d92:	15 fb       	bst	r17, 5
+     d94:	44 27       	eor	r20, r20
+     d96:	40 f9       	bld	r20, 0
+     d98:	65 e0       	ldi	r22, 0x05	; 5
+     d9a:	80 e0       	ldi	r24, 0x00	; 0
+     d9c:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     da0:	14 fb       	bst	r17, 4
+     da2:	44 27       	eor	r20, r20
+     da4:	40 f9       	bld	r20, 0
+     da6:	64 e0       	ldi	r22, 0x04	; 4
+     da8:	80 e0       	ldi	r24, 0x00	; 0
+     daa:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     dae:	41 e0       	ldi	r20, 0x01	; 1
+     db0:	63 e0       	ldi	r22, 0x03	; 3
+     db2:	81 e0       	ldi	r24, 0x01	; 1
+     db4:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     db8:	81 ee       	ldi	r24, 0xE1	; 225
+     dba:	94 e0       	ldi	r25, 0x04	; 4
+     dbc:	01 97       	sbiw	r24, 0x01	; 1
+     dbe:	f1 f7       	brne	.-4      	; 0xdbc <LCD_enuWriteNLatch+0xe6>
+     dc0:	00 c0       	rjmp	.+0      	; 0xdc2 <LCD_enuWriteNLatch+0xec>
+     dc2:	00 00       	nop
+     dc4:	40 e0       	ldi	r20, 0x00	; 0
+     dc6:	63 e0       	ldi	r22, 0x03	; 3
+     dc8:	81 e0       	ldi	r24, 0x01	; 1
+     dca:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     dce:	83 ed       	ldi	r24, 0xD3	; 211
+     dd0:	90 e3       	ldi	r25, 0x30	; 48
+     dd2:	01 97       	sbiw	r24, 0x01	; 1
+     dd4:	f1 f7       	brne	.-4      	; 0xdd2 <LCD_enuWriteNLatch+0xfc>
+     dd6:	00 c0       	rjmp	.+0      	; 0xdd8 <LCD_enuWriteNLatch+0x102>
+     dd8:	00 00       	nop
+     dda:	13 fb       	bst	r17, 3
+     ddc:	44 27       	eor	r20, r20
+     dde:	40 f9       	bld	r20, 0
+     de0:	67 e0       	ldi	r22, 0x07	; 7
+     de2:	80 e0       	ldi	r24, 0x00	; 0
+     de4:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     de8:	12 fb       	bst	r17, 2
+     dea:	44 27       	eor	r20, r20
+     dec:	40 f9       	bld	r20, 0
+     dee:	66 e0       	ldi	r22, 0x06	; 6
+     df0:	80 e0       	ldi	r24, 0x00	; 0
+     df2:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     df6:	11 fb       	bst	r17, 1
+     df8:	44 27       	eor	r20, r20
+     dfa:	40 f9       	bld	r20, 0
+     dfc:	65 e0       	ldi	r22, 0x05	; 5
+     dfe:	80 e0       	ldi	r24, 0x00	; 0
+     e00:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     e04:	41 2f       	mov	r20, r17
+     e06:	41 70       	andi	r20, 0x01	; 1
+     e08:	64 e0       	ldi	r22, 0x04	; 4
+     e0a:	80 e0       	ldi	r24, 0x00	; 0
+     e0c:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     e10:	41 e0       	ldi	r20, 0x01	; 1
+     e12:	63 e0       	ldi	r22, 0x03	; 3
+     e14:	81 e0       	ldi	r24, 0x01	; 1
+     e16:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     e1a:	81 ee       	ldi	r24, 0xE1	; 225
+     e1c:	94 e0       	ldi	r25, 0x04	; 4
+     e1e:	01 97       	sbiw	r24, 0x01	; 1
+     e20:	f1 f7       	brne	.-4      	; 0xe1e <LCD_enuWriteNLatch+0x148>
+     e22:	00 c0       	rjmp	.+0      	; 0xe24 <LCD_enuWriteNLatch+0x14e>
+     e24:	00 00       	nop
+     e26:	40 e0       	ldi	r20, 0x00	; 0
+     e28:	63 e0       	ldi	r22, 0x03	; 3
+     e2a:	81 e0       	ldi	r24, 0x01	; 1
+     e2c:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     e30:	83 ed       	ldi	r24, 0xD3	; 211
+     e32:	90 e3       	ldi	r25, 0x30	; 48
+     e34:	01 97       	sbiw	r24, 0x01	; 1
+     e36:	f1 f7       	brne	.-4      	; 0xe34 <LCD_enuWriteNLatch+0x15e>
+     e38:	00 c0       	rjmp	.+0      	; 0xe3a <LCD_enuWriteNLatch+0x164>
+     e3a:	00 00       	nop
+     e3c:	80 e0       	ldi	r24, 0x00	; 0
+     e3e:	0f 90       	pop	r0
+     e40:	df 91       	pop	r29
+     e42:	cf 91       	pop	r28
+     e44:	1f 91       	pop	r17
+     e46:	08 95       	ret
+
+00000e48 <LCD_enuInit>:
+     e48:	41 e0       	ldi	r20, 0x01	; 1
+     e4a:	61 e0       	ldi	r22, 0x01	; 1
+     e4c:	81 e0       	ldi	r24, 0x01	; 1
+     e4e:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e52:	41 e0       	ldi	r20, 0x01	; 1
+     e54:	62 e0       	ldi	r22, 0x02	; 2
+     e56:	81 e0       	ldi	r24, 0x01	; 1
+     e58:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e5c:	41 e0       	ldi	r20, 0x01	; 1
+     e5e:	63 e0       	ldi	r22, 0x03	; 3
+     e60:	81 e0       	ldi	r24, 0x01	; 1
+     e62:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e66:	41 e0       	ldi	r20, 0x01	; 1
+     e68:	67 e0       	ldi	r22, 0x07	; 7
+     e6a:	80 e0       	ldi	r24, 0x00	; 0
+     e6c:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e70:	41 e0       	ldi	r20, 0x01	; 1
+     e72:	66 e0       	ldi	r22, 0x06	; 6
+     e74:	80 e0       	ldi	r24, 0x00	; 0
+     e76:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e7a:	41 e0       	ldi	r20, 0x01	; 1
+     e7c:	65 e0       	ldi	r22, 0x05	; 5
+     e7e:	80 e0       	ldi	r24, 0x00	; 0
+     e80:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e84:	41 e0       	ldi	r20, 0x01	; 1
+     e86:	64 e0       	ldi	r22, 0x04	; 4
+     e88:	80 e0       	ldi	r24, 0x00	; 0
+     e8a:	0e 94 5b 08 	call	0x10b6	; 0x10b6 <DIO_enuSetPinDirection>
+     e8e:	8d e2       	ldi	r24, 0x2D	; 45
+     e90:	92 e2       	ldi	r25, 0x22	; 34
+     e92:	01 97       	sbiw	r24, 0x01	; 1
+     e94:	f1 f7       	brne	.-4      	; 0xe92 <LCD_enuInit+0x4a>
+     e96:	00 c0       	rjmp	.+0      	; 0xe98 <LCD_enuInit+0x50>
+     e98:	00 00       	nop
+     e9a:	40 e0       	ldi	r20, 0x00	; 0
+     e9c:	61 e0       	ldi	r22, 0x01	; 1
+     e9e:	81 e0       	ldi	r24, 0x01	; 1
+     ea0:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     ea4:	88 e2       	ldi	r24, 0x28	; 40
+     ea6:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     eaa:	89 ef       	ldi	r24, 0xF9	; 249
+     eac:	90 e0       	ldi	r25, 0x00	; 0
+     eae:	01 97       	sbiw	r24, 0x01	; 1
+     eb0:	f1 f7       	brne	.-4      	; 0xeae <LCD_enuInit+0x66>
+     eb2:	00 c0       	rjmp	.+0      	; 0xeb4 <LCD_enuInit+0x6c>
+     eb4:	00 00       	nop
+     eb6:	40 e0       	ldi	r20, 0x00	; 0
+     eb8:	61 e0       	ldi	r22, 0x01	; 1
+     eba:	81 e0       	ldi	r24, 0x01	; 1
+     ebc:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     ec0:	8f e0       	ldi	r24, 0x0F	; 15
+     ec2:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     ec6:	89 ef       	ldi	r24, 0xF9	; 249
+     ec8:	90 e0       	ldi	r25, 0x00	; 0
+     eca:	01 97       	sbiw	r24, 0x01	; 1
+     ecc:	f1 f7       	brne	.-4      	; 0xeca <LCD_enuInit+0x82>
+     ece:	00 c0       	rjmp	.+0      	; 0xed0 <LCD_enuInit+0x88>
+     ed0:	00 00       	nop
+     ed2:	40 e0       	ldi	r20, 0x00	; 0
+     ed4:	61 e0       	ldi	r22, 0x01	; 1
+     ed6:	81 e0       	ldi	r24, 0x01	; 1
+     ed8:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     edc:	81 e0       	ldi	r24, 0x01	; 1
+     ede:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     ee2:	83 ef       	ldi	r24, 0xF3	; 243
+     ee4:	91 e0       	ldi	r25, 0x01	; 1
+     ee6:	01 97       	sbiw	r24, 0x01	; 1
+     ee8:	f1 f7       	brne	.-4      	; 0xee6 <LCD_enuInit+0x9e>
+     eea:	00 c0       	rjmp	.+0      	; 0xeec <LCD_enuInit+0xa4>
+     eec:	00 00       	nop
+     eee:	40 e0       	ldi	r20, 0x00	; 0
+     ef0:	61 e0       	ldi	r22, 0x01	; 1
+     ef2:	81 e0       	ldi	r24, 0x01	; 1
+     ef4:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     ef8:	86 e0       	ldi	r24, 0x06	; 6
+     efa:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     efe:	80 e0       	ldi	r24, 0x00	; 0
+     f00:	08 95       	ret
+
+00000f02 <LCD_enuSendData>:
+     f02:	cf 93       	push	r28
+     f04:	c8 2f       	mov	r28, r24
+     f06:	41 e0       	ldi	r20, 0x01	; 1
+     f08:	61 e0       	ldi	r22, 0x01	; 1
+     f0a:	81 e0       	ldi	r24, 0x01	; 1
+     f0c:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     f10:	8c 2f       	mov	r24, r28
+     f12:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     f16:	80 e0       	ldi	r24, 0x00	; 0
+     f18:	cf 91       	pop	r28
+     f1a:	08 95       	ret
+
+00000f1c <LCD_enuDisplayUnsignedInteger>:
+     f1c:	af 92       	push	r10
+     f1e:	bf 92       	push	r11
+     f20:	cf 92       	push	r12
+     f22:	df 92       	push	r13
+     f24:	ef 92       	push	r14
+     f26:	ff 92       	push	r15
+     f28:	0f 93       	push	r16
+     f2a:	1f 93       	push	r17
+     f2c:	cf 93       	push	r28
+     f2e:	df 93       	push	r29
+     f30:	61 15       	cp	r22, r1
+     f32:	71 05       	cpc	r23, r1
+     f34:	81 05       	cpc	r24, r1
+     f36:	91 05       	cpc	r25, r1
+     f38:	61 f5       	brne	.+88     	; 0xf92 <LCD_enuDisplayUnsignedInteger+0x76>
+     f3a:	41 e0       	ldi	r20, 0x01	; 1
+     f3c:	61 e0       	ldi	r22, 0x01	; 1
+     f3e:	81 e0       	ldi	r24, 0x01	; 1
+     f40:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     f44:	80 e3       	ldi	r24, 0x30	; 48
+     f46:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     f4a:	a1 2c       	mov	r10, r1
+     f4c:	54 c0       	rjmp	.+168    	; 0xff6 <LCD_enuDisplayUnsignedInteger+0xda>
+     f4e:	2a e0       	ldi	r18, 0x0A	; 10
+     f50:	30 e0       	ldi	r19, 0x00	; 0
+     f52:	40 e0       	ldi	r20, 0x00	; 0
+     f54:	50 e0       	ldi	r21, 0x00	; 0
+     f56:	0e 94 8d 09 	call	0x131a	; 0x131a <__udivmodsi4>
+     f5a:	cc 0c       	add	r12, r12
+     f5c:	dd 1c       	adc	r13, r13
+     f5e:	ee 1c       	adc	r14, r14
+     f60:	ff 1c       	adc	r15, r15
+     f62:	d7 01       	movw	r26, r14
+     f64:	c6 01       	movw	r24, r12
+     f66:	88 0f       	add	r24, r24
+     f68:	99 1f       	adc	r25, r25
+     f6a:	aa 1f       	adc	r26, r26
+     f6c:	bb 1f       	adc	r27, r27
+     f6e:	88 0f       	add	r24, r24
+     f70:	99 1f       	adc	r25, r25
+     f72:	aa 1f       	adc	r26, r26
+     f74:	bb 1f       	adc	r27, r27
+     f76:	c8 0e       	add	r12, r24
+     f78:	d9 1e       	adc	r13, r25
+     f7a:	ea 1e       	adc	r14, r26
+     f7c:	fb 1e       	adc	r15, r27
+     f7e:	c6 0e       	add	r12, r22
+     f80:	d1 1c       	adc	r13, r1
+     f82:	e1 1c       	adc	r14, r1
+     f84:	f1 1c       	adc	r15, r1
+     f86:	cf 5f       	subi	r28, 0xFF	; 255
+     f88:	62 2f       	mov	r22, r18
+     f8a:	73 2f       	mov	r23, r19
+     f8c:	84 2f       	mov	r24, r20
+     f8e:	95 2f       	mov	r25, r21
+     f90:	04 c0       	rjmp	.+8      	; 0xf9a <LCD_enuDisplayUnsignedInteger+0x7e>
+     f92:	c0 e0       	ldi	r28, 0x00	; 0
+     f94:	c1 2c       	mov	r12, r1
+     f96:	d1 2c       	mov	r13, r1
+     f98:	76 01       	movw	r14, r12
+     f9a:	61 15       	cp	r22, r1
+     f9c:	71 05       	cpc	r23, r1
+     f9e:	81 05       	cpc	r24, r1
+     fa0:	91 05       	cpc	r25, r1
+     fa2:	a9 f6       	brne	.-86     	; 0xf4e <LCD_enuDisplayUnsignedInteger+0x32>
+     fa4:	a1 2c       	mov	r10, r1
+     fa6:	1b c0       	rjmp	.+54     	; 0xfde <LCD_enuDisplayUnsignedInteger+0xc2>
+     fa8:	41 e0       	ldi	r20, 0x01	; 1
+     faa:	61 e0       	ldi	r22, 0x01	; 1
+     fac:	81 e0       	ldi	r24, 0x01	; 1
+     fae:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+     fb2:	c7 01       	movw	r24, r14
+     fb4:	b6 01       	movw	r22, r12
+     fb6:	2a e0       	ldi	r18, 0x0A	; 10
+     fb8:	30 e0       	ldi	r19, 0x00	; 0
+     fba:	40 e0       	ldi	r20, 0x00	; 0
+     fbc:	50 e0       	ldi	r21, 0x00	; 0
+     fbe:	0e 94 8d 09 	call	0x131a	; 0x131a <__udivmodsi4>
+     fc2:	b2 2e       	mov	r11, r18
+     fc4:	03 2f       	mov	r16, r19
+     fc6:	14 2f       	mov	r17, r20
+     fc8:	d5 2f       	mov	r29, r21
+     fca:	80 e3       	ldi	r24, 0x30	; 48
+     fcc:	86 0f       	add	r24, r22
+     fce:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     fd2:	a8 2e       	mov	r10, r24
+     fd4:	cb 2c       	mov	r12, r11
+     fd6:	d0 2e       	mov	r13, r16
+     fd8:	e1 2e       	mov	r14, r17
+     fda:	fd 2e       	mov	r15, r29
+     fdc:	c1 50       	subi	r28, 0x01	; 1
+     fde:	c1 14       	cp	r12, r1
+     fe0:	d1 04       	cpc	r13, r1
+     fe2:	e1 04       	cpc	r14, r1
+     fe4:	f1 04       	cpc	r15, r1
+     fe6:	01 f7       	brne	.-64     	; 0xfa8 <LCD_enuDisplayUnsignedInteger+0x8c>
+     fe8:	04 c0       	rjmp	.+8      	; 0xff2 <LCD_enuDisplayUnsignedInteger+0xd6>
+     fea:	80 e3       	ldi	r24, 0x30	; 48
+     fec:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+     ff0:	c1 50       	subi	r28, 0x01	; 1
+     ff2:	c1 11       	cpse	r28, r1
+     ff4:	fa cf       	rjmp	.-12     	; 0xfea <LCD_enuDisplayUnsignedInteger+0xce>
+     ff6:	8a 2d       	mov	r24, r10
+     ff8:	df 91       	pop	r29
+     ffa:	cf 91       	pop	r28
+     ffc:	1f 91       	pop	r17
+     ffe:	0f 91       	pop	r16
+    1000:	ff 90       	pop	r15
+    1002:	ef 90       	pop	r14
+    1004:	df 90       	pop	r13
+    1006:	cf 90       	pop	r12
+    1008:	bf 90       	pop	r11
+    100a:	af 90       	pop	r10
+    100c:	08 95       	ret
+
+0000100e <LCD_enuDisplayString>:
+
+ES_t LCD_enuDisplayString(const char * Copy_pcString)
+{
+    100e:	0f 93       	push	r16
+    1010:	1f 93       	push	r17
+    1012:	cf 93       	push	r28
+    1014:	df 93       	push	r29
+    1016:	ec 01       	movw	r28, r24
+	ES_t Local_enuErrorState = ES_NOK;
+	if (Copy_pcString != NULL)
+    1018:	89 2b       	or	r24, r25
+    101a:	79 f4       	brne	.+30     	; 0x103a <LCD_enuDisplayString+0x2c>
+			DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
+			Local_enuErrorState = LCD_enuWriteNLatch(*Copy_pcString++);
+		}
+
+	}
+	else Local_enuErrorState = ES_NULL_POINTER;
+    101c:	82 e0       	ldi	r24, 0x02	; 2
+    101e:	11 c0       	rjmp	.+34     	; 0x1042 <LCD_enuDisplayString+0x34>
+	ES_t Local_enuErrorState = ES_NOK;
+	if (Copy_pcString != NULL)
+	{
+		while (*Copy_pcString)
+		{
+			DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
+    1020:	41 e0       	ldi	r20, 0x01	; 1
+    1022:	61 e0       	ldi	r22, 0x01	; 1
+    1024:	81 e0       	ldi	r24, 0x01	; 1
+    1026:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+			Local_enuErrorState = LCD_enuWriteNLatch(*Copy_pcString++);
+    102a:	8e 01       	movw	r16, r28
+    102c:	0f 5f       	subi	r16, 0xFF	; 255
+    102e:	1f 4f       	sbci	r17, 0xFF	; 255
+    1030:	88 81       	ld	r24, Y
+    1032:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+    1036:	e8 01       	movw	r28, r16
+    1038:	01 c0       	rjmp	.+2      	; 0x103c <LCD_enuDisplayString+0x2e>
+    103a:	80 e0       	ldi	r24, 0x00	; 0
+ES_t LCD_enuDisplayString(const char * Copy_pcString)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+	if (Copy_pcString != NULL)
+	{
+		while (*Copy_pcString)
+    103c:	98 81       	ld	r25, Y
+    103e:	91 11       	cpse	r25, r1
+    1040:	ef cf       	rjmp	.-34     	; 0x1020 <LCD_enuDisplayString+0x12>
+		}
+
+	}
+	else Local_enuErrorState = ES_NULL_POINTER;
+	return Local_enuErrorState;
+}
+    1042:	df 91       	pop	r29
+    1044:	cf 91       	pop	r28
+    1046:	1f 91       	pop	r17
+    1048:	0f 91       	pop	r16
+    104a:	08 95       	ret
+
+0000104c <LCD_enuSetCursorPosition>:
+
+
+ES_t LCD_enuSetCursorPosition(u8 Copy_u8XDimension, u8 Copy_u8YDimension)
+{
+    104c:	1f 93       	push	r17
+    104e:	cf 93       	push	r28
+    1050:	df 93       	push	r29
+
+	ES_t Local_enuErrorState = ES_NOK;
+	if ((Copy_u8XDimension <= LCD_u8XDIM_1) && (Copy_u8YDimension <= LCD_u8YDIM_15))
+    1052:	82 30       	cpi	r24, 0x02	; 2
+    1054:	a8 f4       	brcc	.+42     	; 0x1080 <LCD_enuSetCursorPosition+0x34>
+    1056:	60 31       	cpi	r22, 0x10	; 16
+    1058:	a8 f4       	brcc	.+42     	; 0x1084 <LCD_enuSetCursorPosition+0x38>
+    105a:	16 2f       	mov	r17, r22
+    105c:	c8 2f       	mov	r28, r24
+		{
+		Local_enuErrorState = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
+    105e:	40 e0       	ldi	r20, 0x00	; 0
+    1060:	61 e0       	ldi	r22, 0x01	; 1
+    1062:	81 e0       	ldi	r24, 0x01	; 1
+    1064:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+    1068:	d8 2f       	mov	r29, r24
+		LCD_enuWriteNLatch(0x80 + (Copy_u8XDimension*64) + Copy_u8YDimension);
+    106a:	8c 2f       	mov	r24, r28
+    106c:	90 e0       	ldi	r25, 0x00	; 0
+    106e:	02 96       	adiw	r24, 0x02	; 2
+    1070:	20 e4       	ldi	r18, 0x40	; 64
+    1072:	82 9f       	mul	r24, r18
+    1074:	10 0d       	add	r17, r0
+    1076:	11 24       	eor	r1, r1
+    1078:	81 2f       	mov	r24, r17
+    107a:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+    107e:	03 c0       	rjmp	.+6      	; 0x1086 <LCD_enuSetCursorPosition+0x3a>
+
+
+ES_t LCD_enuSetCursorPosition(u8 Copy_u8XDimension, u8 Copy_u8YDimension)
+{
+
+	ES_t Local_enuErrorState = ES_NOK;
+    1080:	d0 e0       	ldi	r29, 0x00	; 0
+    1082:	01 c0       	rjmp	.+2      	; 0x1086 <LCD_enuSetCursorPosition+0x3a>
+    1084:	d0 e0       	ldi	r29, 0x00	; 0
+		Local_enuErrorState = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
+		LCD_enuWriteNLatch(0x80 + (Copy_u8XDimension*64) + Copy_u8YDimension);
+		}
+	return Local_enuErrorState;
+
+}
+    1086:	8d 2f       	mov	r24, r29
+    1088:	df 91       	pop	r29
+    108a:	cf 91       	pop	r28
+    108c:	1f 91       	pop	r17
+    108e:	08 95       	ret
+
+00001090 <LCD_enuClearDisplay>:
+
+ES_t LCD_enuClearDisplay( void )
+{
+    1090:	cf 93       	push	r28
+
+	ES_t Local_enuErrorState = ES_NOK;
+
+		Local_enuErrorState = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
+    1092:	40 e0       	ldi	r20, 0x00	; 0
+    1094:	61 e0       	ldi	r22, 0x01	; 1
+    1096:	81 e0       	ldi	r24, 0x01	; 1
+    1098:	0e 94 cd 08 	call	0x119a	; 0x119a <DIO_enuSetPinValue>
+    109c:	c8 2f       	mov	r28, r24
+		LCD_enuWriteNLatch(0x01);
+    109e:	81 e0       	ldi	r24, 0x01	; 1
+    10a0:	0e 94 6b 06 	call	0xcd6	; 0xcd6 <LCD_enuWriteNLatch>
+
+	return Local_enuErrorState;
+
+}
+    10a4:	8c 2f       	mov	r24, r28
+    10a6:	cf 91       	pop	r28
+    10a8:	08 95       	ret
+
+000010aa <DIO_enuInit>:
+	{
+		Local_enuErrorState = ES_OUT_OF_RANGE;
+	}
+
+	return Local_enuErrorState;
+}
+    10aa:	81 eb       	ldi	r24, 0xB1	; 177
+    10ac:	8a bb       	out	0x1a, r24	; 26
+    10ae:	86 e1       	ldi	r24, 0x16	; 22
+    10b0:	8b bb       	out	0x1b, r24	; 27
+    10b2:	80 e0       	ldi	r24, 0x00	; 0
+    10b4:	08 95       	ret
+
+000010b6 <DIO_enuSetPinDirection>:
+    10b6:	84 30       	cpi	r24, 0x04	; 4
+    10b8:	08 f0       	brcs	.+2      	; 0x10bc <DIO_enuSetPinDirection+0x6>
+    10ba:	67 c0       	rjmp	.+206    	; 0x118a <DIO_enuSetPinDirection+0xd4>
+    10bc:	68 30       	cpi	r22, 0x08	; 8
+    10be:	08 f0       	brcs	.+2      	; 0x10c2 <DIO_enuSetPinDirection+0xc>
+    10c0:	66 c0       	rjmp	.+204    	; 0x118e <DIO_enuSetPinDirection+0xd8>
+    10c2:	42 30       	cpi	r20, 0x02	; 2
+    10c4:	08 f0       	brcs	.+2      	; 0x10c8 <DIO_enuSetPinDirection+0x12>
+    10c6:	65 c0       	rjmp	.+202    	; 0x1192 <DIO_enuSetPinDirection+0xdc>
+    10c8:	81 30       	cpi	r24, 0x01	; 1
+    10ca:	e9 f0       	breq	.+58     	; 0x1106 <DIO_enuSetPinDirection+0x50>
+    10cc:	30 f0       	brcs	.+12     	; 0x10da <DIO_enuSetPinDirection+0x24>
+    10ce:	82 30       	cpi	r24, 0x02	; 2
+    10d0:	81 f1       	breq	.+96     	; 0x1132 <DIO_enuSetPinDirection+0x7c>
+    10d2:	83 30       	cpi	r24, 0x03	; 3
+    10d4:	09 f4       	brne	.+2      	; 0x10d8 <DIO_enuSetPinDirection+0x22>
+    10d6:	43 c0       	rjmp	.+134    	; 0x115e <DIO_enuSetPinDirection+0xa8>
+    10d8:	5e c0       	rjmp	.+188    	; 0x1196 <DIO_enuSetPinDirection+0xe0>
+    10da:	81 e0       	ldi	r24, 0x01	; 1
+    10dc:	90 e0       	ldi	r25, 0x00	; 0
+    10de:	06 2e       	mov	r0, r22
+    10e0:	02 c0       	rjmp	.+4      	; 0x10e6 <DIO_enuSetPinDirection+0x30>
+    10e2:	88 0f       	add	r24, r24
+    10e4:	99 1f       	adc	r25, r25
+    10e6:	0a 94       	dec	r0
+    10e8:	e2 f7       	brpl	.-8      	; 0x10e2 <DIO_enuSetPinDirection+0x2c>
+    10ea:	80 95       	com	r24
+    10ec:	2a b3       	in	r18, 0x1a	; 26
+    10ee:	28 23       	and	r18, r24
+    10f0:	84 2f       	mov	r24, r20
+    10f2:	90 e0       	ldi	r25, 0x00	; 0
+    10f4:	02 c0       	rjmp	.+4      	; 0x10fa <DIO_enuSetPinDirection+0x44>
+    10f6:	88 0f       	add	r24, r24
+    10f8:	99 1f       	adc	r25, r25
+    10fa:	6a 95       	dec	r22
+    10fc:	e2 f7       	brpl	.-8      	; 0x10f6 <DIO_enuSetPinDirection+0x40>
+    10fe:	82 2b       	or	r24, r18
+    1100:	8a bb       	out	0x1a, r24	; 26
+    1102:	81 e0       	ldi	r24, 0x01	; 1
+    1104:	08 95       	ret
+    1106:	21 e0       	ldi	r18, 0x01	; 1
+    1108:	30 e0       	ldi	r19, 0x00	; 0
+    110a:	06 2e       	mov	r0, r22
+    110c:	02 c0       	rjmp	.+4      	; 0x1112 <DIO_enuSetPinDirection+0x5c>
+    110e:	22 0f       	add	r18, r18
+    1110:	33 1f       	adc	r19, r19
+    1112:	0a 94       	dec	r0
+    1114:	e2 f7       	brpl	.-8      	; 0x110e <DIO_enuSetPinDirection+0x58>
+    1116:	20 95       	com	r18
+    1118:	87 b3       	in	r24, 0x17	; 23
+    111a:	28 23       	and	r18, r24
+    111c:	84 2f       	mov	r24, r20
+    111e:	90 e0       	ldi	r25, 0x00	; 0
+    1120:	02 c0       	rjmp	.+4      	; 0x1126 <DIO_enuSetPinDirection+0x70>
+    1122:	88 0f       	add	r24, r24
+    1124:	99 1f       	adc	r25, r25
+    1126:	6a 95       	dec	r22
+    1128:	e2 f7       	brpl	.-8      	; 0x1122 <DIO_enuSetPinDirection+0x6c>
+    112a:	82 2b       	or	r24, r18
+    112c:	87 bb       	out	0x17, r24	; 23
+    112e:	81 e0       	ldi	r24, 0x01	; 1
+    1130:	08 95       	ret
+    1132:	21 e0       	ldi	r18, 0x01	; 1
+    1134:	30 e0       	ldi	r19, 0x00	; 0
+    1136:	06 2e       	mov	r0, r22
+    1138:	02 c0       	rjmp	.+4      	; 0x113e <DIO_enuSetPinDirection+0x88>
+    113a:	22 0f       	add	r18, r18
+    113c:	33 1f       	adc	r19, r19
+    113e:	0a 94       	dec	r0
+    1140:	e2 f7       	brpl	.-8      	; 0x113a <DIO_enuSetPinDirection+0x84>
+    1142:	20 95       	com	r18
+    1144:	84 b3       	in	r24, 0x14	; 20
+    1146:	28 23       	and	r18, r24
+    1148:	84 2f       	mov	r24, r20
+    114a:	90 e0       	ldi	r25, 0x00	; 0
+    114c:	02 c0       	rjmp	.+4      	; 0x1152 <DIO_enuSetPinDirection+0x9c>
+    114e:	88 0f       	add	r24, r24
+    1150:	99 1f       	adc	r25, r25
+    1152:	6a 95       	dec	r22
+    1154:	e2 f7       	brpl	.-8      	; 0x114e <DIO_enuSetPinDirection+0x98>
+    1156:	82 2b       	or	r24, r18
+    1158:	84 bb       	out	0x14, r24	; 20
+    115a:	81 e0       	ldi	r24, 0x01	; 1
+    115c:	08 95       	ret
+    115e:	21 e0       	ldi	r18, 0x01	; 1
+    1160:	30 e0       	ldi	r19, 0x00	; 0
+    1162:	06 2e       	mov	r0, r22
+    1164:	02 c0       	rjmp	.+4      	; 0x116a <DIO_enuSetPinDirection+0xb4>
+    1166:	22 0f       	add	r18, r18
+    1168:	33 1f       	adc	r19, r19
+    116a:	0a 94       	dec	r0
+    116c:	e2 f7       	brpl	.-8      	; 0x1166 <DIO_enuSetPinDirection+0xb0>
+    116e:	20 95       	com	r18
+    1170:	81 b3       	in	r24, 0x11	; 17
+    1172:	28 23       	and	r18, r24
+    1174:	84 2f       	mov	r24, r20
+    1176:	90 e0       	ldi	r25, 0x00	; 0
+    1178:	02 c0       	rjmp	.+4      	; 0x117e <DIO_enuSetPinDirection+0xc8>
+    117a:	88 0f       	add	r24, r24
+    117c:	99 1f       	adc	r25, r25
+    117e:	6a 95       	dec	r22
+    1180:	e2 f7       	brpl	.-8      	; 0x117a <DIO_enuSetPinDirection+0xc4>
+    1182:	82 2b       	or	r24, r18
+    1184:	81 bb       	out	0x11, r24	; 17
+    1186:	81 e0       	ldi	r24, 0x01	; 1
+    1188:	08 95       	ret
+    118a:	83 e0       	ldi	r24, 0x03	; 3
+    118c:	08 95       	ret
+    118e:	83 e0       	ldi	r24, 0x03	; 3
+    1190:	08 95       	ret
+    1192:	83 e0       	ldi	r24, 0x03	; 3
+    1194:	08 95       	ret
+    1196:	81 e0       	ldi	r24, 0x01	; 1
+    1198:	08 95       	ret
+
+0000119a <DIO_enuSetPinValue>:
+    119a:	84 30       	cpi	r24, 0x04	; 4
+    119c:	08 f0       	brcs	.+2      	; 0x11a0 <DIO_enuSetPinValue+0x6>
+    119e:	67 c0       	rjmp	.+206    	; 0x126e <DIO_enuSetPinValue+0xd4>
+    11a0:	68 30       	cpi	r22, 0x08	; 8
+    11a2:	08 f0       	brcs	.+2      	; 0x11a6 <DIO_enuSetPinValue+0xc>
+    11a4:	66 c0       	rjmp	.+204    	; 0x1272 <DIO_enuSetPinValue+0xd8>
+    11a6:	42 30       	cpi	r20, 0x02	; 2
+    11a8:	08 f0       	brcs	.+2      	; 0x11ac <DIO_enuSetPinValue+0x12>
+    11aa:	65 c0       	rjmp	.+202    	; 0x1276 <DIO_enuSetPinValue+0xdc>
+    11ac:	81 30       	cpi	r24, 0x01	; 1
+    11ae:	e9 f0       	breq	.+58     	; 0x11ea <DIO_enuSetPinValue+0x50>
+    11b0:	30 f0       	brcs	.+12     	; 0x11be <DIO_enuSetPinValue+0x24>
+    11b2:	82 30       	cpi	r24, 0x02	; 2
+    11b4:	81 f1       	breq	.+96     	; 0x1216 <DIO_enuSetPinValue+0x7c>
+    11b6:	83 30       	cpi	r24, 0x03	; 3
+    11b8:	09 f4       	brne	.+2      	; 0x11bc <DIO_enuSetPinValue+0x22>
+    11ba:	43 c0       	rjmp	.+134    	; 0x1242 <DIO_enuSetPinValue+0xa8>
+    11bc:	5e c0       	rjmp	.+188    	; 0x127a <DIO_enuSetPinValue+0xe0>
+    11be:	81 e0       	ldi	r24, 0x01	; 1
+    11c0:	90 e0       	ldi	r25, 0x00	; 0
+    11c2:	06 2e       	mov	r0, r22
+    11c4:	02 c0       	rjmp	.+4      	; 0x11ca <DIO_enuSetPinValue+0x30>
+    11c6:	88 0f       	add	r24, r24
+    11c8:	99 1f       	adc	r25, r25
+    11ca:	0a 94       	dec	r0
+    11cc:	e2 f7       	brpl	.-8      	; 0x11c6 <DIO_enuSetPinValue+0x2c>
+    11ce:	80 95       	com	r24
+    11d0:	2b b3       	in	r18, 0x1b	; 27
+    11d2:	28 23       	and	r18, r24
+    11d4:	84 2f       	mov	r24, r20
+    11d6:	90 e0       	ldi	r25, 0x00	; 0
+    11d8:	02 c0       	rjmp	.+4      	; 0x11de <DIO_enuSetPinValue+0x44>
+    11da:	88 0f       	add	r24, r24
+    11dc:	99 1f       	adc	r25, r25
+    11de:	6a 95       	dec	r22
+    11e0:	e2 f7       	brpl	.-8      	; 0x11da <DIO_enuSetPinValue+0x40>
+    11e2:	82 2b       	or	r24, r18
+    11e4:	8b bb       	out	0x1b, r24	; 27
+    11e6:	81 e0       	ldi	r24, 0x01	; 1
+    11e8:	08 95       	ret
+    11ea:	21 e0       	ldi	r18, 0x01	; 1
+    11ec:	30 e0       	ldi	r19, 0x00	; 0
+    11ee:	06 2e       	mov	r0, r22
+    11f0:	02 c0       	rjmp	.+4      	; 0x11f6 <DIO_enuSetPinValue+0x5c>
+    11f2:	22 0f       	add	r18, r18
+    11f4:	33 1f       	adc	r19, r19
+    11f6:	0a 94       	dec	r0
+    11f8:	e2 f7       	brpl	.-8      	; 0x11f2 <DIO_enuSetPinValue+0x58>
+    11fa:	20 95       	com	r18
+    11fc:	88 b3       	in	r24, 0x18	; 24
+    11fe:	28 23       	and	r18, r24
+    1200:	84 2f       	mov	r24, r20
+    1202:	90 e0       	ldi	r25, 0x00	; 0
+    1204:	02 c0       	rjmp	.+4      	; 0x120a <DIO_enuSetPinValue+0x70>
+    1206:	88 0f       	add	r24, r24
+    1208:	99 1f       	adc	r25, r25
+    120a:	6a 95       	dec	r22
+    120c:	e2 f7       	brpl	.-8      	; 0x1206 <DIO_enuSetPinValue+0x6c>
+    120e:	82 2b       	or	r24, r18
+    1210:	88 bb       	out	0x18, r24	; 24
+    1212:	81 e0       	ldi	r24, 0x01	; 1
+    1214:	08 95       	ret
+    1216:	21 e0       	ldi	r18, 0x01	; 1
+    1218:	30 e0       	ldi	r19, 0x00	; 0
+    121a:	06 2e       	mov	r0, r22
+    121c:	02 c0       	rjmp	.+4      	; 0x1222 <DIO_enuSetPinValue+0x88>
+    121e:	22 0f       	add	r18, r18
+    1220:	33 1f       	adc	r19, r19
+    1222:	0a 94       	dec	r0
+    1224:	e2 f7       	brpl	.-8      	; 0x121e <DIO_enuSetPinValue+0x84>
+    1226:	20 95       	com	r18
+    1228:	85 b3       	in	r24, 0x15	; 21
+    122a:	28 23       	and	r18, r24
+    122c:	84 2f       	mov	r24, r20
+    122e:	90 e0       	ldi	r25, 0x00	; 0
+    1230:	02 c0       	rjmp	.+4      	; 0x1236 <DIO_enuSetPinValue+0x9c>
+    1232:	88 0f       	add	r24, r24
+    1234:	99 1f       	adc	r25, r25
+    1236:	6a 95       	dec	r22
+    1238:	e2 f7       	brpl	.-8      	; 0x1232 <DIO_enuSetPinValue+0x98>
+    123a:	82 2b       	or	r24, r18
+    123c:	85 bb       	out	0x15, r24	; 21
+    123e:	81 e0       	ldi	r24, 0x01	; 1
+    1240:	08 95       	ret
+    1242:	21 e0       	ldi	r18, 0x01	; 1
+    1244:	30 e0       	ldi	r19, 0x00	; 0
+    1246:	06 2e       	mov	r0, r22
+    1248:	02 c0       	rjmp	.+4      	; 0x124e <DIO_enuSetPinValue+0xb4>
+    124a:	22 0f       	add	r18, r18
+    124c:	33 1f       	adc	r19, r19
+    124e:	0a 94       	dec	r0
+    1250:	e2 f7       	brpl	.-8      	; 0x124a <DIO_enuSetPinValue+0xb0>
+    1252:	20 95       	com	r18
+    1254:	82 b3       	in	r24, 0x12	; 18
+    1256:	28 23       	and	r18, r24
+    1258:	84 2f       	mov	r24, r20
+    125a:	90 e0       	ldi	r25, 0x00	; 0
+    125c:	02 c0       	rjmp	.+4      	; 0x1262 <DIO_enuSetPinValue+0xc8>
+    125e:	88 0f       	add	r24, r24
+    1260:	99 1f       	adc	r25, r25
+    1262:	6a 95       	dec	r22
+    1264:	e2 f7       	brpl	.-8      	; 0x125e <DIO_enuSetPinValue+0xc4>
+    1266:	82 2b       	or	r24, r18
+    1268:	82 bb       	out	0x12, r24	; 18
+    126a:	81 e0       	ldi	r24, 0x01	; 1
+    126c:	08 95       	ret
+    126e:	83 e0       	ldi	r24, 0x03	; 3
+    1270:	08 95       	ret
+    1272:	83 e0       	ldi	r24, 0x03	; 3
+    1274:	08 95       	ret
+    1276:	83 e0       	ldi	r24, 0x03	; 3
+    1278:	08 95       	ret
+    127a:	81 e0       	ldi	r24, 0x01	; 1
+    127c:	08 95       	ret
+
+0000127e <DIO_enuGetPinValue>:
+ES_t DIO_enuGetPinValue(u8 Copy_u8PortID , u8 Copy_u8PinID , u8 * Copy_pu8Value)
+{
+	ES_t Local_enuErrorState = ES_NOK;
+
+	if (Copy_pu8Value != NULL)
+    127e:	41 15       	cp	r20, r1
+    1280:	51 05       	cpc	r21, r1
+    1282:	e1 f1       	breq	.+120    	; 0x12fc <DIO_enuGetPinValue+0x7e>
+	{
+		if(Copy_u8PortID <= DIO_u8GROUP_D
+    1284:	84 30       	cpi	r24, 0x04	; 4
+    1286:	e0 f5       	brcc	.+120    	; 0x1300 <DIO_enuGetPinValue+0x82>
+				&& Copy_u8PinID <= DIO_u8PIN7)
+    1288:	68 30       	cpi	r22, 0x08	; 8
+    128a:	e0 f5       	brcc	.+120    	; 0x1304 <DIO_enuGetPinValue+0x86>
+		{
+			switch (Copy_u8PortID)
+    128c:	81 30       	cpi	r24, 0x01	; 1
+    128e:	91 f0       	breq	.+36     	; 0x12b4 <DIO_enuGetPinValue+0x36>
+    1290:	28 f0       	brcs	.+10     	; 0x129c <DIO_enuGetPinValue+0x1e>
+    1292:	82 30       	cpi	r24, 0x02	; 2
+    1294:	d9 f0       	breq	.+54     	; 0x12cc <DIO_enuGetPinValue+0x4e>
+    1296:	83 30       	cpi	r24, 0x03	; 3
+    1298:	29 f1       	breq	.+74     	; 0x12e4 <DIO_enuGetPinValue+0x66>
+    129a:	36 c0       	rjmp	.+108    	; 0x1308 <DIO_enuGetPinValue+0x8a>
+			{
+			case DIO_u8GROUP_A:
+
+				*Copy_pu8Value = ( (PINA >> Copy_u8PinID ) & DIO_MASK_BIT);
+    129c:	89 b3       	in	r24, 0x19	; 25
+    129e:	90 e0       	ldi	r25, 0x00	; 0
+    12a0:	02 c0       	rjmp	.+4      	; 0x12a6 <DIO_enuGetPinValue+0x28>
+    12a2:	95 95       	asr	r25
+    12a4:	87 95       	ror	r24
+    12a6:	6a 95       	dec	r22
+    12a8:	e2 f7       	brpl	.-8      	; 0x12a2 <DIO_enuGetPinValue+0x24>
+    12aa:	81 70       	andi	r24, 0x01	; 1
+    12ac:	fa 01       	movw	r30, r20
+    12ae:	80 83       	st	Z, r24
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+			}
+			Local_enuErrorState = ES_OK;
+    12b0:	81 e0       	ldi	r24, 0x01	; 1
+			{
+			case DIO_u8GROUP_A:
+
+				*Copy_pu8Value = ( (PINA >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+    12b2:	08 95       	ret
+			case DIO_u8GROUP_B:
+
+				*Copy_pu8Value = ( (PINB >> Copy_u8PinID ) & DIO_MASK_BIT);
+    12b4:	86 b3       	in	r24, 0x16	; 22
+    12b6:	90 e0       	ldi	r25, 0x00	; 0
+    12b8:	02 c0       	rjmp	.+4      	; 0x12be <DIO_enuGetPinValue+0x40>
+    12ba:	95 95       	asr	r25
+    12bc:	87 95       	ror	r24
+    12be:	6a 95       	dec	r22
+    12c0:	e2 f7       	brpl	.-8      	; 0x12ba <DIO_enuGetPinValue+0x3c>
+    12c2:	81 70       	andi	r24, 0x01	; 1
+    12c4:	fa 01       	movw	r30, r20
+    12c6:	80 83       	st	Z, r24
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+			}
+			Local_enuErrorState = ES_OK;
+    12c8:	81 e0       	ldi	r24, 0x01	; 1
+				break;
+			case DIO_u8GROUP_B:
+
+				*Copy_pu8Value = ( (PINB >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+    12ca:	08 95       	ret
+			case DIO_u8GROUP_C:
+
+				*Copy_pu8Value = ( (PINC >> Copy_u8PinID ) & DIO_MASK_BIT);
+    12cc:	83 b3       	in	r24, 0x13	; 19
+    12ce:	90 e0       	ldi	r25, 0x00	; 0
+    12d0:	02 c0       	rjmp	.+4      	; 0x12d6 <DIO_enuGetPinValue+0x58>
+    12d2:	95 95       	asr	r25
+    12d4:	87 95       	ror	r24
+    12d6:	6a 95       	dec	r22
+    12d8:	e2 f7       	brpl	.-8      	; 0x12d2 <DIO_enuGetPinValue+0x54>
+    12da:	81 70       	andi	r24, 0x01	; 1
+    12dc:	fa 01       	movw	r30, r20
+    12de:	80 83       	st	Z, r24
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+			}
+			Local_enuErrorState = ES_OK;
+    12e0:	81 e0       	ldi	r24, 0x01	; 1
+				break;
+			case DIO_u8GROUP_C:
+
+				*Copy_pu8Value = ( (PINC >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+    12e2:	08 95       	ret
+			case DIO_u8GROUP_D:
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+    12e4:	80 b3       	in	r24, 0x10	; 16
+    12e6:	90 e0       	ldi	r25, 0x00	; 0
+    12e8:	02 c0       	rjmp	.+4      	; 0x12ee <DIO_enuGetPinValue+0x70>
+    12ea:	95 95       	asr	r25
+    12ec:	87 95       	ror	r24
+    12ee:	6a 95       	dec	r22
+    12f0:	e2 f7       	brpl	.-8      	; 0x12ea <DIO_enuGetPinValue+0x6c>
+    12f2:	81 70       	andi	r24, 0x01	; 1
+    12f4:	fa 01       	movw	r30, r20
+    12f6:	80 83       	st	Z, r24
+
+				break;
+			}
+			Local_enuErrorState = ES_OK;
+    12f8:	81 e0       	ldi	r24, 0x01	; 1
+				break;
+			case DIO_u8GROUP_D:
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+    12fa:	08 95       	ret
+			Local_enuErrorState = ES_OUT_OF_RANGE;
+		}
+	}
+	else
+	{
+		Local_enuErrorState = ES_NULL_POINTER;
+    12fc:	82 e0       	ldi	r24, 0x02	; 2
+    12fe:	08 95       	ret
+			}
+			Local_enuErrorState = ES_OK;
+		}
+		else
+		{
+			Local_enuErrorState = ES_OUT_OF_RANGE;
+    1300:	83 e0       	ldi	r24, 0x03	; 3
+    1302:	08 95       	ret
+    1304:	83 e0       	ldi	r24, 0x03	; 3
+    1306:	08 95       	ret
+
+				*Copy_pu8Value = ( (PIND >> Copy_u8PinID ) & DIO_MASK_BIT);
+
+				break;
+			}
+			Local_enuErrorState = ES_OK;
+    1308:	81 e0       	ldi	r24, 0x01	; 1
+	{
+		Local_enuErrorState = ES_NULL_POINTER;
+	}
+
+	return Local_enuErrorState;
+}
+    130a:	08 95       	ret
+
+0000130c <SPI_vInitMaster>:
+#include "SPI.h"
+#include "../../LIBRARY/stdTypes.h"
+
+void SPI_vInitMaster (void)
+{
+	DDRB |=(1<<SPI_MOSI) |(1<<SPI_SS)|(1<<SPI_SCK);//Set the port B mosi(master out slave in ) ,port B ss(slave select),sck(spi clock)  pins as output
+    130c:	87 b3       	in	r24, 0x17	; 23
+    130e:	80 6b       	ori	r24, 0xB0	; 176
+    1310:	87 bb       	out	0x17, r24	; 23
+	SPCR |= (1<<SPE)|(1<<MSTR)|(1<<SPR0);//Enable the SPI,master mode ,Set the clock speed to F/16
+    1312:	8d b1       	in	r24, 0x0d	; 13
+    1314:	81 65       	ori	r24, 0x51	; 81
+    1316:	8d b9       	out	0x0d, r24	; 13
+    1318:	08 95       	ret
+
+0000131a <__udivmodsi4>:
+    131a:	a1 e2       	ldi	r26, 0x21	; 33
+    131c:	1a 2e       	mov	r1, r26
+    131e:	aa 1b       	sub	r26, r26
+    1320:	bb 1b       	sub	r27, r27
+    1322:	fd 01       	movw	r30, r26
+    1324:	0d c0       	rjmp	.+26     	; 0x1340 <__udivmodsi4_ep>
+
+00001326 <__udivmodsi4_loop>:
+    1326:	aa 1f       	adc	r26, r26
+    1328:	bb 1f       	adc	r27, r27
+    132a:	ee 1f       	adc	r30, r30
+    132c:	ff 1f       	adc	r31, r31
+    132e:	a2 17       	cp	r26, r18
+    1330:	b3 07       	cpc	r27, r19
+    1332:	e4 07       	cpc	r30, r20
+    1334:	f5 07       	cpc	r31, r21
+    1336:	20 f0       	brcs	.+8      	; 0x1340 <__udivmodsi4_ep>
+    1338:	a2 1b       	sub	r26, r18
+    133a:	b3 0b       	sbc	r27, r19
+    133c:	e4 0b       	sbc	r30, r20
+    133e:	f5 0b       	sbc	r31, r21
+
+00001340 <__udivmodsi4_ep>:
+    1340:	66 1f       	adc	r22, r22
+    1342:	77 1f       	adc	r23, r23
+    1344:	88 1f       	adc	r24, r24
+    1346:	99 1f       	adc	r25, r25
+    1348:	1a 94       	dec	r1
+    134a:	69 f7       	brne	.-38     	; 0x1326 <__udivmodsi4_loop>
+    134c:	60 95       	com	r22
+    134e:	70 95       	com	r23
+    1350:	80 95       	com	r24
+    1352:	90 95       	com	r25
+    1354:	9b 01       	movw	r18, r22
+    1356:	ac 01       	movw	r20, r24
+    1358:	bd 01       	movw	r22, r26
+    135a:	cf 01       	movw	r24, r30
+    135c:	08 95       	ret
+
+0000135e <_exit>:
+    135e:	f8 94       	cli
+
+00001360 <__stop_program>:
+    1360:	ff cf       	rjmp	.-2      	; 0x1360 <__stop_program>
