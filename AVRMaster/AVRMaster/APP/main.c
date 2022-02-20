@@ -57,6 +57,7 @@ int main (void)
 	u8 Keypad_Pressed_Key;
 	u8 Current_State=0;
 	u8 UART_CHOICE;
+	u8 LoginSystem_u8TrialsLeft =3;
 	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
 	_delay_ms(150);
 
@@ -99,6 +100,8 @@ int main (void)
 				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 				LCD_enuDisplayString("Successfully");
 				_delay_ms(1000);
+				LCD_enuClearDisplay();
+				
 				Program_Status_Flag = IDLE_STATUS;
 
 			}
@@ -143,10 +146,10 @@ int main (void)
 
 				Program_Status_Flag = IDLE_STATUS;
 			}
-			
+		
 	while (1)
 	{
-	UART_enuSendString("PRESS ENTER TO START\r\n");
+		UART_enuSendString("PRESS ENTER TO START\r\n");	
 /************************************************************************************************************/
 /******************************AIR CONDITIONER AUTOMATIC CONTROL*********************************************/
 
@@ -213,6 +216,9 @@ int main (void)
 				LCD_enuDisplayString("Dimmer controlled");
 				break;
 				default:
+				LCD_enuDisplayString("All Devices");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("Are Off");
 				break;
 				
 			}
@@ -227,11 +233,10 @@ int main (void)
 
 		}
 
-		if (Program_Status_Flag == ADMIN_LOGIN_PAGE_STATUS)
+		while (Program_Status_Flag == ADMIN_LOGIN_PAGE_STATUS)
 		{
 						u8 LoginSystem_u8_AdminTrueFlag;
 						u8 LoginSystem_u8_Remoted_USERTrueFlag;
-						u8 LoginSystem_u8TrialsLeft =3;
 						LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_Au8Username, LoginSystem_Au8Password);
 
 
@@ -239,7 +244,13 @@ int main (void)
 
 						if(LoginSystem_u8_AdminTrueFlag == TRUE)
 						{
+							UART_enuSendString("\r\nLogged in Successfully");
+							_delay_ms(500);
+							UART_enuSendString("\r\nWelcome Admin\r\n");
+							_delay_ms(500);
+							LoginSystem_u8TrialsLeft =3;
 							Program_Status_Flag = ADMIN_MENU_STATUS;
+							
 						}
 						else
 						{
@@ -248,15 +259,18 @@ int main (void)
 								LoginSystem_u8_Remoted_USERTrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
 								if (LoginSystem_u8_Remoted_USERTrueFlag == TRUE)
 								{
-									if(LoginSystem_AstrUsers[Local_u8Iterator].User_Priority == REMOTED_USER ) // pro>>>>   // rem: key or not
+									if(LoginSystem_AstrUsers[Local_u8Iterator].User_Priority == REMOTED_USER )// pro>>>>   // rem: key or not
+									{
+									UART_enuSendString("\r\nLogged in Successfully\r\n");
+									_delay_ms(500);
+									LoginSystem_u8TrialsLeft =3;
 									Program_Status_Flag = REMOTED_USER_MENU_STATUS;
 									break;
+									}
 								}
 							}
 
 						}
-
-
 						if ( (LoginSystem_u8_AdminTrueFlag == FALSE)&& (LoginSystem_u8_Remoted_USERTrueFlag ==FALSE) )
 						{
 							LoginSystem_u8TrialsLeft--;
@@ -270,12 +284,8 @@ int main (void)
 								Program_Status_Flag = BLOCKING_STATUS;
 							}
 						}
-						else
-						{
-							UART_enuSendString("\r\nLogged in Successfully");
-							_delay_ms(500);
-						}
-				}
+					
+			}
 				
 				
 				/*
@@ -379,9 +389,7 @@ int main (void)
 		while (Program_Status_Flag == ADMIN_MENU_STATUS)
 		{
 			u8 ShowToUser = MAIN_MENU;
-			UART_enuSendString("\r\nWelcome Admin:\n");
-			UART_enuSendString(LoginSystem_strAdmin.UserName);
-			_delay_ms(500);
+			
 	
 
 			while(ShowToUser == MAIN_MENU)
@@ -437,7 +445,7 @@ int main (void)
 					break;
 					*/
 					default:
-					UART_enuSendString("\r\nInvalid Choice");
+					UART_enuSendString("\r\nInvalid Choice\r\n");
 					_delay_ms(1000);
 					ShowToUser = MAIN_MENU;
 					break;
@@ -446,27 +454,43 @@ int main (void)
 			switch (ShowToUser)
 			{
 				case ADD_USER_COMMAND:
-				LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
-				UART_enuSendString("\r\n1-Remoted");
-				UART_enuSendString("\r\n2-Promoted");
-				UART_enuSendString("\r\n3-Nonremoted");
-				UART_enuSendString("\r\nPriority Arrangment: Promoted > Nonremoted (LCD+Keypad) > Remoted");
-				UART_enuRecieveChar(&UART_CHOICE);
-				/////////////////////////////////////////////////////////////fel
-				if (UART_CHOICE == '1')
-				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
-				else if (UART_CHOICE == '2')
-				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = PROMOTED_USER;
-				else if (UART_CHOICE == '3')
-				LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
-				else{
-				UART_enuSendString("\r\nInvalid Choice");/////////////////////////////////////////////////////////////fel a5er
-				_delay_ms(1000);}
-				LoginSystem_SaveNewUser(LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers],&LoginSystem_NumOfRegisteredUsers);	
-			//	case REMOVE_USER_COMMAND:
-				
-				
-				
+				if (LoginSystem_NumOfRegisteredUsers <MAX_NO_OF_USERS)
+				{
+					LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
+					UART_enuSendString("\r\n1-Remoted");
+					UART_enuSendString("\r\n2-Promoted");
+					UART_enuSendString("\r\n3-Nonremoted");
+					UART_enuSendString("\r\n\r\nPriority Arrangment: Promoted > Nonremoted (LCD+Keypad) > Remoted\r\n");
+					UART_enuRecieveChar(&UART_CHOICE);
+					/////////////////////////////////////////////////////////////fel a5er
+					if (UART_CHOICE == '1')
+					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
+					else if (UART_CHOICE == '2')
+					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = PROMOTED_USER;
+					else if (UART_CHOICE == '3')
+					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
+					else{
+						UART_enuSendString("\r\nInvalid Choice\r\n");/////////////////////////////////////////////////////////////fel a5er
+					_delay_ms(1000);}
+					LoginSystem_SaveNewUser(LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers],&LoginSystem_NumOfRegisteredUsers);
+					UART_enuSendString("\r\nRegistered Successfully\r\n");
+				}
+				else
+				{
+					UART_enuSendString("\r\nReached The Max Number of Stored Users");
+					UART_enuSendString("\r\nCouldn't Store A New User");
+					UART_enuSendString("\r\nReturning to Main Menu\r\n");
+					_delay_ms(700);
+				}
+				ShowToUser=MAIN_MENU;
+				break;
+				case REMOVE_USER_COMMAND:
+				if (LoginSystem_RemoveUser(LoginSystem_AstrUsers,&LoginSystem_NumOfRegisteredUsers) == TRUE)
+				UART_enuSendString("\r\nRemoved Successfully\r\n");
+				else	{UART_enuSendString("\r\nUsername not Found \r\nReturning to Main Menu\r\n");}
+				ShowToUser=MAIN_MENU;
+				_delay_ms(700);
+				break;
 			}
 				
 			

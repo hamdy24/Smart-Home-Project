@@ -17,6 +17,8 @@
 #include "main_config.h"
 
 #include <util/delay.h>
+
+
 	ES_t LoginSystem_SaveNewUser(User_t Copy_strNewUser,u8 *Copy_u8NumofRegisteredUsers)
 	{
 		EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + (*Copy_u8NumofRegisteredUsers)*(2*MAX_NO_OF_LETTERS+1), Copy_strNewUser.UserName,MAX_NO_OF_LETTERS);
@@ -69,7 +71,7 @@
 		ES_t LoginSystem_enuGetDataFromUserBY_UART(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
 		{
 			ES_t Local_enuErrorState = ES_NOK;
-			UART_enuSendString("Username: ");
+			UART_enuSendString("\r\n\r\nUsername: ");
 			UART_enuRecieveString(Copy_Au8Username);
 			Copy_Au8Username[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
 			UART_enuSendString("Password: ");
@@ -97,7 +99,36 @@
 		else
 			return FALSE;
 	}
-
+	
+	u8 LoginSystem_RemoveUser(User_t *Copy_AstrUsers,u8 *Copy_u8NumofRegisteredUsers)
+		{
+			u8 Local_Au8Username[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
+			u8 Copy_u8Flag;
+			UART_enuSendString("\r\nEnter Username Required to be Removed: ");
+			UART_enuRecieveString(Local_Au8Username);
+			Local_Au8Username[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
+			for (u8 Local_u8Iterator=0; Local_u8Iterator < (*Copy_u8NumofRegisteredUsers); Local_u8Iterator++)
+			{
+				Copy_u8Flag = LoginSystem_u8Strcmp (Copy_AstrUsers[Local_u8Iterator].UserName,Local_Au8Username);
+				if (Copy_u8Flag )
+				{
+					Copy_AstrUsers[Local_u8Iterator]=Copy_AstrUsers[(*Copy_u8NumofRegisteredUsers)-1];
+					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + (Local_u8Iterator)*(2*MAX_NO_OF_LETTERS+1), Copy_AstrUsers[(*Copy_u8NumofRegisteredUsers)-1].UserName,MAX_NO_OF_LETTERS);
+					_delay_ms(50);
+					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + (Local_u8Iterator)*(2*MAX_NO_OF_LETTERS+1) + MAX_NO_OF_LETTERS, Copy_AstrUsers[(*Copy_u8NumofRegisteredUsers)-1].Password,MAX_NO_OF_LETTERS);
+					_delay_ms(50);
+					EEPROM_vWriteByteToAddress((SAVED_USERS_INFO_ADDRESS + (Local_u8Iterator)*(2*MAX_NO_OF_LETTERS+1) + 2*MAX_NO_OF_LETTERS),Copy_AstrUsers[(*Copy_u8NumofRegisteredUsers)-1].User_Priority);
+					_delay_ms(50);
+					(*Copy_u8NumofRegisteredUsers)--;
+					EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,(*Copy_u8NumofRegisteredUsers));
+					_delay_ms(50);
+					break;
+				}
+			}
+			return Copy_u8Flag;
+		}
+	
+/*
 	void ServoMotor_Door(u8 Copy_u8Angle)
 	{
 		float Local_floatDuty=0;
@@ -116,3 +147,4 @@
 		DIO_enuSetPinValue(DIO_u8GROUP_B,DIO_u8PIN6,DIO_u8LOW);
 	}
 
+*/
