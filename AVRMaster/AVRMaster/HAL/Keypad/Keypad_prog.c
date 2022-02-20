@@ -16,7 +16,7 @@
 
 ES_t Keypad_enuInit(void)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	DIO_enuSetPinDirection(C1_PORT , C1_PIN , DIO_u8OUTPUT);
 	DIO_enuSetPinDirection(C2_PORT , C2_PIN , DIO_u8OUTPUT);
@@ -38,12 +38,12 @@ ES_t Keypad_enuInit(void)
 	DIO_enuSetPinValue(R3_PORT , R3_PIN , DIO_u8PULL_UP);
 	DIO_enuSetPinValue(R4_PORT , R4_PIN , DIO_u8PULL_UP);
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
 
 ES_t Keypad_enuGetPressedKey(u8 * Copy_pu8KeyValue)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	u8 Local_Au8ColPorts [COL_NUM] = {C1_PORT,C2_PORT,C3_PORT,C4_PORT};
 	u8 Local_Au8ColPins  [COL_NUM] = {C1_PIN, C2_PIN, C3_PIN, C4_PIN};
@@ -79,5 +79,5 @@ ES_t Keypad_enuGetPressedKey(u8 * Copy_pu8KeyValue)
 		DIO_enuSetPinValue(Local_Au8ColPorts[Local_u8ColIter], Local_Au8ColPins[Local_u8ColIter], DIO_u8HIGH);
 	}
 	}
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }

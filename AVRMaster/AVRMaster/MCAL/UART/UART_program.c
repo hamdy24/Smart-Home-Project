@@ -62,7 +62,7 @@ ES_t UART_enuRecieveChar(u8 * Copy_u8RxChar)
 
 	while(((UCSRA >> 7) & 1) == 0); // (UCSRA >> 7) -> RXc
 	*Copy_u8RxChar = UDR;
-
+	//UART_First_ConnectionFlag ++;
 	return Local_ErorrState;
 }
 
@@ -76,7 +76,7 @@ ES_t UART_enuSendString(u8 * Copy_Au8StringData)
 	{
 		while(! ((UCSRA>>5) & 1 )); // wait until the UDR is empty using (UCSRA>>5) -> UDRE
 		UDR = (Copy_Au8StringData[Local_u8Iter]);
-		UART_First_ConnectionFlag++;
+		//UART_First_ConnectionFlag++;
 		Local_u8Iter++;
 	}
 
@@ -147,9 +147,10 @@ ES_t UART_enuRecieveString(u8 * Copy_Au8RxString)
 
 
 u8 UART_enuCheck_Connection()
-{
-	if(UART_First_ConnectionFlag!=0)
+{	u8 readUDR;
+	if(((UCSRA >> 7) & 1)!=0)
 	{
+		readUDR = UDR;
 		return 1;
 	}
 

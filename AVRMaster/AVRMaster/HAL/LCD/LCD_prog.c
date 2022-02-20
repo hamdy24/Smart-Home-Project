@@ -18,7 +18,7 @@
 
 ES_t LCD_enuInit(void)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	DIO_enuSetPinDirection(RS_PORT, RS_PIN, DIO_u8OUTPUT);
 	DIO_enuSetPinDirection(RW_PORT, RW_PIN, DIO_u8OUTPUT);
@@ -59,34 +59,34 @@ ES_t LCD_enuInit(void)
 	DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
 	LCD_enuWriteNLatch(0x06);
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
 
 ES_t LCD_enuSendData(u8 Copy_u8Data)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
 	LCD_enuWriteNLatch(Copy_u8Data);
 
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
 
 ES_t LCD_enuSendCommand(u8 Copy_u8Command)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
 	LCD_enuWriteNLatch(Copy_u8Command);
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
 
 
 static ES_t LCD_enuWriteNLatch(u8 Copy_u8Data)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	DIO_enuSetPinValue(EN_PORT, EN_PIN, DIO_u8LOW);
 	DIO_enuSetPinValue(RW_PORT , RW_PIN , DIO_u8LOW);
@@ -140,14 +140,14 @@ static ES_t LCD_enuWriteNLatch(u8 Copy_u8Data)
 #endif
 
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
 
 /****************************************************************************************************/
 
-ES_t LCD_enuDisplayUnsignedInteger(u32 Copy_u32Data)
+ES_t LCD_enuDisplayUnsignedInteger(u16 Copy_u32Data)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 
 
@@ -172,7 +172,7 @@ ES_t LCD_enuDisplayUnsignedInteger(u32 Copy_u32Data)
 			for (;Local_u32Reversed>0;)
 			{
 				DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-				Local_enuErrorState = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
+				Local_enuerrorStates = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
 				Local_u32Reversed/=10;
 				Local_u8Counter--;
 				/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********/
@@ -185,13 +185,13 @@ ES_t LCD_enuDisplayUnsignedInteger(u32 Copy_u32Data)
 	}
 
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 
 }
-
+/*
 ES_t LCD_enuDisplaySignedInteger(s32 Copy_s32Data)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
 	u8 Local_u8Remainder;
 	u32 Local_u32Reversed = 0;
@@ -199,7 +199,7 @@ ES_t LCD_enuDisplaySignedInteger(s32 Copy_s32Data)
 	if (Copy_s32Data < 0)
 	{
 		DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-		Local_enuErrorState = LCD_enuWriteNLatch('-');
+		Local_enuerrorStates = LCD_enuWriteNLatch('-');
 		Copy_s32Data *= -1;
 	}
 	for (;Copy_s32Data>0;)
@@ -208,22 +208,22 @@ ES_t LCD_enuDisplaySignedInteger(s32 Copy_s32Data)
 		Local_u32Reversed = Local_u32Reversed*10 + Local_u8Remainder;
 		Copy_s32Data/=10;
 	}
-	/*********in the previous step: 3malt reverse lel integer elly gayelly, 3ashan law ma3amaltelosh reverse hayetebe3 ma3koos**********/
+	/*********in the previous step: 3malt reverse lel integer elly gayelly, 3ashan law ma3amaltelosh reverse hayetebe3 ma3koos**********
 	for (;Local_u32Reversed>0;)
 	{
 		DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-		Local_enuErrorState = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
+		Local_enuerrorStates = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
 		Local_u32Reversed/=10;
-		/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********/
+		/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********
 	}
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 
 }
 
 ES_t LCD_enuDisplayFloat(f64 Copy_f64Data)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 	u8 Local_u8Remainder;
 	u32 Local_u32Reversed = 0;
 
@@ -233,7 +233,7 @@ ES_t LCD_enuDisplayFloat(f64 Copy_f64Data)
 	if (Copy_f64Data < 0)
 	{
 		DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-		Local_enuErrorState = LCD_enuWriteNLatch('-');
+		Local_enuerrorStates = LCD_enuWriteNLatch('-');
 		Copy_f64Data *= -1;
 	}
 
@@ -246,72 +246,72 @@ ES_t LCD_enuDisplayFloat(f64 Copy_f64Data)
 		Local_u32Reversed = Local_u32Reversed*10 + Local_u8Remainder;
 		Local_u32BeforeDecimalPoint/=10;
 	}
-	/*********in the previous step: 3malt reverse lel integer elly gayelly, 3ashan law ma3amaltelosh reverse hayetebe3 ma3koos**********/
+	/*********in the previous step: 3malt reverse lel integer elly gayelly, 3ashan law ma3amaltelosh reverse hayetebe3 ma3koos**********
 	for (;Local_u32Reversed>0;)
 	{
 		DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-		Local_enuErrorState = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
+		Local_enuerrorStates = LCD_enuWriteNLatch(Local_u32Reversed%10 + '0');
 		Local_u32Reversed/=10;
-		/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********/
+		/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********
 	}
 
 
 	if (Copy_f64Data != 0)
 	{
 		DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-		Local_enuErrorState = LCD_enuWriteNLatch('.');
+		Local_enuerrorStates = LCD_enuWriteNLatch('.');
 	//	for (;Copy_f64Data>0;)
 		for (u8 Local_u8Iterator=0 ;Local_u8Iterator < 5; Local_u8Iterator++)
 			{
 				Copy_f64Data *= 10;
 				DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-				Local_enuErrorState = LCD_enuWriteNLatch((int)(Copy_f64Data) + '0');
+				Local_enuerrorStates = LCD_enuWriteNLatch((int)(Copy_f64Data) + '0');
 				Copy_f64Data -= (int)(Copy_f64Data);
-				/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********/
+				/*********el mafrood a3mel error status check hna bs 3ashan write and latch me7taga te3mel return ES_OK fa me7taga ta3deel**********
 			}
 	}
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 }
-
+*/
 ES_t LCD_enuDisplayString(const char * Copy_pcString)
 {
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 	if (Copy_pcString != NULL)
 	{
 		while (*Copy_pcString)
 		{
 			DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8HIGH);
-			Local_enuErrorState = LCD_enuWriteNLatch(*Copy_pcString++);
+			Local_enuerrorStates = LCD_enuWriteNLatch(*Copy_pcString++);
 		}
 
 	}
-	else Local_enuErrorState = ES_NULL_POINTER;
-	return Local_enuErrorState;
+	else Local_enuerrorStates = ES_NULL_POINTER;
+	return Local_enuerrorStates;
 }
 
 
 ES_t LCD_enuSetCursorPosition(u8 Copy_u8XDimension, u8 Copy_u8YDimension)
 {
 
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 	if ((Copy_u8XDimension <= LCD_u8XDIM_1) && (Copy_u8YDimension <= LCD_u8YDIM_15))
 		{
-		Local_enuErrorState = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
+		Local_enuerrorStates = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
 		LCD_enuWriteNLatch(0x80 + (Copy_u8XDimension*64) + Copy_u8YDimension);
 		}
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 
 }
 
 ES_t LCD_enuClearDisplay( void )
 {
 
-	ES_t Local_enuErrorState = ES_NOK;
+	ES_t Local_enuerrorStates = ES_NOK;
 
-		Local_enuErrorState = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
+		Local_enuerrorStates = DIO_enuSetPinValue(RS_PORT, RS_PIN , DIO_u8LOW);
 		LCD_enuWriteNLatch(0x01);
 
-	return Local_enuErrorState;
+	return Local_enuerrorStates;
 
 }

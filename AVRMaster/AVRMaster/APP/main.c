@@ -11,7 +11,9 @@
 #include "../LIBRARY/AVR_REG.h"
 
 #include "../MCAL/DIO/DIO_int.h"
-//#include "../MCAL/TIMER1/Timer1_int.h"
+
+#include "../MCAL/EXTI/EXTI_config.h"
+#include "../MCAL/EXTI/EXTI_int.h"
 #include "../MCAL/SPI/SPI_int.h"
 #include "../MCAL/UART/UART_interface.h"
 #include "../HAL/EPROM3/EPROM_int.h"
@@ -26,6 +28,28 @@
 
 #include <util/delay.h>
 
+u8 LoginSystem_u8AdminOnlineFlag = 0;
+u8 LoginSystem_u8PromotedUserOnlineFlag = 0;
+u8 ShowToUser = MAIN_MENU;
+//u8 Program_Status_Flag = 0;
+u8 LCD_KEYPAD_USER_FLAG = 0;
+volatile void Button_Pressed_Interrupt()
+{
+	if (LoginSystem_u8AdminOnlineFlag)	//5od karar hna
+	{
+		LCD_KEYPAD_USER_FLAG = 0;
+	}
+	else if	(LoginSystem_u8PromotedUserOnlineFlag)
+	{
+		LCD_KEYPAD_USER_FLAG = 0;
+	}
+	else
+	{
+		LCD_KEYPAD_USER_FLAG = 1;
+		ShowToUser = MAIN_MENU;
+	}
+	
+}
 int main (void)
 {
 /************************************************************************************************************/
@@ -41,14 +65,15 @@ int main (void)
 	LCD_enuInit();
 	Keypad_enuInit();
 	DIO_enuSetPinDirection(DIO_u8GROUP_D,DIO_u8PIN1,DIO_u8OUTPUT);
-	
+	EXTI_enuInit();
+	__asm("sei");// GIE
+	EXTI_enuCallBack((volatile void (*) (void))Button_Pressed_Interrupt);
 /***************************************************************************************************/
 /* ***********************************************************************************************************/
 /************************************************************************************************************/
 
-	__asm("sei");// GIE
 
-	u8 Program_Status_Flag;
+	u8 Program_Status_Flag = 0;
 	User_t LoginSystem_strAdmin;
 	User_t LoginSystem_AstrUsers[MAX_NO_OF_USERS];
 	u8 LoginSystem_NumOfRegisteredUsers=0;
@@ -61,14 +86,14 @@ int main (void)
 	u8 Dimmer_Percentage;
 	u8 Dimmer_Percentage_Tens;
 	u8 Dimmer_Percentage_Ones;
-	u8 ShowToUser = MAIN_MENU;
+//	u8 ShowToUser = MAIN_MENU;
 	u8 LoginSystem_u8TrialsLeft =3;
-	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
-	_delay_ms(150);
-
+	
 	LCD_enuDisplayString("Welcome To Smart");
 	LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-	LCD_enuDisplayString("Home !");
+	LCD_enuDisplayString("Home ! ");
+	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
+	_delay_ms(150);
 	_delay_ms (2000);
 	LCD_enuClearDisplay();
 
@@ -188,7 +213,7 @@ int main (void)
 /************************************************************************************************************/
 
 
-		while (Program_Status_Flag == IDLE_STATUS)
+		if (Program_Status_Flag == IDLE_STATUS)
 		{
 
 			//LCD_enuClearDisplay();
@@ -228,17 +253,18 @@ int main (void)
 				break;
 				
 			}
-			
-
-			u8 Local_u8Data;
-			UART_enuRecieveChar(Local_u8Data);
-			if(UART_enuCheck_Connection())
+			while (Program_Status_Flag == IDLE_STATUS)
+			if (LCD_KEYPAD_USER_FLAG == 1)
+			{
+				Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
+			}
+			else if(UART_enuCheck_Connection())
 			{
 				Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
 			}
-
 		}
-
+		
+	
 		while (Program_Status_Flag == ADMIN_LOGIN_PAGE_STATUS)
 		{
 						u8 LoginSystem_u8_AdminTrueFlag;
@@ -284,7 +310,7 @@ int main (void)
 							_delay_ms(300);
 							UART_enuSendString("\r\nRemaining Trials: ");
 							UART_enuSendChar('0'+LoginSystem_u8TrialsLeft);
-							_delay_ms(1000);
+							//_delay_ms(1000);
 							if (LoginSystem_u8TrialsLeft == 0)
 							{
 								Program_Status_Flag = BLOCKING_STATUS;
@@ -293,105 +319,7 @@ int main (void)
 					
 			}
 				
-				
-				/*
-		if (Program_Status_Flag == ADMIN_MENU_STATUS)
-		{
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("Welcome Admin:");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString(LoginSystem_strAdmin.UserName);
-			_delay_ms(500);
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("1-Registration");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("2-Lights 3-More");
-			Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
-			switch (Keypad_Pressed_Key)
-			{
-				case '1':
-				if (LoginSystem_NumOfRegisteredUsers < MAX_NO_OF_USERS)
-				{
-
-					LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("1-Remoted");
-					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-					LCD_enuDisplayString("2-Nonremoted");
-					Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
-
-					switch (Keypad_Pressed_Key)
-					{
-						case '1':
-						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
-						break;
-						case '2':
-						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
-						break;
-
-					}
-
-					/**************Saving the new user into the EEPROM****************
-					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1), LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName,MAX_NO_OF_LETTERS);
-					_delay_ms(10);
-					EEPROM_vWriteBlockToAddress(SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + MAX_NO_OF_LETTERS, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password,MAX_NO_OF_LETTERS);
-					_delay_ms(10);
-					
-
-					EEPROM_vWriteByteToAddress((SAVED_USERS_INFO_ADDRESS + LoginSystem_NumOfRegisteredUsers*(2*MAX_NO_OF_LETTERS+1) + 2*MAX_NO_OF_LETTERS),LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].User_Priority);
-					_delay_ms(10);
-					LoginSystem_NumOfRegisteredUsers++;
-
-					EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Registered");
-					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-					LCD_enuDisplayString("Successfully");
-					_delay_ms(700);
-				}
-
-				else
-				{
-					LCD_enuDisplayString("Max Limit");
-					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-					LCD_enuDisplayString("is Reached");
-				}
-				break;
-				case '2':
-				///////////////////////////////////
-				break;
-				case '3':
-
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("4-Promote User");
-				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayString("5-Dimmer 6-Door");
-				Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
-				switch (Keypad_Pressed_Key)
-				{
-					case '4':
-					//////////////
-					break;
-					case '5':
-					/////////////
-					break;
-					case '6':
-					////////////
-					default:
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Invalid Choice");
-					_delay_ms(200);
-				}
-				break;
-
-				default:
-				LCD_enuClearDisplay();
-				LCD_enuDisplayString("Invalid Choice");
-				_delay_ms(200);
-			}
-
-		}
-		*/
+		
 		while (Program_Status_Flag == ADMIN_MENU_STATUS)
 		{
 			
@@ -550,7 +478,7 @@ int main (void)
 		
 		//if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS);
 		while (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///off line user should have interrupt
-			{
+		{
 
 				u8 LoginSystem_u8TrueFlag;
 			//	u8 LoginSystem_u8TrialsLeft =3;
@@ -566,7 +494,6 @@ int main (void)
 						break;
 					}
 				}
-
 				if (LoginSystem_u8TrueFlag == FALSE)
 				{
 					LoginSystem_u8TrialsLeft--;
@@ -613,7 +540,6 @@ int main (void)
 							LCD_enuClearDisplay();
 							LCD_enuDisplayString("Welcome User");
 							LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-							LCD_enuDisplayString(LoginSystem_strAdmin.UserName);
 							_delay_ms(500);
 							LCD_enuClearDisplay();
 							LCD_enuDisplayString("1-Lights 2-Dimmer");

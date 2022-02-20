@@ -14,11 +14,11 @@ ES_t LCD_enuSendData(u8 Copy_u8Data);
 
 ES_t LCD_enuSendCommand(u8 Copy_u8Command);
 
-ES_t LCD_enuDisplaySignedInteger(s32 Copy_s32Data);
+//ES_t LCD_enuDisplaySignedInteger(s32 Copy_s32Data);
 
-ES_t LCD_enuDisplayUnsignedInteger(u32 Copy_u32Data);
+ES_t LCD_enuDisplayUnsignedInteger(u16 Copy_u32Data);
 
-ES_t LCD_enuDisplayFloat(f64 Copy_f64Data);
+//ES_t LCD_enuDisplayFloat(f64 Copy_f64Data);
 
 ES_t LCD_enuDisplayString(const char * Copy_pcString);
 

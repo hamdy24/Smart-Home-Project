@@ -41,7 +41,7 @@
 	}
 	ES_t LoginSystem_enuGetDataFromUserByKeypad(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
 	{
-		ES_t Local_enuErrorState = ES_NOK;
+		ES_t Local_enuerrorStates = ES_NOK;
 		u8 Local_u8PressedKey;
 		u8 Local_u8Iterator;
 		LCD_enuClearDisplay();
@@ -70,13 +70,13 @@
 
 		}
 		Copy_Au8Password[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
-		Local_enuErrorState = ES_OK;
-		return Local_enuErrorState;
+		Local_enuerrorStates = ES_OK;
+		return Local_enuerrorStates;
 	}
 	
 		ES_t LoginSystem_enuGetDataFromUserBY_UART(u8 *Copy_Au8Username, u8 *Copy_Au8Password)
 		{
-			ES_t Local_enuErrorState = ES_NOK;
+			ES_t Local_enuerrorStates = ES_NOK;
 			UART_enuSendString("\r\n\r\nUsername: ");
 			UART_enuRecieveString(Copy_Au8Username);
 			Copy_Au8Username[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
@@ -84,8 +84,8 @@
 			UART_enuRecieveString(Copy_Au8Password);
 			Copy_Au8Password[MAX_NO_OF_LETTERS] =NULL_CHARACTER;
 
-			Local_enuErrorState = ES_OK;
-			return Local_enuErrorState;
+			Local_enuerrorStates = ES_OK;
+			return Local_enuerrorStates;
 		}
 
 

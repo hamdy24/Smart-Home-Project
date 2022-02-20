@@ -13,7 +13,7 @@ void EEPROM_ui8ReadByteFromAddress( const u16 u16Address ,  u8 * data)
 	/* Start EEPROM read by writing EERE */
 	EECR |= (1 << EERE);
 	/* Return data from data register */
-	* data = EEDR;
+	(*data) = EEDR;
 	//return 1;
 }
 

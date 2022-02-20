@@ -14,6 +14,10 @@ HAL\LCD\LCD_prog.c
 
 MCAL\DIO\DIO_prog.c
 
+MCAL\EXTI\EXTI_config.c
+
+MCAL\EXTI\EXTI_prog.c
+
 MCAL\SPI\SPI.c
 
 MCAL\UART\UART_program.c
