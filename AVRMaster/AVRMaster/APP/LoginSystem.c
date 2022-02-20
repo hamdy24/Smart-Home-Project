@@ -4,15 +4,21 @@
  *  Created on: 15 Feb 2022
  *      Author: Dell
  */
+#define F_CPU  16000000
+
 #include "../LIBRARY/stdTypes.h"
 #include "../LIBRARY/errorStates.h"
+
+#include "../MCAL/DIO/DIO_int.h"
+//#include "../MCAL/TIMER1/Timer1_int.h"
+#include "../MCAL/UART/UART_interface.h"
+#include "../HAL/EPROM3/EPROM_int.h"
 
 //#include "../HAL/EEPROM/EEPROM_int.h"
 #include "../HAL/LCD/LCD_int.h"
 #include "../HAL/Keypad/Keypad_int.h"
 
-#include "../MCAL/DIO/DIO_int.h"
-//#include "../MCAL/TIMER1/Timer1_int.h"
+
 
 #include "main_config.h"
 
@@ -57,7 +63,7 @@
 		{
 			Keypad_enuGetPressedKey(&Local_u8PressedKey);
 			LCD_enuSendData(Local_u8PressedKey);
-			_delay_ms(100);
+			_delay_ms(500);
 			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0+Local_u8Iterator);
 			LCD_enuSendData('*');
 			Copy_Au8Password[Local_u8Iterator] = Local_u8PressedKey;

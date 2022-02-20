@@ -14,10 +14,11 @@
 //#include "../MCAL/TIMER1/Timer1_int.h"
 #include "../MCAL/SPI/SPI_int.h"
 #include "../MCAL/UART/UART_interface.h"
+#include "../HAL/EPROM3/EPROM_int.h"
 
 #include "../HAL/LCD/LCD_int.h"
 #include "../HAL/Keypad/Keypad_int.h"
-#include "../HAL/EPROM3/EPROM_int.h"
+
 
 
 #include "main_config.h"
@@ -57,6 +58,10 @@ int main (void)
 	u8 Keypad_Pressed_Key;
 	u8 Current_State=0;
 	u8 UART_CHOICE;
+	u8 Dimmer_Percentage;
+	u8 Dimmer_Percentage_Tens;
+	u8 Dimmer_Percentage_Ones;
+	u8 ShowToUser = MAIN_MENU;
 	u8 LoginSystem_u8TrialsLeft =3;
 	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
 	_delay_ms(150);
@@ -216,6 +221,7 @@ int main (void)
 				LCD_enuDisplayString("Dimmer controlled");
 				break;
 				default:
+				LCD_enuClearDisplay();
 				LCD_enuDisplayString("All Devices");
 				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 				LCD_enuDisplayString("Are Off");
@@ -227,9 +233,9 @@ int main (void)
 			u8 Local_u8Data;
 			UART_enuRecieveChar(Local_u8Data);
 			if(UART_enuCheck_Connection())
-				{
-					Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
-				}
+			{
+				Program_Status_Flag = ADMIN_LOGIN_PAGE_STATUS;
+			}
 
 		}
 
@@ -388,10 +394,7 @@ int main (void)
 		*/
 		while (Program_Status_Flag == ADMIN_MENU_STATUS)
 		{
-			u8 ShowToUser = MAIN_MENU;
 			
-	
-
 			while(ShowToUser == MAIN_MENU)
 			{
 				UART_enuSendString("\r\n1-Add User");
@@ -435,10 +438,11 @@ int main (void)
 					ShowToUser = LOG_OUT_CHOICE;
 					break;
 					case '8':
+					SPI_ui8TransmitRecive(DIMMER);
 					ShowToUser = DIMMER_MENU;
 					break;
 					case '9':
-					ShowToUser = DOOR_MENU;
+					ShowToUser = DOOR_MENU;  
 					break;
 					/*case '10':
 					ShowToUser = AIR_COND_MENU;
@@ -454,54 +458,102 @@ int main (void)
 			switch (ShowToUser)
 			{
 				case ADD_USER_COMMAND:
-				if (LoginSystem_NumOfRegisteredUsers <MAX_NO_OF_USERS)
-				{
-					LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
-					UART_enuSendString("\r\n1-Remoted");
-					UART_enuSendString("\r\n2-Promoted");
-					UART_enuSendString("\r\n3-Nonremoted");
-					UART_enuSendString("\r\n\r\nPriority Arrangment: Promoted > Nonremoted (LCD+Keypad) > Remoted\r\n");
-					UART_enuRecieveChar(&UART_CHOICE);
-					/////////////////////////////////////////////////////////////fel a5er
-					if (UART_CHOICE == '1')
-					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
-					else if (UART_CHOICE == '2')
-					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = PROMOTED_USER;
-					else if (UART_CHOICE == '3')
-					LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
-					else{
-						UART_enuSendString("\r\nInvalid Choice\r\n");/////////////////////////////////////////////////////////////fel a5er
-					_delay_ms(1000);}
-					LoginSystem_SaveNewUser(LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers],&LoginSystem_NumOfRegisteredUsers);
-					UART_enuSendString("\r\nRegistered Successfully\r\n");
-				}
-				else
-				{
-					UART_enuSendString("\r\nReached The Max Number of Stored Users");
-					UART_enuSendString("\r\nCouldn't Store A New User");
-					UART_enuSendString("\r\nReturning to Main Menu\r\n");
-					_delay_ms(700);
-				}
-				ShowToUser=MAIN_MENU;
+					if (LoginSystem_NumOfRegisteredUsers <MAX_NO_OF_USERS)
+					{
+						LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].UserName, LoginSystem_AstrUsers[LoginSystem_NumOfRegisteredUsers].Password);
+						UART_enuSendString("\r\n1-Remoted");
+						UART_enuSendString("\r\n2-Promoted");
+						UART_enuSendString("\r\n3-Nonremoted");
+						UART_enuSendString("\r\n\r\nPriority Arrangment: Promoted > Nonremoted (LCD+Keypad) > Remoted\r\n");
+						UART_enuRecieveChar(&UART_CHOICE);
+						if (UART_CHOICE == '1')
+						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = REMOTED_USER;
+						else if (UART_CHOICE == '2')
+						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = PROMOTED_USER;
+						else if (UART_CHOICE == '3')
+						LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers].User_Priority = NORMAL_USER;
+						else{
+							UART_enuSendString("\r\nInvalid Choice\r\n");/////////////////////////////////////////////////////////////fel a5er
+						_delay_ms(1000);}
+						LoginSystem_SaveNewUser(LoginSystem_AstrUsers [LoginSystem_NumOfRegisteredUsers],&LoginSystem_NumOfRegisteredUsers);
+						UART_enuSendString("\r\nRegistered Successfully\r\n");
+					}
+					else
+					{
+						UART_enuSendString("\r\nReached The Max Number of Stored Users");
+						UART_enuSendString("\r\nCouldn't Store A New User");
+						UART_enuSendString("\r\nReturning to Main Menu\r\n");
+						_delay_ms(700);
+					}
+					ShowToUser=LOG_OUT_CHOICE;
 				break;
-				case REMOVE_USER_COMMAND:
-				if (LoginSystem_RemoveUser(LoginSystem_AstrUsers,&LoginSystem_NumOfRegisteredUsers) == TRUE)
-				UART_enuSendString("\r\nRemoved Successfully\r\n");
-				else	{UART_enuSendString("\r\nUsername not Found \r\nReturning to Main Menu\r\n");}
-				ShowToUser=MAIN_MENU;
-				_delay_ms(700);
-				break;
-			}
 				
-			
+				case REMOVE_USER_COMMAND:
+					if (LoginSystem_RemoveUser(LoginSystem_AstrUsers,&LoginSystem_NumOfRegisteredUsers) == TRUE)
+						{UART_enuSendString("\r\nRemoved Successfully\r\n");	ShowToUser=LOG_OUT_CHOICE;}
+					else	{UART_enuSendString("\r\nUsername not Found \r\nReturning to Main Menu\r\n");}
+					ShowToUser=MAIN_MENU;
+					_delay_ms(700);
+				break;
+				
+				case DIMMER_MENU:
+					UART_enuSendString("\r\nEnter The Percentage of Brightness: ");
+					UART_enuRecieveChar(&Dimmer_Percentage_Tens);
+					UART_enuSendChar(Dimmer_Percentage_Tens);
+					Dimmer_Percentage_Tens = Dimmer_Percentage_Tens - '0';
+					
+					UART_enuRecieveChar(&Dimmer_Percentage_Ones);
+					UART_enuSendChar(Dimmer_Percentage_Ones);
+					Dimmer_Percentage_Ones = Dimmer_Percentage_Ones -'0';
+					
+					Dimmer_Percentage =10*Dimmer_Percentage_Tens + Dimmer_Percentage_Ones;
+					
+					SPI_ui8TransmitRecive(Dimmer_Percentage);
+					ShowToUser=LOG_OUT_CHOICE;
+				break;
+				
+				case DOOR_MENU:
+					UART_enuSendString("\r\nDoor Options \r\n 1-Open Door\r\n 2-Close Door\r\n 0-Return to main menu\r\n ");
+					UART_enuRecieveChar(&UART_CHOICE);
+					if (UART_CHOICE == '1')
+					{
+						SPI_ui8TransmitRecive(OPEN_DOOR_COMMAND);	
+						ShowToUser = LOG_OUT_CHOICE;
+					}
+					else if(UART_CHOICE == '2')
+					{
+						SPI_ui8TransmitRecive(CLOSE_DOOR_COMMAND);
+						ShowToUser = LOG_OUT_CHOICE;
+					}
+					else if (UART_CHOICE == '0') 
+						{ShowToUser = MAIN_MENU;} 
+					else{UART_enuSendString("\r\nInvalid Choice\r\n ");		ShowToUser = DOOR_MENU;}
+				break;
+				
+				case LOG_OUT_CHOICE:
+					UART_enuSendString("\r\n1-Log Out\r\n2-Return to main menu\r\n");
+					UART_enuRecieveChar(&UART_CHOICE);
+					if (UART_CHOICE == '1')
+						{
+							Program_Status_Flag = IDLE_STATUS;	
+							ShowToUser = MAIN_MENU;			//That's For the next time The Program Enters the ADMIN Menu State to Start From the MAIN Menu 
+							UART_enuSendString("\r\nLogged Out\r\n");
+						}
+				
+					else if(UART_CHOICE == '2')
+						{ShowToUser = MAIN_MENU;}
+					else{UART_enuSendString("\r\nInvalid Choice\r\n ");		ShowToUser = LOG_OUT_CHOICE;}
+				break;
+				
+			}
 		}
 		
-					
-		if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///offline user should have interrupt
+		//if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS);
+		while (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///off line user should have interrupt
 			{
 
 				u8 LoginSystem_u8TrueFlag;
-				u8 LoginSystem_u8TrialsLeft =3;
+			//	u8 LoginSystem_u8TrialsLeft =3;
 
 				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
 				/*********************Search The Users Array***********************/
@@ -510,6 +562,7 @@ int main (void)
 					LoginSystem_u8TrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
 					if (LoginSystem_u8TrueFlag == TRUE)
 					{
+						LoginSystem_u8TrialsLeft =3;
 						break;
 					}
 				}
@@ -539,6 +592,11 @@ int main (void)
 					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 					LCD_enuDisplayString("Successfully");
 					_delay_ms(700);
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Welcome");
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+					LCD_enuDisplayString("User");
+					_delay_ms(700);
 					Program_Status_Flag = USER_MENU_STATUS;
 
 			}
@@ -550,7 +608,7 @@ int main (void)
 /************************************************************************************************************/
 /************************************************************************************************************/
 
-		if (Program_Status_Flag == USER_MENU_STATUS)//**offline user menu
+		if (Program_Status_Flag == USER_MENU_STATUS)//off line user menu
 		{
 							LCD_enuClearDisplay();
 							LCD_enuDisplayString("Welcome User");
