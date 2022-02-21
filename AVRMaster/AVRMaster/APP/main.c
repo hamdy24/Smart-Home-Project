@@ -8,7 +8,8 @@
 #define F_CPU  16000000
 #include "../LIBRARY/stdTypes.h"
 #include "../LIBRARY/errorStates.h"
-#include "../LIBRARY/AVR_REG.h"
+#include "../LIBRARY/bit_math.h"
+
 
 #include "../MCAL/DIO/DIO_int.h"
 
@@ -32,14 +33,11 @@ u8 LoginSystem_u8AdminOnlineFlag = 0;
 u8 LoginSystem_u8PromotedUserOnlineFlag = 0;
 u8 ShowToUser = MAIN_MENU;
 //u8 Program_Status_Flag = 0;
+u8 Blocking_Flag=FALSE;
 u8 LCD_KEYPAD_USER_FLAG = 0;
 volatile void Button_Pressed_Interrupt()
 {
-	if (LoginSystem_u8AdminOnlineFlag)	//5od karar hna
-	{
-		LCD_KEYPAD_USER_FLAG = 0;
-	}
-	else if	(LoginSystem_u8PromotedUserOnlineFlag)
+	if (LoginSystem_u8AdminOnlineFlag || LoginSystem_u8PromotedUserOnlineFlag || Blocking_Flag )	//5od karar hna
 	{
 		LCD_KEYPAD_USER_FLAG = 0;
 	}
@@ -61,6 +59,7 @@ int main (void)
 	LCD_enuInit();
 	Keypad_enuInit();
 	DIO_enuSetPinDirection(DIO_u8GROUP_D,DIO_u8PIN1,DIO_u8OUTPUT);
+	DIO_enuSetPinDirection(DIO_u8GROUP_C,DIO_u8PIN0,DIO_u8OUTPUT);
 	EXTI_enuInit();
 	__asm("sei");// GIE
 	EXTI_enuCallBack((volatile void (*) (void))Button_Pressed_Interrupt);
@@ -77,17 +76,18 @@ int main (void)
 	u8 LoginSystem_Au8Password[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
 
 	u8 Keypad_Pressed_Key;
-	u8 Current_State=0;
+	u8 On_Devices=0;
 	u8 UART_CHOICE;
 	u8 Dimmer_Percentage;
 	u8 Dimmer_Percentage_Tens;
 	u8 Dimmer_Percentage_Ones;
 //	u8 ShowToUser = MAIN_MENU;
 	u8 LoginSystem_u8TrialsLeft =3;
+	u8 Current_State=0;
 	
 	LCD_enuDisplayString("Welcome To Smart");
 	LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-	LCD_enuDisplayString("Home ! ");
+	LCD_enuDisplayString("Home !");
 	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
 	_delay_ms (2000);
 	LCD_enuClearDisplay();
@@ -177,53 +177,89 @@ int main (void)
 
 		if (Program_Status_Flag == IDLE_STATUS)
 		{
-
-			//LCD_enuClearDisplay();
-			
-			switch (Current_State)
-			{	
-				
-				case State_ROOM_1:
-				LCD_enuDisplayString("Room 1 controlled");
-				break;
-				case State_ROOM_2:
-				LCD_enuDisplayString("Room 2 controlled");
-				break;
-				case State_ROOM_3:
-				LCD_enuDisplayString("Room 3 controlled");
-				break;
-				case State_ROOM_4:
-				LCD_enuDisplayString("Room 4 controlled");
-				break;
-				case State_ROOM_5:
-				LCD_enuDisplayString("Room 5 controlled");
-				break;
-				case State_Air_Cond:
-				LCD_enuDisplayString("Air Cond controlled");
-				break;
-				case State_Door:
-				LCD_enuDisplayString("Door controlled");
-				break;
-				case State_Dimmer:
-				LCD_enuDisplayString("Dimmer controlled");
-				break;
-				default:
-				LCD_enuClearDisplay();
+			u8 Local_u8Iterator = 1;
+			if ((Current_State == -0))
+			{LCD_enuClearDisplay();
 				LCD_enuDisplayString("All Devices");
 				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 				LCD_enuDisplayString("Are Off");
-				break;
-				
 			}
-			while (Program_Status_Flag == IDLE_STATUS)
-			if (LCD_KEYPAD_USER_FLAG == 1)
+			while ( Program_Status_Flag == IDLE_STATUS)
+			{	
+				On_Devices = ( GET_BIT( Current_State, Local_u8Iterator) )*Local_u8Iterator;
+				switch (On_Devices)
+				{
+					
+					case State_ROOM_1:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Room1 On");
+					_delay_ms(1000);
+					break;
+					case State_ROOM_2:
+					if (!GET_BIT( Current_State, State_ROOM_1))
+					{
+						LCD_enuClearDisplay();
+					}
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+					LCD_enuDisplayString("Room2 On");
+					_delay_ms(1000);
+					break;
+					case State_ROOM_3:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Room3 On");
+					_delay_ms(1000);
+					break;
+					case State_ROOM_4:
+					if (!GET_BIT( Current_State, State_ROOM_3))
+					{
+						LCD_enuClearDisplay();
+					}
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+					LCD_enuDisplayString("Room4 On");
+					_delay_ms(1000);
+					break;
+				/*	case State_ROOM_5:
+					LCD_enuDisplayString("Room 5 controlled");
+					break;
+					case State_Air_Cond:
+					LCD_enuDisplayString("Air Cond controlled");
+					break; */
+					case State_Door:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Door is Opened");
+					_delay_ms(1000);
+					break;
+					case State_Dimmer:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Dimmer: ");
+					LCD_enuDisplayUnsignedInteger(Dimmer_Percentage);
+					_delay_ms(1000);
+					break;
+				}
+					Local_u8Iterator++;
+					if (Local_u8Iterator == 7)
+						Local_u8Iterator =1;
+					if (LCD_KEYPAD_USER_FLAG == 1)
+					{
+						Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
+					}
+					else if(UART_enuCheck_Connection())
+					{
+						Program_Status_Flag = REMOTED_SYSTEM_LOGIN_PAGE_STATUS;
+					}
+			}
+			
+				
+		
+		//	while (Program_Status_Flag == IDLE_STATUS)
+			/*if (LCD_KEYPAD_USER_FLAG == 1)
 			{
 				Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
 			}
 			else if(UART_enuCheck_Connection())
 			{
 				Program_Status_Flag = REMOTED_SYSTEM_LOGIN_PAGE_STATUS;
-			}
+			}*/
 		}
 	
 	
@@ -327,21 +363,25 @@ int main (void)
 				{
 					case '1':
 						SPI_ui8TransmitRecive(ROOM1_LED_TOGGLE);
+						ToggleBit(&Current_State,1);
 						ShowToUser = LOG_OUT_CHOICE;//Set the next menu to be shown to room1 menu
 					break;
 					
 					case '2':
 						SPI_ui8TransmitRecive(ROOM2_LED_TOGGLE);
+						ToggleBit(&Current_State,2);
 						ShowToUser = LOG_OUT_CHOICE;//Set the next menu to be shown to room1 menu
 					break;
 					
 					case '3':
 						SPI_ui8TransmitRecive(ROOM3_LED_TOGGLE);
+						ToggleBit(&Current_State,3);
 						ShowToUser = LOG_OUT_CHOICE;
 					break;
 					
 					case '4':
 						SPI_ui8TransmitRecive(ROOM4_LED_TOGGLE);
+						ToggleBit(&Current_State,4);
 						ShowToUser = LOG_OUT_CHOICE;
 					break;
 					
@@ -352,6 +392,7 @@ int main (void)
 					
 					case '5':
 						SPI_ui8TransmitRecive(DIMMER);
+						SetBit(&Current_State,5);
 						ShowToUser = DIMMER_MENU;
 					break;
 					
@@ -449,7 +490,8 @@ int main (void)
 					UART_enuRecieveChar(&UART_CHOICE);
 					if (UART_CHOICE == '1')
 					{
-						SPI_ui8TransmitRecive(OPEN_DOOR_COMMAND);	
+						SPI_ui8TransmitRecive(OPEN_DOOR_COMMAND);
+						SetBit(&Current_State,6);	
 						ShowToUser = LOG_OUT_CHOICE;
 					}
 					else if(UART_CHOICE == '2')
@@ -486,8 +528,12 @@ int main (void)
 		
 		//if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS);
 		while (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///off line user should have interrupt
-		{
-
+		{	
+				LCD_enuClearDisplay();
+				LCD_enuDisplayString("User Login");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("Attempt Detected");
+				_delay_ms(700);
 				u8 LoginSystem_u8TrueFlag;
 				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
 				/*********************Search The Users Array***********************/
@@ -541,37 +587,137 @@ int main (void)
 /************************************************************************************************************/
 /************************************************************************************************************/
 
-		if (Program_Status_Flag == USER_MENU_STATUS)//off line user menu
+		while (Program_Status_Flag == USER_MENU_STATUS)//off line user menu
 		{
-			LCD_enuClearDisplay();			
-			LCD_enuDisplayString("1-Lights 2-Dimmer");
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-			LCD_enuDisplayString("3-Air Cond");
-			Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
-			switch (Keypad_Pressed_Key)
+			while(ShowToUser == MAIN_MENU)
 			{
-			case '1':
-			//////////////////
-			break;
-			case '2':
-			///////////////////////////////////
-			break;
-			case '3':
-			//////////////
-			break;
-
-
-			default:
-			LCD_enuClearDisplay();
-			LCD_enuDisplayString("Invalid Choice");
-			_delay_ms(200);
-			break;
+				LCD_enuClearDisplay();			
+				LCD_enuDisplayString("1:Room1 2:Room2");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("3:Room3 4:More");
+				Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+				switch (Keypad_Pressed_Key)
+				{
+				case '1':
+					SPI_ui8TransmitRecive(ROOM1_LED_TOGGLE);
+					ToggleBit(&Current_State,1);
+					ShowToUser = LOG_OUT_CHOICE;
+				break;
+				
+				case '2':
+					SPI_ui8TransmitRecive(ROOM2_LED_TOGGLE);
+					ToggleBit(&Current_State,2);
+					ShowToUser = LOG_OUT_CHOICE;
+				break;
+				
+				case '3':
+					SPI_ui8TransmitRecive(ROOM3_LED_TOGGLE);
+					ToggleBit(&Current_State,3);
+					ShowToUser = LOG_OUT_CHOICE;
+				break;
+				
+				case '4':
+					ShowToUser = MORE_MENU;
+				break;
+				
+				default:
+				LCD_enuClearDisplay();
+				LCD_enuDisplayString("Invalid Choice");
+				_delay_ms(700);
+				break;
+				}
 			}
-		Program_Status_Flag = IDLE_STATUS;
-		}
+			
+			while (ShowToUser == MORE_MENU)
+			{
+				LCD_enuClearDisplay();
+				LCD_enuDisplayString("1:Room4 2:Dimmer");
+				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+				LCD_enuDisplayString("0:Return");
+				Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+				switch (Keypad_Pressed_Key)
+				{
+					case '1':
+					SPI_ui8TransmitRecive(ROOM4_LED_TOGGLE);
+					ToggleBit(&Current_State,4);
+					ShowToUser = LOG_OUT_CHOICE;
+					break;
+					
+					case '2':
+					SPI_ui8TransmitRecive(DIMMER);
+					
+					ShowToUser = DIMMER_MENU;
+					break;
+					
+					case '0':
+					ShowToUser = MAIN_MENU;
+					break;
+					
+					default:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Invalid Choice");
+					_delay_ms(700);
+					break;
+				}
+			}
+			switch(ShowToUser)
+			{
+				case DIMMER_MENU:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("Brightness");
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+					LCD_enuDisplayString("Percentage:");
+					Keypad_enuGetPressedKey(&Dimmer_Percentage_Tens);
+					LCD_enuSendData(Dimmer_Percentage_Tens);
+					Dimmer_Percentage_Tens = Dimmer_Percentage_Tens - '0';
+					Keypad_enuGetPressedKey(&Dimmer_Percentage_Ones);
+					LCD_enuSendData(Dimmer_Percentage_Ones);
+					Dimmer_Percentage_Ones = Dimmer_Percentage_Ones -'0';
+					Dimmer_Percentage =10*Dimmer_Percentage_Tens + Dimmer_Percentage_Ones;
+					SPI_ui8TransmitRecive(Dimmer_Percentage);
+					_delay_ms(700);
+					SetBit(&Current_State,5);
+					ShowToUser=LOG_OUT_CHOICE;
+				break;
+				
+				case LOG_OUT_CHOICE:
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("1:Log Out 2:Ret");
+					Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+					if (Keypad_Pressed_Key == '1')
+					{
+						Program_Status_Flag = IDLE_STATUS;
+						ShowToUser = MAIN_MENU;			//That's For the next time The Program Enters the ADMIN Menu State to Start From the MAIN Menu
+						LCD_KEYPAD_USER_FLAG = 0;
+						LCD_enuClearDisplay();
+						LCD_enuDisplayString("Logged Out");
+						
+						_delay_ms(700);
+					}
+					else if(Keypad_Pressed_Key == '2')
+						{ShowToUser = MAIN_MENU;}
+					else{LCD_enuClearDisplay();		LCD_enuDisplayString("Invalid Choice");	 _delay_ms(700);	ShowToUser = LOG_OUT_CHOICE;}
+				break;
+			}
+		}//end of the LCD_KEYPAD_MENU_STATUS
 
+	/************************************************************************************************************/
+	/************************************************************************************************************/
+		if(Program_Status_Flag == BLOCKING_STATUS)
+		{
+			EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,BLOCKING_STATUS);
+			Blocking_Flag=TRUE;
+			LCD_enuClearDisplay();
+			LCD_enuDisplayString("You are Blocked");
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+			LCD_enuDisplayString("From The System");
+			DIO_enuSetPinValue(DIO_u8GROUP_C,DIO_u8PIN0,DIO_u8HIGH);
+			while (Program_Status_Flag == BLOCKING_STATUS);
+			
+		}//end of the Blocking Status
+		
 
-	}
+	}//end of the while (1)
 
 
 

@@ -1,5 +1,5 @@
 APP/main.d APP/main.o: ../APP/main.c ../APP/../LIBRARY/stdTypes.h \
- ../APP/../LIBRARY/errorStates.h ../APP/../LIBRARY/AVR_REG.h \
+ ../APP/../LIBRARY/errorStates.h ../APP/../LIBRARY/bit_math.h \
  ../APP/../MCAL/DIO/DIO_int.h ../APP/../MCAL/EXTI/EXTI_config.h \
  ../APP/../MCAL/EXTI/EXTI_int.h ../APP/../MCAL/EXTI/EXTI_config.h \
  ../APP/../MCAL/SPI/SPI_int.h ../APP/../MCAL/UART/UART_interface.h \
@@ -17,7 +17,7 @@ APP/main.d APP/main.o: ../APP/main.c ../APP/../LIBRARY/stdTypes.h \
 
 ../APP/../LIBRARY/errorStates.h:
 
-../APP/../LIBRARY/AVR_REG.h:
+../APP/../LIBRARY/bit_math.h:
 
 ../APP/../MCAL/DIO/DIO_int.h:
 

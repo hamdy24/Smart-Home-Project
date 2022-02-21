@@ -43,10 +43,10 @@
 #define State_ROOM_2							 2
 #define State_ROOM_3							 3
 #define State_ROOM_4							 4
-#define State_ROOM_5							 5
-#define State_Dimmer							 6
-#define State_Air_Cond							 7
-#define State_Door								 8
+//#define State_ROOM_5							 5
+#define State_Dimmer							 5
+//#define State_Air_Cond						 7
+#define State_Door								 6
 
 
 #define MAIN_MENU  0
@@ -67,6 +67,7 @@
 #define OPEN_DOOR_COMMAND 13
 #define CLOSE_DOOR_COMMAND 14
 #define PRIORITIES_MENU 15
+#define MORE_MENU    16
 typedef struct {
 	u8 UserName[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
 	u8 Password[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];

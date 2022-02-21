@@ -134,6 +134,14 @@
 			return Copy_u8Flag;
 		}
 	
+	void SetBit(u8 *x,u8 n)
+	{
+		(*x) |= (1<<n);
+	}
+	ToggleBit(u8 *x,u8 n)
+	{
+		(*x) ^=(1<<n);
+	}
 /*
 	void ServoMotor_Door(u8 Copy_u8Angle)
 	{
