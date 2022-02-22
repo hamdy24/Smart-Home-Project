@@ -21,29 +21,26 @@
 #define MAX_NO_OF_USERS							 4
 #define MAX_NO_OF_LETTERS						 4
 /**********************************EEPROM Used Addresses***********************************/
-#define SAVED_INITIAL_PROGRAM_STATUS_ADDRESS	 0x00
+#define SAVED_INITIAL_PROGRAM_STATE_ADDRESS	 0x00
 #define	SAVED_ADMIN_INFO_ADDRESS				 0X01
 #define NO_OF_REGISTERED_USERS_ADDRESS 			 0x11
 #define	SAVED_USERS_INFO_ADDRESS				 0x12
-/**********************************Program Status Flag Modes***********************************/
-#define FIRST_TIME_USE_STATUS 					 0xff
-#define LOAD_LOGIN_SYSTEM_DATABASE				 0x00
-#define MAIN_MENU_STATUS 0x01
-//#define ADMIN_LOGIN_PAGE_STATUS 				 0X02
-#define REMOTED_SYSTEM_LOGIN_PAGE_STATUS 		 0X02
-#define USER_LOGIN_PAGE_STATUS					 0X03
-//#define ADMIN_MENU_STATUS						 0x04
-#define REMOTED_SYSTEM_MENU_STATUS				 0x04
-#define USER_MENU_STATUS 						 0x05
-#define BLOCKING_STATUS 						 0x06
-#define IDLE_STATUS 							 0x07
+/**********************************Program States ***********************************/
+#define FIRST_TIME_USE_STATE 					 0xff
+#define LOAD_LOGIN_SYSTEM_DATABASE_STATE		 0x00
+#define IDLE_STATE 								 0x07
+#define REMOTED_SYSTEM_LOGIN_PAGE_STATE 		 0X02
+#define LCD_KEYPAD_LOGIN_PAGE_STATE				 0X03
+#define REMOTED_SYSTEM_MENU_STATE				 0x04
+#define LCD_KEYPAD_MENU_STATE 					 0x05
+#define BLOCKING_STATE 							 0x06
+
 
 
 #define State_ROOM_1							 1
 #define State_ROOM_2							 2
 #define State_ROOM_3							 3
 #define State_ROOM_4							 4
-//#define State_ROOM_5							 5
 #define State_Dimmer							 5
 #define State_Air_Cond							 7
 #define State_Door								 6
@@ -55,7 +52,7 @@
 #define ROOM2_LED_TOGGLE 2
 #define ROOM3_LED_TOGGLE 3
 #define ROOM4_LED_TOGGLE 4
-#define ROOM5_LED_TOGGLE 5
+
 
 #define ADD_USER_COMMAND	6
 #define REMOVE_USER_COMMAND	7
@@ -70,7 +67,7 @@
 #define MORE_MENU    16
 #define OPEN_AirCond_COMMAND					 16
 #define CLOSE_AirCond_COMMAND					 17
-
+#define AUTO_AirCond_COMMAND					18
 typedef struct {
 	u8 UserName[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];
 	u8 Password[MAX_NO_OF_LETTERS+NULL_CHARACTER_COUNT];

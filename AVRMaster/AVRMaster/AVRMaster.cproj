@@ -172,9 +172,6 @@
     <Compile Include="LIBRARY\AVR_REG.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LIBRARY\bit_math.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LIBRARY\errorStates.h">
       <SubType>compile</SubType>
     </Compile>

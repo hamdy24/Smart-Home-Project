@@ -11,35 +11,23 @@
 #include "../MCAL/TIMER1/Timer1_int.h"
 #include "../MCAL/ADC/ADC_int.h"
 
+
+
 #include "main_config.h"
 #include <util/delay.h>
-/*
- * SPI_ui8TransmitRecive
- *
- * u8 SPI_ui8Flag ()
-{
-	if (((SPSR&(1<<SPIF))>>SPIF)==0)
-		return 0;
-	else
-		return 1;
-}
- *
- * */
+
+
 
 
 void ServoMotor_Door(u8 Copy_u8Angle)
 {
-		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN7,DIO_u8HIGH);  //LET SERVO ON
+
 		float Local_floatDuty=0;
 		Local_floatDuty = (((float)Copy_u8Angle/180.0)*5)+5;
 		Timer_PWM(50,Local_floatDuty);
 }
-void DIMMER_LED(u16 freq,u8 light)
-{
-		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN7,DIO_u8LOW);   //LET SERVO OFF
 
-		Timer_PWM(freq,light);
-}
+
 
 void Auto_AIR_COND_CONTROL(u8 Copy_u8LowerLimit,u8 Copy_u8UpperLimit)
 {

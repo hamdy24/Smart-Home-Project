@@ -135,7 +135,12 @@
 	{
 		(*x) |= (1<<n);
 	}
+	void ClearBit(u8 *x,u8 n)
+	{
+		(*x) &=~ (1<<n);
+	}
 	void ToggleBit(u8 *x,u8 n)
 	{
 		(*x) ^=(1<<n);
 	}
+	

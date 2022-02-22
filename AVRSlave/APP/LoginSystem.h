@@ -11,6 +11,6 @@
 
 void Auto_AIR_COND_CONTROL(u8 Copy_u8LowerLimit,u8 Copy_u8UpperLimit);
 void ServoMotor_Door(u8 Copy_u8Angle);
-void DIMMER_LED(u16 freq,u8 light);
-u8 SPI_ui8Flag ();
+
+
 #endif /* APP_LOGINSYSTEM_H_ */

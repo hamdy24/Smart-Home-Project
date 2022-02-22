@@ -26,19 +26,12 @@ u8 LoginSystem_u8PromotedUserOnlineFlag = 0;
 u8 ShowToUser = MAIN_MENU;
 u8 Program_Status_Flag = 0;
 u8 Blocking_Flag=FALSE;
-u8 LCD_KEYPAD_USER_FLAG = 0;
-volatile void Button_Pressed_Interrupt()
-{
-	if (LoginSystem_u8AdminOnlineFlag || LoginSystem_u8PromotedUserOnlineFlag || Blocking_Flag )	//5od karar hna
-	{
-	}
-	else
-	{
-		Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
-		ShowToUser = MAIN_MENU;
-	}
-	
-}
+
+volatile void Button_Pressed_Interrupt();  //The function that's executed on the EXT INT ISR interrupt When a button is pressed Which Indicates that a LCD_KEYPAD user wants to initiate a login attempt,So it switch the program state into the "LCD_KEYPAD_LOGIN_PAGE_STATE"
+
+//Our Program is divided into several State "Finite State Machine"
+//These States are explained as you go through the code 
+
 int main (void)
 {
 	
@@ -89,16 +82,18 @@ u8 LoginSystem_u8TrialsLeft =3;
 	LCD_enuDisplayString("Welcome To Smart");
 	LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 	LCD_enuDisplayString("Home !");
-	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,&Program_Status_Flag);
+	EEPROM_ui8ReadByteFromAddress(SAVED_INITIAL_PROGRAM_STATE_ADDRESS,&Program_Status_Flag);
 	_delay_ms (700);
 	LCD_enuClearDisplay();
-
+/************************************************************************************FIRST_TIME_USE_STATE*********************************************************************************/
+/************************************************************First State of The Program In Case of First Time Use of The smart Home******************************************************/
+/*****************************************************************It Registers The Admin For First Time and Save it in EEPROM***********************************************************/
 	
-			if (Program_Status_Flag == FIRST_TIME_USE_STATUS)
+			if (Program_Status_Flag == FIRST_TIME_USE_STATE)
 			{
 
 				EEPROM_vWriteByteToAddress(NO_OF_REGISTERED_USERS_ADDRESS,LoginSystem_NumOfRegisteredUsers);
-				_delay_ms(150);
+				_delay_ms(50);
 				LCD_enuDisplayString("For First Time");
 				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 				LCD_enuDisplayString("Use");
@@ -113,12 +108,12 @@ u8 LoginSystem_u8TrialsLeft =3;
 				
 				
 				EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS ,LoginSystem_strAdmin.UserName , MAX_NO_OF_LETTERS);
-				_delay_ms(150);
+				_delay_ms(50);
 				EEPROM_vWriteBlockToAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS ,LoginSystem_strAdmin.Password , MAX_NO_OF_LETTERS);
-				_delay_ms(150);
+				_delay_ms(50);
 
-				EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,LOAD_LOGIN_SYSTEM_DATABASE);
-				_delay_ms(150);
+				EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATE_ADDRESS,LOAD_LOGIN_SYSTEM_DATABASE_STATE);
+				_delay_ms(50);
 	
 				LCD_enuClearDisplay();
 				LCD_enuDisplayString("Saved");
@@ -127,152 +122,142 @@ u8 LoginSystem_u8TrialsLeft =3;
 				_delay_ms(700);
 				LCD_enuClearDisplay();
 				
-				Program_Status_Flag = IDLE_STATUS;
+				Program_Status_Flag = IDLE_STATE;
 
-			}
+			}//end of the FIRST_TIME_USE_STATE
+			
+/********************************************************************************LOAD_LOGIN_SYSTEM_DATABASE_STATE*************************************************************************/
+/********************************************************First State of The Program if it's not the First Time Use of The smart Home*****************************************************/
+/****************************************************It Loads the Usernames and Passwords of The ADMIN and Registered Users from the EEPROM*********************************************/
 
-/*************************************************************************************************************************************************/
-/*************************************************************************************************************************************************/
-
-			else if (Program_Status_Flag == LOAD_LOGIN_SYSTEM_DATABASE)
+			else if (Program_Status_Flag == LOAD_LOGIN_SYSTEM_DATABASE_STATE)
 			{
 				
-/****************************************Load the Login System database from the EEPROM***************************************/
-
 				EEPROM_ui8ReadByteFromAddress(NO_OF_REGISTERED_USERS_ADDRESS,&LoginSystem_NumOfRegisteredUsers);
-				_delay_ms(150);
+				_delay_ms(50);
 				
 
 				EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS,LoginSystem_strAdmin.UserName,MAX_NO_OF_LETTERS);
 				LoginSystem_strAdmin.UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-				_delay_ms(150);
+				_delay_ms(50);
 				EEPROM_vReadBlockFromAddress(SAVED_ADMIN_INFO_ADDRESS + MAX_NO_OF_LETTERS,LoginSystem_strAdmin.Password,MAX_NO_OF_LETTERS);
 				LoginSystem_strAdmin.Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
-				_delay_ms(150);
+				_delay_ms(50);
 				
 				LoginSystem_strAdmin.User_Priority=ADMIN_PRIORITY;
-				_delay_ms(150);
+				_delay_ms(50);
 
 				u16 Local_u16UserAddress;
 				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
 				{
 					Local_u16UserAddress = SAVED_USERS_INFO_ADDRESS +Local_u8Iterator*(2* MAX_NO_OF_LETTERS+1);
 					EEPROM_vReadBlockFromAddress(Local_u16UserAddress,&LoginSystem_AstrUsers[Local_u8Iterator].UserName,MAX_NO_OF_LETTERS);
-					_delay_ms(150);
+					_delay_ms(50);
 
 					EEPROM_vReadBlockFromAddress(Local_u16UserAddress + MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].Password,MAX_NO_OF_LETTERS);
-					_delay_ms(150);
+					_delay_ms(50);
 					EEPROM_ui8ReadByteFromAddress(Local_u16UserAddress + 2*MAX_NO_OF_LETTERS,&LoginSystem_AstrUsers[Local_u8Iterator].User_Priority);
-					_delay_ms(150);
+					_delay_ms(50);
 					LoginSystem_AstrUsers[Local_u8Iterator].UserName[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
 					LoginSystem_AstrUsers[Local_u8Iterator].Password[MAX_NO_OF_LETTERS] = NULL_CHARACTER;
 				}
 				
-				
 
-
-				Program_Status_Flag = IDLE_STATUS;
-			}
+				Program_Status_Flag = IDLE_STATE;
+			}//end of the LOAD_LOGIN_SYSTEM_DATABASE_STATE
+			
+			
+			
 		
 	while (1)
 	{
-		UART_enuSendString("PRESS ENTER TO START\r\n");	
-
-		if (Program_Status_Flag == IDLE_STATUS)
+		
+/************************************************************************************IDLE_STATE********************************************************************************************/
+/***********************************Second State of The Program: The Program stays in this state as long as the LCD_Keypad System and The Remoted System aren't used**********************/
+/**************************************************************It Displays The Currently Running Device on The LCD***********************************************************************/
+	if (Program_Status_Flag == IDLE_STATE)
+	{
+	UART_enuSendString("Press Any Key To Start A Login Attempt\r\n");	
+	LCD_enuClearDisplay();
+	u8 Local_u8Iterator = 1;
+	if (Current_State == 0)
+	{
+		LCD_enuClearDisplay();
+		LCD_enuDisplayString("All Devices");
+		LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+		LCD_enuDisplayString("Are Off");
+	}
+	else
 		{
-			u8 Local_u8Iterator = 1;
-			if ((Current_State == 0))
-			{LCD_enuClearDisplay();
-				LCD_enuDisplayString("All Devices");
-				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayString("Are Off");
-			}
-			while ( Program_Status_Flag == IDLE_STATUS)
+			while ( Local_u8Iterator <= 4)
 			{	
-				On_Devices = ( GET_BIT( Current_State, Local_u8Iterator) )*Local_u8Iterator;
+				LCD_enuSendData('L');
+				LCD_enuSendData('0'+Local_u8Iterator);
+				LCD_enuSendData(':');
+				On_Devices = ( GET_BIT( Current_State, Local_u8Iterator) )*Local_u8Iterator;	//We stored the state of each Device "On or Off" in a Corresponding bit in The Current_State Variable
 				switch (On_Devices)
-				{
-					
+				{					
 					case State_ROOM_1:
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Room1 On");
-					_delay_ms(1000);
+					LCD_enuSendData('+');			//"+" indicates On State and "-" indicates off State "We Choose this representation because the small size of the LCD in order to display the state of all device on the LCD on the Same time"
 					break;
 					case State_ROOM_2:
-					if (!GET_BIT( Current_State, State_ROOM_1))
-					{
-						LCD_enuClearDisplay();
-					}
-					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-					LCD_enuDisplayString("Room2 On");
-					_delay_ms(1000);
+					LCD_enuSendData('+');
 					break;
 					case State_ROOM_3:
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Room3 On");
-					_delay_ms(1000);
+					LCD_enuSendData('+');
 					break;
 					case State_ROOM_4:
-					if (!GET_BIT( Current_State, State_ROOM_3))
-					{
-						LCD_enuClearDisplay();
-					}
-					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-					LCD_enuDisplayString("Room4 On");
-					_delay_ms(1000);
+					LCD_enuSendData('+');
 					break;
-					/*case State_ROOM_5:
-					LCD_enuDisplayString("Room 5 controlled");
-					break;*/
-					case State_Air_Cond:
-					LCD_enuDisplayString("Air Cond controlled");
-					break; 
-					case State_Door:
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Door is Opened");
-					_delay_ms(1000);
-					break;
-					case State_Dimmer:
-					LCD_enuClearDisplay();
-					LCD_enuDisplayString("Dimmer: ");
-					LCD_enuDisplayUnsignedInteger(Dimmer_Percentage);
-					_delay_ms(1000);
+					default:
+					LCD_enuSendData('-');
 					break;
 				}
-					Local_u8Iterator++;
-					if (Local_u8Iterator == 7)
-						Local_u8Iterator =1;
-					if (LCD_KEYPAD_USER_FLAG == 1)
-					{
-						Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
-					}
-					else if(UART_enuCheck_Connection())
-					{
-						Program_Status_Flag = REMOTED_SYSTEM_LOGIN_PAGE_STATUS;
-					}
+			Local_u8Iterator ++;
 			}
+			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+			LCD_enuDisplayString("Dim:");
+			LCD_enuDisplayUnsignedInteger(Dimmer_Percentage);
 			
-				
-		
-		//	while (Program_Status_Flag == IDLE_STATUS)
-			/*if (LCD_KEYPAD_USER_FLAG == 1)
+			LCD_enuDisplayString(" A.Con:");
+			if ((!GET_BIT( Current_State, 6)) && (!GET_BIT( Current_State, 5)) )		//For Air Conditioner, We have 3 Possibilities: Open, Close and Auto. So, We will represent these 3 possibilities by 2 bits
 			{
-				Program_Status_Flag = USER_LOGIN_PAGE_STATUS;
+				LCD_enuDisplayString("Auto");											//The 2 bits are zero in the Automatic Control State
 			}
-			else if(UART_enuCheck_Connection())
+			else if ((!GET_BIT( Current_State, 6)) && (GET_BIT( Current_State, 5)))		//The sixth bit is zero and the fifth bit is one for "On" state
 			{
-				Program_Status_Flag = REMOTED_SYSTEM_LOGIN_PAGE_STATUS;
-			}*/
+				LCD_enuDisplayString("On");
+			}
+			else
+			{
+				LCD_enuDisplayString("Off");											//Otherwise "Off" State
+			}
+					
+					
+		/*	case State_Door:
+		LCD_enuClearDisplay();
+		LCD_enuDisplayString("Door is Opened");
+		_delay_ms(1000);
+		break;*/
 		}
+		while (Program_Status_Flag == IDLE_STATE)
+					if(UART_enuCheck_Connection())
+					{
+						Program_Status_Flag = REMOTED_SYSTEM_LOGIN_PAGE_STATE;
+					}			
 	
-	
-		while (Program_Status_Flag == REMOTED_SYSTEM_LOGIN_PAGE_STATUS)
+		}//end of the IDLE_STATE
+				
+/************************************************************************************REMOTED_SYSTEM_LOGIN_PAGE_STATE********************************************************************************************/
+/****************The Program Enters This State if A User is Connected to the remoted System through bluetooth and Started a Login Attempt by Pressing any Key into the Bluetooth Terminal**********************/
+/*******************************************It takes the username and password from the user and Compare it with the admin info and the Remoted users database************************************************/
+		while (Program_Status_Flag == REMOTED_SYSTEM_LOGIN_PAGE_STATE)
 		{
 			u8 LoginSystem_u8_AdminTrueFlag;
 			u8 LoginSystem_u8_Remoted_USERTrueFlag;
 			LoginSystem_enuGetDataFromUserBY_UART(LoginSystem_Au8Username, LoginSystem_Au8Password);
-	
-			LoginSystem_u8_AdminTrueFlag = (LoginSystem_u8Strcmp(LoginSystem_Au8Username,LoginSystem_strAdmin.UserName)) && ( LoginSystem_u8Strcmp(LoginSystem_Au8Password,LoginSystem_strAdmin.Password) ) ;
+			
+			LoginSystem_u8_AdminTrueFlag = (LoginSystem_u8Strcmp(LoginSystem_Au8Username,LoginSystem_strAdmin.UserName)) && ( LoginSystem_u8Strcmp(LoginSystem_Au8Password,LoginSystem_strAdmin.Password) ) ; //Comparing The Acquired Password and Username with The admin info 
 
 			if(LoginSystem_u8_AdminTrueFlag == TRUE)
 			{
@@ -282,11 +267,11 @@ u8 LoginSystem_u8TrialsLeft =3;
 				_delay_ms(500);
 				LoginSystem_u8AdminOnlineFlag = TRUE;
 				LoginSystem_u8TrialsLeft =3;
-				Program_Status_Flag = REMOTED_SYSTEM_MENU_STATUS;	
+				Program_Status_Flag = REMOTED_SYSTEM_MENU_STATE;	
 			}
 			else
 			{
-				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++) //Searching the remoted users data bases for a match for the Acquired Username and Password
 				{
 								
 					LoginSystem_u8_Remoted_USERTrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
@@ -297,7 +282,7 @@ u8 LoginSystem_u8TrialsLeft =3;
 							UART_enuSendString("\r\nLogged in Successfully\r\n");
 							_delay_ms(500);
 							LoginSystem_u8TrialsLeft =3;
-							Program_Status_Flag = REMOTED_SYSTEM_MENU_STATUS;
+							Program_Status_Flag = REMOTED_SYSTEM_MENU_STATE;
 							if (LoginSystem_AstrUsers[Local_u8Iterator].User_Priority == PROMOTED_USER)
 							{
 								LoginSystem_u8PromotedUserOnlineFlag = TRUE;
@@ -325,19 +310,21 @@ u8 LoginSystem_u8TrialsLeft =3;
 							//_delay_ms(1000);
 				if (LoginSystem_u8TrialsLeft == 0)
 				{
-					Program_Status_Flag = BLOCKING_STATUS;
+					Program_Status_Flag = BLOCKING_STATE;
 				}
 			}
 					
-		}
+		}//end of the REMOTED_SYSTEM_LOGIN_PAGE_STATE
 				
-		
-		while (Program_Status_Flag == REMOTED_SYSTEM_MENU_STATUS)
+/**********************************************************************************************REMOTED_SYSTEM_MENU_STATE********************************************************************************************/
+/****************The Program Enters This State The User Entered Matched Username and Password With The Admin info or the Remoted users database in the Remoted System Login Page "The Previous State"**************/
+/************************************************It Displays The Menu of the Smart Home to The Remoted User and Displays Aditional Options To The Admin Only******************************************************/
+		while (Program_Status_Flag == REMOTED_SYSTEM_MENU_STATE)
 		{
 			
-			while(ShowToUser == MAIN_MENU)
+			while(ShowToUser == MAIN_MENU && Program_Status_Flag == REMOTED_SYSTEM_MENU_STATE)  //"Program_Status_Flag == REMOTED_SYSTEM_MENU_STATE" This condition is added here because if there's a remoted user entered this while loop and meanwhile a LCD_keypad Raised an interrupt by pressing the button "EXTI" to start a login attempt this action will result in logging the remoted user out as the LCD_Keypad user have More Priority "Except For Promoted Users and Admin" 
 			{
-				//The first five chioces will Appear for Admin or Remoted user 
+			//The first six chioces will Appear for Admin or Remoted user 
 			UART_enuSendString("\r\n1-Room1");
 			UART_enuSendString("\r\n2-Room2");
 			UART_enuSendString("\r\n3-Room3");
@@ -389,11 +376,10 @@ u8 LoginSystem_u8TrialsLeft =3;
 					
 					case '5':
 						SPI_ui8TransmitRecive(DIMMER);
-						SetBit(&Current_State,5);
 						ShowToUser = DIMMER_MENU;
 					break;
 					
-					case '6'://air
+					case '6':
 						ShowToUser = AIR_COND_MENU;  
 					break;
 					case '7':
@@ -485,8 +471,7 @@ u8 LoginSystem_u8TrialsLeft =3;
 					UART_enuRecieveChar(&UART_CHOICE);
 					if (UART_CHOICE == '1')
 					{
-						SPI_ui8TransmitRecive(OPEN_DOOR_COMMAND);
-						SetBit(&Current_State,6);	
+						SPI_ui8TransmitRecive(OPEN_DOOR_COMMAND);	
 						ShowToUser = LOG_OUT_CHOICE;
 					}
 					else if(UART_CHOICE == '2')
@@ -499,26 +484,36 @@ u8 LoginSystem_u8TrialsLeft =3;
 					else{UART_enuSendString("\r\nInvalid Choice\r\n ");		ShowToUser = DOOR_MENU;}
 				break;
 				case AIR_COND_MENU:
-					UART_enuSendString("\r\n1-Open\r\n2-Close\r\n");
+					
+					UART_enuSendString("\r\n1-Open\r\n2-Close\r\n3-Automatic Control");
 					UART_enuRecieveChar(&UART_CHOICE);
 					if(UART_CHOICE == '1')
 					{
 						SPI_ui8TransmitRecive(OPEN_AirCond_COMMAND);
+						ClearBit(&Current_State,6);
+						SetBit(&Current_State,5);
 					}	
 					else if(UART_CHOICE == '2')
 					{
 						SPI_ui8TransmitRecive(CLOSE_AirCond_COMMAND);
-
+						SetBit(&Current_State,6);
+						SetBit(&Current_State,5);
+					}
+					else if(UART_CHOICE == '3')
+					{
+						SPI_ui8TransmitRecive(AUTO_AirCond_COMMAND);
+						ClearBit(&Current_State,6);
+						ClearBit(&Current_State,5);
 					}
 					ShowToUser = LOG_OUT_CHOICE;
 				break;
 				
 				case LOG_OUT_CHOICE:
-					UART_enuSendString("\r\n1-Log Out\r\n2-Return to main menu\r\n");
+					UART_enuSendString("\r\n\r\n1-Log Out\r\n2-Return to main menu\r\n");
 					UART_enuRecieveChar(&UART_CHOICE);
 					if (UART_CHOICE == '1')
 						{
-							Program_Status_Flag = IDLE_STATUS;	
+							Program_Status_Flag = IDLE_STATE;	
 							ShowToUser = MAIN_MENU;			//That's For the next time The Program Enters the ADMIN Menu State to Start From the MAIN Menu 
 							UART_enuSendString("\r\nLogged Out\r\n");
 							if (LoginSystem_u8AdminOnlineFlag == TRUE)	//If an Admin was online and wants to log out
@@ -533,10 +528,12 @@ u8 LoginSystem_u8TrialsLeft =3;
 				break;
 				
 			}
-		}
+		}//end of the REMOTED_SYSTEM_MENU_STATE
 		
-		//if (Program_Status_Flag == USER_LOGIN_PAGE_STATUS);
-		while (Program_Status_Flag == USER_LOGIN_PAGE_STATUS)///off line user should have interrupt
+/***********************************************************************************************LCD_KEYPAD_LOGIN_PAGE_STATE*********************************************************************************************************/
+/****************The Program Enters This State if A User Started a Login Attempt To LCD_Keypad System By Pressing A Button That generates an EXT interrupt The Transfers the Program_Status_Flag into this state*******************/
+/***********************************************************It takes the username and password from the user and Compare it with NonRemoted users database************************************************************************/
+		while (Program_Status_Flag == LCD_KEYPAD_LOGIN_PAGE_STATE)//off-line user should have Button interrupt
 		{	
 				LCD_enuClearDisplay();
 				LCD_enuDisplayString("User Login");
@@ -546,7 +543,7 @@ u8 LoginSystem_u8TrialsLeft =3;
 				u8 LoginSystem_u8TrueFlag;
 				LoginSystem_enuGetDataFromUserByKeypad(LoginSystem_Au8Username, LoginSystem_Au8Password);
 				/*********************Search The Users Array***********************/
-				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++)
+				for (u8 Local_u8Iterator=0; Local_u8Iterator < LoginSystem_NumOfRegisteredUsers; Local_u8Iterator++) //Searching the Nonremoted users data bases for a match for the Acquired Username and Password
 				{
 					LoginSystem_u8TrueFlag = LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].UserName,LoginSystem_Au8Username) && LoginSystem_u8Strcmp (LoginSystem_AstrUsers[Local_u8Iterator].Password,LoginSystem_Au8Password);
 					if ( LoginSystem_u8TrueFlag == TRUE  )
@@ -562,7 +559,7 @@ u8 LoginSystem_u8TrialsLeft =3;
 							LCD_enuClearDisplay();
 							LCD_enuDisplayString("Welcome User");
 							_delay_ms(700);
-							Program_Status_Flag = USER_MENU_STATUS;
+							Program_Status_Flag = LCD_KEYPAD_MENU_STATE;
 							break;
 						}
 						else
@@ -588,15 +585,16 @@ u8 LoginSystem_u8TrialsLeft =3;
 					_delay_ms(700);
 					if (LoginSystem_u8TrialsLeft == 0)
 					{
-						Program_Status_Flag = BLOCKING_STATUS;
+						Program_Status_Flag = BLOCKING_STATE;
 					}
 				}
 
-		}
-/************************************************************************************************************/
-/************************************************************************************************************/
-
-		while (Program_Status_Flag == USER_MENU_STATUS)//off line user menu
+		}//end of the LCD_KEYPAD_LOGIN_PAGE_STATE
+		
+/*************************************************************************************LCD_KEYPAD_MENU_STATE*************************************************************************************/
+/****************The Program Enters This State if The User Entered Matched Username and Password With Nonremoted users database in the LCD Keypad Login Page "The Previous State"**************/
+/***************************************************************It Displays The Menu of the Smart Home to The Nonremoted User*****************************************************************/
+		while (Program_Status_Flag == LCD_KEYPAD_MENU_STATE)//off line user menu
 		{
 			while(ShowToUser == MAIN_MENU)
 			{
@@ -639,10 +637,11 @@ u8 LoginSystem_u8TrialsLeft =3;
 			
 			while (ShowToUser == MORE_MENU)
 			{
+					
 				LCD_enuClearDisplay();
 				LCD_enuDisplayString("1:Room4 2:Dimmer");
 				LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
-				LCD_enuDisplayString("0:Return");
+				LCD_enuDisplayString("3:AirCond 0:Ret");
 				Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
 				switch (Keypad_Pressed_Key)
 				{
@@ -658,6 +657,32 @@ u8 LoginSystem_u8TrialsLeft =3;
 					ShowToUser = DIMMER_MENU;
 					break;
 					
+					case '3':
+					LCD_enuClearDisplay();
+					LCD_enuDisplayString("1-Open 2-Close");
+					LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
+					LCD_enuDisplayString("3-Automatic");
+					Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
+					if(Keypad_Pressed_Key == '1')
+					{
+						SPI_ui8TransmitRecive(OPEN_AirCond_COMMAND);
+						ClearBit(&Current_State,6);
+						SetBit(&Current_State,5);
+					}
+					else if(Keypad_Pressed_Key == '2')
+					{
+						SPI_ui8TransmitRecive(CLOSE_AirCond_COMMAND);
+						SetBit(&Current_State,5);
+						SetBit(&Current_State,6);
+					}
+					else if(Keypad_Pressed_Key == '3')
+					{
+						SPI_ui8TransmitRecive(AUTO_AirCond_COMMAND);
+						ClearBit(&Current_State,6);
+						ClearBit(&Current_State,5);
+					}
+					ShowToUser = LOG_OUT_CHOICE;
+					break;
 					case '0':
 					ShowToUser = MAIN_MENU;
 					break;
@@ -685,7 +710,6 @@ u8 LoginSystem_u8TrialsLeft =3;
 					Dimmer_Percentage =10*Dimmer_Percentage_Tens + Dimmer_Percentage_Ones;
 					SPI_ui8TransmitRecive(Dimmer_Percentage);
 					_delay_ms(700);
-					SetBit(&Current_State,5);
 					ShowToUser=LOG_OUT_CHOICE;
 				break;
 				
@@ -695,9 +719,8 @@ u8 LoginSystem_u8TrialsLeft =3;
 					Keypad_enuGetPressedKey(&Keypad_Pressed_Key);
 					if (Keypad_Pressed_Key == '1')
 					{
-						Program_Status_Flag = IDLE_STATUS;
+						Program_Status_Flag = IDLE_STATE;
 						ShowToUser = MAIN_MENU;			//That's For the next time The Program Enters the ADMIN Menu State to Start From the MAIN Menu
-						LCD_KEYPAD_USER_FLAG = 0;
 						LCD_enuClearDisplay();
 						LCD_enuDisplayString("Logged Out");
 						
@@ -708,22 +731,21 @@ u8 LoginSystem_u8TrialsLeft =3;
 					else{LCD_enuClearDisplay();		LCD_enuDisplayString("Invalid Choice");	 _delay_ms(700);	ShowToUser = LOG_OUT_CHOICE;}
 				break;
 			}
-		}//end of the LCD_KEYPAD_MENU_STATUS
+		}//end of the LCD_KEYPAD_MENU_STATE
 
-	/************************************************************************************************************/
-	/************************************************************************************************************/
-		if(Program_Status_Flag == BLOCKING_STATUS)
+
+		if(Program_Status_Flag == BLOCKING_STATE)
 		{
-			EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATUS_ADDRESS,BLOCKING_STATUS);
+			EEPROM_vWriteByteToAddress(SAVED_INITIAL_PROGRAM_STATE_ADDRESS,BLOCKING_STATE);
 			Blocking_Flag=TRUE;
 			LCD_enuClearDisplay();
 			LCD_enuDisplayString("You are Blocked");
 			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0);
 			LCD_enuDisplayString("From The System");
 			DIO_enuSetPinValue(DIO_u8GROUP_C,DIO_u8PIN0,DIO_u8HIGH);
-			while (Program_Status_Flag == BLOCKING_STATUS);
+			while (Program_Status_Flag == BLOCKING_STATE);
 			
-		}//end of the Blocking Status
+		}//end of the Blocking STATE
 		
 
 	}//end of the while (1)
@@ -731,6 +753,15 @@ u8 LoginSystem_u8TrialsLeft =3;
 
 
 	return 0;
-}
+}//end of main()
 
+volatile void Button_Pressed_Interrupt()  //The function that's executed on the EXT INT ISR interrupt When a button is pressed Which Indicates that a LCD_KEYPAD user wants to initiate a login attempt,So it switch the program state into the "LCD_KEYPAD_LOGIN_PAGE_STATE"
+{
+	if (!(LoginSystem_u8AdminOnlineFlag || LoginSystem_u8PromotedUserOnlineFlag || Blocking_Flag ))
+	{
+		Program_Status_Flag = LCD_KEYPAD_LOGIN_PAGE_STATE;
+		ShowToUser = MAIN_MENU;
+	}
+	
+}
 
