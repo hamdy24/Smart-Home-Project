@@ -10,11 +10,9 @@
 #include "../LIBRARY/errorStates.h"
 
 #include "../MCAL/DIO/DIO_int.h"
-//#include "../MCAL/TIMER1/Timer1_int.h"
 #include "../MCAL/UART/UART_interface.h"
-#include "../HAL/EPROM3/EPROM_int.h"
+#include "../MCAL/EEPROM/EPROM_int.h"
 
-//#include "../HAL/EEPROM/EEPROM_int.h"
 #include "../HAL/LCD/LCD_int.h"
 #include "../HAL/Keypad/Keypad_int.h"
 
@@ -62,9 +60,6 @@
 		for (Local_u8Iterator=0; Local_u8Iterator < MAX_NO_OF_LETTERS; Local_u8Iterator++)
 		{
 			Keypad_enuGetPressedKey(&Local_u8PressedKey);
-			LCD_enuSendData(Local_u8PressedKey);
-			_delay_ms(500);
-			LCD_enuSetCursorPosition(LCD_u8YDIM_1,LCD_u8XDIM_0+Local_u8Iterator);
 			LCD_enuSendData('*');
 			Copy_Au8Password[Local_u8Iterator] = Local_u8PressedKey;
 
@@ -134,23 +129,13 @@
 			return Copy_u8Flag;
 		}
 	
-/*
-	void ServoMotor_Door(u8 Copy_u8Angle)
-	{
-		float Local_floatDuty=0;
-		Local_floatDuty = (((float)Copy_u8Angle/180.0)*6)+5;
-		Timer1_enuPWM(50,Local_floatDuty);
-	}
 
-	void OPEN_LEDS(u8 freq,u8 light)
+	
+	void SetBit(u8 *x,u8 n)
 	{
-		DIO_enuSetPinValue(DIO_u8GROUP_B,DIO_u8PIN6,DIO_u8HIGH);
-		Timer1_enuPWM(freq,light);
+		(*x) |= (1<<n);
 	}
-
-	void CLOSE_LEDS()
+	void ToggleBit(u8 *x,u8 n)
 	{
-		DIO_enuSetPinValue(DIO_u8GROUP_B,DIO_u8PIN6,DIO_u8LOW);
+		(*x) ^=(1<<n);
 	}
-
-*/

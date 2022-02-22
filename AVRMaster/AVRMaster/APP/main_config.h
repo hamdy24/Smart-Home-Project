@@ -43,30 +43,31 @@
 #define State_ROOM_2							 2
 #define State_ROOM_3							 3
 #define State_ROOM_4							 4
-#define State_ROOM_5							 5
-#define State_Dimmer							 6
+//#define State_ROOM_5							 5
+#define State_Dimmer							 5
 #define State_Air_Cond							 7
-#define State_Door								 8
+#define State_Door								 6
 
 
-#define MAIN_MENU								 0
+#define MAIN_MENU  0
 
-#define ROOM1_LED_TOGGLE						 1
-#define ROOM2_LED_TOGGLE						 2
-#define ROOM3_LED_TOGGLE						 3
-#define ROOM4_LED_TOGGLE						 4
-#define ROOM5_LED_TOGGLE						 5
+#define ROOM1_LED_TOGGLE 1
+#define ROOM2_LED_TOGGLE 2
+#define ROOM3_LED_TOGGLE 3
+#define ROOM4_LED_TOGGLE 4
+#define ROOM5_LED_TOGGLE 5
 
-#define ADD_USER_COMMAND					   	 6
-#define REMOVE_USER_COMMAND						 7
-#define DIMMER_MENU								 8
-#define AIR_COND_MENU							 9
-#define DOOR_MENU								 10
-#define LOG_OUT_CHOICE							 11
-#define DIMMER									 12
-#define OPEN_DOOR_COMMAND						 13
-#define CLOSE_DOOR_COMMAND						 14
-#define PRIORITIES_MENU							 15
+#define ADD_USER_COMMAND	6
+#define REMOVE_USER_COMMAND	7
+#define DIMMER_MENU  8
+#define AIR_COND_MENU  9
+#define DOOR_MENU  10
+#define LOG_OUT_CHOICE 11
+#define DIMMER   12
+#define OPEN_DOOR_COMMAND 13
+#define CLOSE_DOOR_COMMAND 14
+#define PRIORITIES_MENU 15
+#define MORE_MENU    16
 #define OPEN_AirCond_COMMAND					 16
 #define CLOSE_AirCond_COMMAND					 17
 

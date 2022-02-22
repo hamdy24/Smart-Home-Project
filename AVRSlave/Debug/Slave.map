@@ -1,13 +1,9 @@
 Archive member included because of file (symbol)
 
-e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
-                              ./HAL/LM35/LM35_prog.o (__mulsi3)
-e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
-                              ./HAL/LM35/LM35_prog.o (__udivmodsi4)
 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
                               e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o (exit)
 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
-                              ./MCAL/ADC/ADC_prog.o (__do_clear_bss)
+                              ./MCAL/SPI/SPI_prog.o (__do_clear_bss)
 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
                               ./MCAL/TIMER1/Timer1_prog.o (__fixunssfsi)
 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_addsub_sf.o)
@@ -45,6 +41,12 @@ e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc
 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
                               e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clzsi2.o) (__clz_tab)
 
+Allocating common symbols
+Common symbol       size              file
+
+data                0x1               ./MCAL/SPI/SPI_prog.o
+Master_Command      0x1               ./APP/main.o
+
 Memory Configuration
 
 Name             Origin             Length             Attributes
@@ -60,11 +62,9 @@ Linker script and memory map
 
 LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
 LOAD ./MCAL/TIMER1/Timer1_prog.o
-LOAD ./MCAL/SPI/SPI.o
+LOAD ./MCAL/SPI/SPI_prog.o
 LOAD ./MCAL/DIO/DIO_prog.o
 LOAD ./MCAL/ADC/ADC_prog.o
-LOAD ./HAL/LM35/LM35_prog.o
-LOAD ./HAL/DC_Motor/DC_Motor_program.o
 LOAD ./APP/LoginSystem.o
 LOAD ./APP/main.o
 LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
@@ -161,7 +161,7 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x21ee
+.text           0x00000000     0x14d8
  *(.vectors)
  .vectors       0x00000000       0x54 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x00000000                __vectors
@@ -218,7 +218,6 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
  *(.text)
  .text          0x0000008e        0x4 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
                 0x0000008e                __vector_1
-                0x0000008e                __vector_12
                 0x0000008e                __bad_interrupt
                 0x0000008e                __vector_6
                 0x0000008e                __vector_3
@@ -235,18 +234,15 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
                 0x0000008e                __vector_8
                 0x0000008e                __vector_14
                 0x0000008e                __vector_10
+                0x0000008e                __vector_16
                 0x0000008e                __vector_18
                 0x0000008e                __vector_20
  .text          0x00000092        0x0 ./MCAL/TIMER1/Timer1_prog.o
- .text          0x00000092        0x0 ./MCAL/SPI/SPI.o
+ .text          0x00000092        0x0 ./MCAL/SPI/SPI_prog.o
  .text          0x00000092        0x0 ./MCAL/DIO/DIO_prog.o
  .text          0x00000092        0x0 ./MCAL/ADC/ADC_prog.o
- .text          0x00000092        0x0 ./HAL/LM35/LM35_prog.o
- .text          0x00000092        0x0 ./HAL/DC_Motor/DC_Motor_program.o
  .text          0x00000092        0x0 ./APP/LoginSystem.o
  .text          0x00000092        0x0 ./APP/main.o
- .text          0x00000092        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .text          0x00000092        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
  .text          0x00000092        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .text          0x00000092        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
  .text          0x00000092       0x58 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -283,126 +279,71 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
  .text          0x00000e2e        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
                 0x00000e2e                . = ALIGN (0x2)
  *(.text.*)
- .text.Timer1_enuInit
-                0x00000e2e       0x8e ./MCAL/TIMER1/Timer1_prog.o
-                0x00000e2e                Timer1_enuInit
- .text.Timer1_enuPWM
-                0x00000ebc      0x16c ./MCAL/TIMER1/Timer1_prog.o
-                0x00000ebc                Timer1_enuPWM
- .text.SPI_vInitMaster
-                0x00001028       0x2a ./MCAL/SPI/SPI.o
-                0x00001028                SPI_vInitMaster
- .text.SPI_vInitSlave
-                0x00001052       0x2a ./MCAL/SPI/SPI.o
-                0x00001052                SPI_vInitSlave
+ .text.Timer1_init
+                0x00000e2e       0x40 ./MCAL/TIMER1/Timer1_prog.o
+                0x00000e2e                Timer1_init
+ .text.Timer_PWM
+                0x00000e6e      0x100 ./MCAL/TIMER1/Timer1_prog.o
+                0x00000e6e                Timer_PWM
+ .text.SPI_vidInit
+                0x00000f6e        0xe ./MCAL/SPI/SPI_prog.o
+                0x00000f6e                SPI_vidInit
  .text.SPI_ui8TransmitRecive
-                0x0000107c       0x38 ./MCAL/SPI/SPI.o
-                0x0000107c                SPI_ui8TransmitRecive
+                0x00000f7c        0xa ./MCAL/SPI/SPI_prog.o
+                0x00000f7c                SPI_ui8TransmitRecive
+ .text.SPI_EnableINT
+                0x00000f86        0x4 ./MCAL/SPI/SPI_prog.o
+                0x00000f86                SPI_EnableINT
+ .text.SPI_DisableINT
+                0x00000f8a        0x4 ./MCAL/SPI/SPI_prog.o
+                0x00000f8a                SPI_DisableINT
  .text.DIO_enuInit
-                0x000010b4       0x26 ./MCAL/DIO/DIO_prog.o
-                0x000010b4                DIO_enuInit
+                0x00000f8e        0xc ./MCAL/DIO/DIO_prog.o
+                0x00000f8e                DIO_enuInit
  .text.DIO_enuSetPinDirection
-                0x000010da      0x1d8 ./MCAL/DIO/DIO_prog.o
-                0x000010da                DIO_enuSetPinDirection
+                0x00000f9a       0xd4 ./MCAL/DIO/DIO_prog.o
+                0x00000f9a                DIO_enuSetPinDirection
  .text.DIO_enuSetPinValue
-                0x000012b2      0x1de ./MCAL/DIO/DIO_prog.o
-                0x000012b2                DIO_enuSetPinValue
+                0x0000106e       0xd4 ./MCAL/DIO/DIO_prog.o
+                0x0000106e                DIO_enuSetPinValue
  .text.DIO_enuTogPinValue
-                0x00001490      0x11c ./MCAL/DIO/DIO_prog.o
-                0x00001490                DIO_enuTogPinValue
+                0x00001142       0x78 ./MCAL/DIO/DIO_prog.o
+                0x00001142                DIO_enuTogPinValue
  .text.DIO_enuGetPinValue
-                0x000015ac      0x13c ./MCAL/DIO/DIO_prog.o
-                0x000015ac                DIO_enuGetPinValue
- .text.ADC_enuInit
-                0x000016e8       0x78 ./MCAL/ADC/ADC_prog.o
-                0x000016e8                ADC_enuInit
- .text.ADC_enuStartConversion
-                0x00001760       0x28 ./MCAL/ADC/ADC_prog.o
-                0x00001760                ADC_enuStartConversion
- .text.ADC_enuChooseChannel
-                0x00001788       0x48 ./MCAL/ADC/ADC_prog.o
-                0x00001788                ADC_enuChooseChannel
- .text.ADC_enuEnableAutoTriggering
-                0x000017d0       0x7a ./MCAL/ADC/ADC_prog.o
-                0x000017d0                ADC_enuEnableAutoTriggering
- .text.ADC_enuDisableAutoTriggering
-                0x0000184a       0x28 ./MCAL/ADC/ADC_prog.o
-                0x0000184a                ADC_enuDisableAutoTriggering
- .text.ADC_enuPollying
-                0x00001872       0x4e ./MCAL/ADC/ADC_prog.o
-                0x00001872                ADC_enuPollying
- .text.ADC_enuEnableADC_Inturrupt
-                0x000018c0       0x28 ./MCAL/ADC/ADC_prog.o
-                0x000018c0                ADC_enuEnableADC_Inturrupt
- .text.ADC_enuDisableADC_Inturrupt
-                0x000018e8       0x28 ./MCAL/ADC/ADC_prog.o
-                0x000018e8                ADC_enuDisableADC_Inturrupt
- .text.ADC_enuEnableADC
-                0x00001910       0x28 ./MCAL/ADC/ADC_prog.o
-                0x00001910                ADC_enuEnableADC
- .text.ADC_eniDisableADC
-                0x00001938       0x28 ./MCAL/ADC/ADC_prog.o
-                0x00001938                ADC_eniDisableADC
- .text.ADC_enuReadDataReg
-                0x00001960       0x72 ./MCAL/ADC/ADC_prog.o
-                0x00001960                ADC_enuReadDataReg
- .text.ADC_enuReadHigherDataReg
-                0x000019d2       0x3e ./MCAL/ADC/ADC_prog.o
-                0x000019d2                ADC_enuReadHigherDataReg
- .text.ADC_enuCallBack
-                0x00001a10       0x3e ./MCAL/ADC/ADC_prog.o
-                0x00001a10                ADC_enuCallBack
- .text.__vector_16
-                0x00001a4e       0x66 ./MCAL/ADC/ADC_prog.o
-                0x00001a4e                __vector_16
- .text.LM35_RaiseFlag
-                0x00001ab4       0x14 ./HAL/LM35/LM35_prog.o
-                0x00001ab4                LM35_RaiseFlag
- .text.LM35_enuInit
-                0x00001ac8       0xfa ./HAL/LM35/LM35_prog.o
-                0x00001ac8                LM35_enuInit
- .text.LM35_enuGetTemp
-                0x00001bc2       0xba ./HAL/LM35/LM35_prog.o
-                0x00001bc2                LM35_enuGetTemp
- .text.LM35_enuGetTempByPollying
-                0x00001c7c       0x2e ./HAL/LM35/LM35_prog.o
-                0x00001c7c                LM35_enuGetTempByPollying
- .text.DC_Motor_enuInit
-                0x00001caa       0x82 ./HAL/DC_Motor/DC_Motor_program.o
-                0x00001caa                DC_Motor_enuInit
- .text.DC_Motor_enuStart
-                0x00001d2c       0xbe ./HAL/DC_Motor/DC_Motor_program.o
-                0x00001d2c                DC_Motor_enuStart
- .text.DC_Motor_enuStop
-                0x00001dea       0x44 ./HAL/DC_Motor/DC_Motor_program.o
-                0x00001dea                DC_Motor_enuStop
+                0x000011ba       0x4c ./MCAL/DIO/DIO_prog.o
+                0x000011ba                DIO_enuGetPinValue
+ .text.ADC_Init
+                0x00001206        0xc ./MCAL/ADC/ADC_prog.o
+                0x00001206                ADC_Init
+ .text.ADC_Read
+                0x00001212       0x22 ./MCAL/ADC/ADC_prog.o
+                0x00001212                ADC_Read
+ .text.Auto_AIR_COND_CONTROL
+                0x00001234       0x58 ./APP/LoginSystem.o
+                0x00001234                Auto_AIR_COND_CONTROL
+ .text.DIMMER_LED
+                0x0000128c       0x5a ./APP/LoginSystem.o
+                0x0000128c                DIMMER_LED
  .text.ServoMotor_Door
-                0x00001e2e       0x9e ./APP/LoginSystem.o
-                0x00001e2e                ServoMotor_Door
- .text.OPEN_LEDS
-                0x00001ecc       0x66 ./APP/LoginSystem.o
-                0x00001ecc                OPEN_LEDS
- .text.CLOSE_LEDS
-                0x00001f32       0x18 ./APP/LoginSystem.o
-                0x00001f32                CLOSE_LEDS
- .text.main     0x00001f4a      0x1b0 ./APP/main.o
-                0x00001f4a                main
- .text.libgcc   0x000020fa       0x3e e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
-                0x000020fa                __mulsi3
- .text.libgcc   0x00002138       0x44 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
-                0x00002138                __udivmodsi4
- .text.libgcc   0x0000217c        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x0000217c        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
- .text.libgcc   0x0000217c       0x38 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
-                0x0000217c                __prologue_saves__
- .text.libgcc   0x000021b4       0x36 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
-                0x000021b4                __epilogue_restores__
- .text.libgcc   0x000021ea        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
-                0x000021ea                . = ALIGN (0x2)
+                0x000012e6       0x60 ./APP/LoginSystem.o
+                0x000012e6                ServoMotor_Door
+ .text.__vector_12
+                0x00001346       0x1e ./APP/main.o
+                0x00001346                __vector_12
+ .text.main     0x00001364      0x102 ./APP/main.o
+                0x00001364                main
+ .text.libgcc   0x00001466        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00001466        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00001466       0x38 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_prologue.o)
+                0x00001466                __prologue_saves__
+ .text.libgcc   0x0000149e       0x36 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_epilogue.o)
+                0x0000149e                __epilogue_restores__
+ .text.libgcc   0x000014d4        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_copy_data.o)
+                0x000014d4                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000021ea        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
-                0x000021ea                exit
-                0x000021ea                _exit
+ .fini9         0x000014d4        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x000014d4                exit
+                0x000014d4                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -421,24 +362,20 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000021ea        0x4 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .fini0         0x000014d4        0x4 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000021ee                _etext = .
+                0x000014d8                _etext = .
 
-.data           0x00800060      0x108 load address 0x000021ee
+.data           0x00800060      0x108 load address 0x000014d8
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
  .data          0x00800060        0x0 ./MCAL/TIMER1/Timer1_prog.o
- .data          0x00800060        0x0 ./MCAL/SPI/SPI.o
+ .data          0x00800060        0x0 ./MCAL/SPI/SPI_prog.o
  .data          0x00800060        0x0 ./MCAL/DIO/DIO_prog.o
  .data          0x00800060        0x0 ./MCAL/ADC/ADC_prog.o
- .data          0x00800060        0x0 ./HAL/LM35/LM35_prog.o
- .data          0x00800060        0x0 ./HAL/DC_Motor/DC_Motor_program.o
  .data          0x00800060        0x0 ./APP/LoginSystem.o
  .data          0x00800060        0x0 ./APP/main.o
- .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
  .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
  .data          0x00800060        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -469,20 +406,16 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
                 0x00800168                _edata = .
                 0x00800168                PROVIDE (__data_end, .)
 
-.bss            0x00800168        0x3
+.bss            0x00800168        0x2
                 0x00800168                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm32.o
  .bss           0x00800168        0x0 ./MCAL/TIMER1/Timer1_prog.o
- .bss           0x00800168        0x0 ./MCAL/SPI/SPI.o
+ .bss           0x00800168        0x0 ./MCAL/SPI/SPI_prog.o
  .bss           0x00800168        0x0 ./MCAL/DIO/DIO_prog.o
  .bss           0x00800168        0x0 ./MCAL/ADC/ADC_prog.o
- .bss           0x00800168        0x0 ./HAL/LM35/LM35_prog.o
- .bss           0x00800168        0x0 ./HAL/DC_Motor/DC_Motor_program.o
  .bss           0x00800168        0x0 ./APP/LoginSystem.o
  .bss           0x00800168        0x0 ./APP/main.o
- .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_mulsi3.o)
- .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodsi4.o)
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fixunssfsi.o)
@@ -504,22 +437,21 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_fpcmp_parts_sf.o)
  .bss           0x00800168        0x0 e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clz.o)
  *(.bss*)
- .bss.ADC_pfunGlobalPtr
-                0x00800168        0x2 ./MCAL/ADC/ADC_prog.o
-                0x00800168                ADC_pfunGlobalPtr
- .bss.LM35_u8Flag
-                0x0080016a        0x1 ./HAL/LM35/LM35_prog.o
  *(COMMON)
-                0x0080016b                PROVIDE (__bss_end, .)
-                0x000021ee                __data_load_start = LOADADDR (.data)
-                0x000022f6                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800168        0x1 ./MCAL/SPI/SPI_prog.o
+                0x00800168                data
+ COMMON         0x00800169        0x1 ./APP/main.o
+                0x00800169                Master_Command
+                0x0080016a                PROVIDE (__bss_end, .)
+                0x000014d8                __data_load_start = LOADADDR (.data)
+                0x000015e0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080016b        0x0
-                0x0080016b                PROVIDE (__noinit_start, .)
+.noinit         0x0080016a        0x0
+                0x0080016a                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080016b                PROVIDE (__noinit_end, .)
-                0x0080016b                _end = .
-                0x0080016b                PROVIDE (__heap_start, .)
+                0x0080016a                PROVIDE (__noinit_end, .)
+                0x0080016a                _end = .
+                0x0080016a                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -537,27 +469,23 @@ LOAD e:/engineering/sdk_win_64/sdk_win_64/winavr/bin/../lib/gcc/avr/4.3.3/avr5\l
 .signature
  *(.signature*)
 
-.stab           0x00000000     0x25e0
+.stab           0x00000000     0x14e8
  *(.stab)
- .stab          0x00000000      0x33c ./MCAL/TIMER1/Timer1_prog.o
- .stab          0x0000033c      0x414 ./MCAL/SPI/SPI.o
-                                0x420 (size before relaxing)
- .stab          0x00000750      0x600 ./MCAL/DIO/DIO_prog.o
-                                0x60c (size before relaxing)
- .stab          0x00000d50      0x978 ./MCAL/ADC/ADC_prog.o
-                                0x984 (size before relaxing)
- .stab          0x000016c8      0x444 ./HAL/LM35/LM35_prog.o
-                                0x450 (size before relaxing)
- .stab          0x00001b0c      0x4f8 ./HAL/DC_Motor/DC_Motor_program.o
+ .stab          0x00000000      0x2f4 ./MCAL/TIMER1/Timer1_prog.o
+ .stab          0x000002f4      0x438 ./MCAL/SPI/SPI_prog.o
+                                0x444 (size before relaxing)
+ .stab          0x0000072c      0x4f8 ./MCAL/DIO/DIO_prog.o
                                 0x504 (size before relaxing)
- .stab          0x00002004      0x2dc ./APP/LoginSystem.o
-                                0x468 (size before relaxing)
- .stab          0x000022e0      0x300 ./APP/main.o
-                                0x54c (size before relaxing)
+ .stab          0x00000c24      0x2c4 ./MCAL/ADC/ADC_prog.o
+                                0x45c (size before relaxing)
+ .stab          0x00000ee8      0x2f4 ./APP/LoginSystem.o
+                                0x48c (size before relaxing)
+ .stab          0x000011dc      0x30c ./APP/main.o
+                                0x558 (size before relaxing)
 
-.stabstr        0x00000000     0x1a8d
+.stabstr        0x00000000      0xde6
  *(.stabstr)
- .stabstr       0x00000000     0x1a8d ./MCAL/TIMER1/Timer1_prog.o
+ .stabstr       0x00000000      0xde6 ./MCAL/TIMER1/Timer1_prog.o
 
 .stab.excl
  *(.stab.excl)

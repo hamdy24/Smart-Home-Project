@@ -1,5 +1,5 @@
-HAL/EPROM3/EEPROM.d HAL/EPROM3/EEPROM.o: ../HAL/EPROM3/EEPROM.c \
- ../HAL/EPROM3/EEPROM.h ../HAL/EPROM3/../../LIBRARY/stdTypes.h \
+MCAL/EEPROM/EEPROM.d MCAL/EEPROM/EEPROM.o: ../MCAL/EEPROM/EEPROM.c \
+ ../MCAL/EEPROM/EEPROM.h ../MCAL/EEPROM/../../LIBRARY/stdTypes.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -12,9 +12,9 @@ HAL/EPROM3/EEPROM.d HAL/EPROM3/EEPROM.o: ../HAL/EPROM3/EEPROM.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h
 
-../HAL/EPROM3/EEPROM.h:
+../MCAL/EEPROM/EEPROM.h:
 
-../HAL/EPROM3/../../LIBRARY/stdTypes.h:
+../MCAL/EEPROM/../../LIBRARY/stdTypes.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 

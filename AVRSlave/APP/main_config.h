@@ -27,5 +27,6 @@
 #define OPEN_AirCond_COMMAND					 16
 #define CLOSE_AirCond_COMMAND					 17
 
+#define ACK_VALUE								0xff
 
 #endif /* APP_MAIN_CONFIG_H_ */

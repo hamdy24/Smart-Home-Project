@@ -9,26 +9,52 @@
 
 #include "../MCAL/DIO/DIO_int.h"
 #include "../MCAL/TIMER1/Timer1_int.h"
+#include "../MCAL/ADC/ADC_int.h"
 
 #include "main_config.h"
-
 #include <util/delay.h>
+/*
+ * SPI_ui8TransmitRecive
+ *
+ * u8 SPI_ui8Flag ()
+{
+	if (((SPSR&(1<<SPIF))>>SPIF)==0)
+		return 0;
+	else
+		return 1;
+}
+ *
+ * */
 
-	void ServoMotor_Door(u8 Copy_u8Angle)
-	{
+
+void ServoMotor_Door(u8 Copy_u8Angle)
+{
+		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN7,DIO_u8HIGH);  //LET SERVO ON
 		float Local_floatDuty=0;
-		Local_floatDuty = (((float)Copy_u8Angle/180.0)*6)+5;
-		Timer1_enuPWM(50,Local_floatDuty);
-	}
+		Local_floatDuty = (((float)Copy_u8Angle/180.0)*5)+5;
+		Timer_PWM(50,Local_floatDuty);
+}
+void DIMMER_LED(u16 freq,u8 light)
+{
+		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN7,DIO_u8LOW);   //LET SERVO OFF
 
-	void OPEN_LEDS(u8 freq,u8 light)
-	{
-		DIO_enuSetPinValue(DIO_u8GROUP_B,DIO_u8PIN6,DIO_u8HIGH);
-		Timer1_enuPWM(freq,light);
-	}
+		Timer_PWM(freq,light);
+}
 
-	void CLOSE_LEDS()
+void Auto_AIR_COND_CONTROL(u8 Copy_u8LowerLimit,u8 Copy_u8UpperLimit)
+{
+
+	u16 Local_u16TempVal;
+	Local_u16TempVal = ADC_Read(0);
+	Local_u16TempVal = (float)Local_u16TempVal/2.0;
+
+	if(Local_u16TempVal > Copy_u8UpperLimit)
 	{
-		DIO_enuSetPinValue(DIO_u8GROUP_B,DIO_u8PIN6,DIO_u8LOW);
+		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN6,DIO_u8HIGH);
 	}
+	else if(Local_u16TempVal < Copy_u8LowerLimit)
+	{
+		DIO_enuSetPinValue(DIO_u8GROUP_D,DIO_u8PIN6,DIO_u8LOW);
+	}
+}
 

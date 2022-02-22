@@ -37,11 +37,11 @@ SUBDIRS :=  \
 ../HAL \
 ../HAL/Keypad \
 ../HAL/LCD \
-../HAL/EPROM3 \
 ../LIBRARY \
 ../MCAL \
 ../MCAL/DIO \
 ../MCAL/EXTI/ \
+../MCAL/EEPROM \
 ../MCAL/UART \
 ../MCAL/SPI
 
@@ -50,13 +50,13 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../APP/LoginSystem.c \
 ../APP/main.c \
-../HAL/EPROM3/EEPROM.c \
 ../HAL/Keypad/Keypad_prog.c \
 ../HAL/LCD/LCD_prog.c \
 ../MCAL/DIO/DIO_prog.c \
+../MCAL/EEPROM/EEPROM.c \
 ../MCAL/EXTI/EXTI_config.c \
 ../MCAL/EXTI/EXTI_prog.c \
-../MCAL/SPI/SPI.c \
+../MCAL/SPI/SPI_prog.c \
 ../MCAL/UART/UART_program.c
 
 
@@ -69,49 +69,49 @@ ASM_SRCS +=
 OBJS +=  \
 APP/LoginSystem.o \
 APP/main.o \
-HAL/EPROM3/EEPROM.o \
 HAL/Keypad/Keypad_prog.o \
 HAL/LCD/LCD_prog.o \
 MCAL/DIO/DIO_prog.o \
+MCAL/EEPROM/EEPROM.o \
 MCAL/EXTI/EXTI_config.o \
 MCAL/EXTI/EXTI_prog.o \
-MCAL/SPI/SPI.o \
+MCAL/SPI/SPI_prog.o \
 MCAL/UART/UART_program.o
 
 OBJS_AS_ARGS +=  \
 APP/LoginSystem.o \
 APP/main.o \
-HAL/EPROM3/EEPROM.o \
 HAL/Keypad/Keypad_prog.o \
 HAL/LCD/LCD_prog.o \
 MCAL/DIO/DIO_prog.o \
+MCAL/EEPROM/EEPROM.o \
 MCAL/EXTI/EXTI_config.o \
 MCAL/EXTI/EXTI_prog.o \
-MCAL/SPI/SPI.o \
+MCAL/SPI/SPI_prog.o \
 MCAL/UART/UART_program.o
 
 C_DEPS +=  \
 APP/LoginSystem.d \
 APP/main.d \
-HAL/EPROM3/EEPROM.d \
 HAL/Keypad/Keypad_prog.d \
 HAL/LCD/LCD_prog.d \
 MCAL/DIO/DIO_prog.d \
+MCAL/EEPROM/EEPROM.d \
 MCAL/EXTI/EXTI_config.d \
 MCAL/EXTI/EXTI_prog.d \
-MCAL/SPI/SPI.d \
+MCAL/SPI/SPI_prog.d \
 MCAL/UART/UART_program.d
 
 C_DEPS_AS_ARGS +=  \
 APP/LoginSystem.d \
 APP/main.d \
-HAL/EPROM3/EEPROM.d \
 HAL/Keypad/Keypad_prog.d \
 HAL/LCD/LCD_prog.d \
 MCAL/DIO/DIO_prog.d \
+MCAL/EEPROM/EEPROM.d \
 MCAL/EXTI/EXTI_config.d \
 MCAL/EXTI/EXTI_prog.d \
-MCAL/SPI/SPI.d \
+MCAL/SPI/SPI_prog.d \
 MCAL/UART/UART_program.d
 
 OUTPUT_FILE_PATH +=AVRMaster.elf
@@ -142,13 +142,6 @@ APP/main.o: ../APP/main.c
 	@echo Finished building: $<
 	
 
-HAL/EPROM3/EEPROM.o: ../HAL/EPROM3/EEPROM.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
 HAL/Keypad/Keypad_prog.o: ../HAL/Keypad/Keypad_prog.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -170,6 +163,13 @@ MCAL/DIO/DIO_prog.o: ../MCAL/DIO/DIO_prog.c
 	@echo Finished building: $<
 	
 
+MCAL/EEPROM/EEPROM.o: ../MCAL/EEPROM/EEPROM.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 MCAL/EXTI/EXTI_config.o: ../MCAL/EXTI/EXTI_config.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
@@ -184,7 +184,7 @@ MCAL/EXTI/EXTI_prog.o: ../MCAL/EXTI/EXTI_prog.c
 	@echo Finished building: $<
 	
 
-MCAL/SPI/SPI.o: ../MCAL/SPI/SPI.c
+MCAL/SPI/SPI_prog.o: ../MCAL/SPI/SPI_prog.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Os -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

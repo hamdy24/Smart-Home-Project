@@ -1,17 +1,15 @@
 /*
  * SPI_int.h
  *
- *  Created on: Feb 18, 2022
- *      Author: hamdy
+ *  Created on: Oct 29, 2021
+ *      Author: Ahmed El-Gaafrawy
  */
 
-#ifndef MCAL_SPI_SPI_INT_H_
-#define MCAL_SPI_SPI_INT_H_
+#ifndef SPI_INT_H_
+#define SPI_INT_H_
 
-void SPI_vInitMaster (void);
+void SPI_vidInit(void);
 
-void SPI_vInitSlave (void);
+u8 SPI_ui8TransmitRecive(u8 Copy_u8Data);
 
-u8 SPI_ui8TransmitRecive (u8 data);
-
-#endif /* MCAL_SPI_SPI_INT_H_ */
+#endif /* SPI_INT_H_ */

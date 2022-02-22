@@ -18,6 +18,6 @@
 #define VECT_ADC		__vector_16
 
 #define VECT_UART		__vector_13
-
+#define SPI_VECT		__vector_12
 
 #endif /* MCAL_INTERRUPT_H_ */

@@ -15,7 +15,7 @@
 #define TIMO_64_PRES 3
 #define TIMO_256_PRES 4
 #define TIMO_1024_PRES 5
-#define TIMO_PRES  TIMO_1024_PRES
+#define TIMO_PRES  TIMO_64_PRES
 
 //mode
 #define TIMER1_NORMAL 0
@@ -26,7 +26,7 @@
 #define TIMER1_PWM_FAST_8 5
 #define TIMER1_PWM_FAST_9 6
 #define TIMER1_PWM_FAST_10 7
-#define TIMER1_MODE  TIMER1_PWM_FAST_10
+#define TIMER1_MODE  TIMER1_PWM_FAST_9
 
 //compare output mode
 #define COM_OUT_DIS 0
@@ -72,12 +72,12 @@
 #define TCNT2	*((volatile u8*) 0x44)
 
 /*OCR*/
-#define OCR0	*((volatile u8*) 0x5c)
-#define OCR1AH	*((volatile u8*) 0x4b)
-#define OCR1AL	*((volatile u8*) 0x4a)
+#define OCR0	*((volatile u8*) 0x5C)
+#define OCR1AH	*((volatile u8*) 0x4B)
+#define OCR1AL	*((volatile u8*) 0x4A)
 
 
-#define OCR1A	*((volatile u16*) 0x4a)
+#define OCR1A	(*(volatile u16*)((0x2A) + 0x20))
 
 #define OCR1BH	*((volatile u8*) 0x49)
 #define OCR1BL	*((volatile u8*) 0x48)
@@ -85,6 +85,8 @@
 #define OCR1B	*((volatile u16*) 0x48)
 
 #define OCR2	*((volatile u8*) 0x43)
-
+#define ICR1H	*((volatile u8*) 0x47)
+#define ICR1L	*((volatile u8*) 0x46)
+#define ICR1    (*(volatile u16*)((0x26) + 0x20))
 
 #endif /* MCAL_TIMER_TIMER1_CONFIG_H_ */
